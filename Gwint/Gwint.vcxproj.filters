@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Pliki źródłowe">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Pliki zasobów">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Gwint.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Colors.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Card.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="settings.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Images.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Fonts.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Skills.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="AllSkills.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="CardList.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="CardsToSelect.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="OtherFunctions.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="DeckManager.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerInfo.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Menu.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Colors.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Card.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="settings.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Images.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Fonts.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Skills.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="AllSkills.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="CardList.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="CardsToSelect.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="OtherFunctions.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="DeckManager.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInfo.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="test.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\Bert.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Brat Krwi.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Czempion Kultu.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Golem.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Jelito.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Liniux.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Mimik.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Mozdzierz.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Ogar Mrozu.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Omobamidele.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Parazaur.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Raptor.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Reptilian.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Sarkozuch.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Terizino.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Tytus.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Zenon.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\CharacterFrame.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\StatCircle.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\StatFrame.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\TextFrame.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\CharacterFrameGold.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="fonts\Arialic Hollow.ttf" />
+    <Font Include="fonts\Baloo-Regular.ttf" />
+    <Font Include="fonts\TIMESS__.ttf" />
+  </ItemGroup>
+</Project>
