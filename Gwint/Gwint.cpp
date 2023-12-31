@@ -9,13 +9,16 @@
 #include "Menu.h"                           //Menu
 #include "Colors.h"                         //Kolory
 #include "settings.h"                       //Ustawienia
-#include "Images.h"
+#include "Images.h"                         //Obrazy
+#include "OtherFunctions.h"                 //Inne funkcje
 
 //#define ScreenWidth 1920
 //#define ScreenHeight 1080
 
 int main()
 {
+    srand(time(NULL));          //Ziarno losowania
+
     //Sprawdzenie czy biblioteka allegro się załadowała
     if (!al_init())
     {

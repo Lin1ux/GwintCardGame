@@ -112,6 +112,35 @@ void PlayerInfo::PutToStack(Card NewCard)
 {
 	CardStack.insert(CardStack.begin(), NewCard);
 }
+//Sprawdza czy mo¿na zagraæ kartê
+//------------------------------------
+bool PlayerInfo::CanPlay(Card NewCard)
+{
+	std::cout << "1: " << MeleeRow.size() << "\n";
+	std::cout << "2: " << RangeRow.size() << "\n";
+	if (NewCard.ReturnRow() == 1 && MeleeRow.size() < 6)
+	{
+		return true;
+	}
+	else if (NewCard.ReturnRow() == 2 && RangeRow.size() < 6)
+	{
+		return true;
+	}
+	return false;
+}
+//Umieszcza kartê na stó³ do odpowiedniego rzêdu
+//----------------------------------------------
+void PlayerInfo::PlayCard(Card NewCard)
+{
+	if (NewCard.ReturnRow() == 1 && MeleeRow.size()<6)
+	{
+		MeleeRow.push_back(NewCard);
+	}
+	else if(NewCard.ReturnRow() == 2 && RangeRow.size() <6)
+	{
+		RangeRow.push_back(NewCard);
+	}
+}
 //Rysuje karty z rêki gracza
 void PlayerInfo::DrawHand()
 {

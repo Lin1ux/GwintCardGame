@@ -22,6 +22,8 @@ public:
 	void TakeCard();							//Jeœli jest miejsce dobiera kartê do rêki
 	void TakeCard(Card NewCard);				//Jeœli jest miejsce dodaje podan¹ kartê do rêki
 	void PutToStack(Card NewCard);				//Wrzuca kartê do tali nie dobranych kart
+	bool CanPlay(Card NewCard);					//Sprawdza czy mo¿na zagraæ kartê
+	void PlayCard(Card NewCard);				//Umieszcza kartê na stó³ do odpowiedniego rzêdu
 	void DrawHand();							//Rysuje karty z rêki gracza
 	Card UseCard(int index);					//Usuwa kartê z rêki i zwraca j¹
 	std::vector<Card> ReturnMeleeRow();			//Zwraca karty w 1 rzêdzie

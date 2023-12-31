@@ -25,5 +25,7 @@ public:
 	static void DrawRectangle(RectanglePoints Points, ALLEGRO_COLOR color,int t);
     static void DrawImage(ALLEGRO_BITMAP* Image, Point Position, Point ImgSize, Point(ImgScaledSize));
     static void DrawTextImage(ALLEGRO_BITMAP* Image, Point Position, Point ImgSize, Point(ImgScaledSize),std::string text);
+    static int Random(int min, int max);
+    static float AlignCenter(float start, float end,float size);
 };
 

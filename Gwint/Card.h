@@ -29,6 +29,7 @@ public:
 	Card();
 	int ReturnValue();
 	int ReturnCost();
+	int ReturnRow();
 	bool ReturnIsHero();
 	std::string ReturnName();
 	RectanglePoints ReturnVertexesPosition();

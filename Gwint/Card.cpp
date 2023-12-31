@@ -191,6 +191,11 @@ int Card::ReturnCost()
 {
 	return cost;
 }
+//Zwraca rząd karty
+int Card::ReturnRow()
+{
+	return row;
+}
 //Czy karta jest bohaterem
 //------------------------
 bool Card::ReturnIsHero()
