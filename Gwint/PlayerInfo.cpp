@@ -106,6 +106,12 @@ void PlayerInfo::TakeCard(Card NewCard)
 		PlayerHand.push_back(NewCard);
 	}
 }
+//Wrzuca kartê do tali nie dobranych kart
+//---------------------------------------
+void PlayerInfo::PutToStack(Card NewCard)
+{
+	CardStack.insert(CardStack.begin(), NewCard);
+}
 //Rysuje karty z rêki gracza
 void PlayerInfo::DrawHand()
 {
@@ -113,6 +119,12 @@ void PlayerInfo::DrawHand()
 	{
 		PlayerHand[i].DrawCard(0.15f + i * 0.08f, 0.8f);
 	}
+}
+Card PlayerInfo::UseCard(int index)
+{
+	Card removedCard = PlayerHand[index];
+	PlayerHand.erase(PlayerHand.begin() + index);
+	return removedCard;
 }
 //Zwraca karty w 1 rzêdzie
 //--------------------------------------------

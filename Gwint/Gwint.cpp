@@ -26,10 +26,10 @@ int main()
     //Ustawia tryb okna
     al_set_new_display_flags(ALLEGRO_FULLSCREEN); //ALLEGRO_FULLSCREEN - Fullscreen | ALLEGRO_WINDOWED - Tryb okienkowy
     //Ustawienie rozdzielczości okna
-    ALLEGRO_DISPLAY* display;                                   //Zmienna okna
-    display = al_create_display(settings::ScrWidth(), settings::ScrHeight());     //Ustawia rozdzielczość okna
-    al_set_window_position(display, 200, 50);                   //Ustawia pozycje okna
-    al_set_window_title(display, "Arok The Card Game");         //Ustawia tytuł gry
+    ALLEGRO_DISPLAY* display;                                                       //Zmienna okna
+    display = al_create_display(settings::ScrWidth(), settings::ScrHeight());       //Ustawia rozdzielczość okna
+    al_set_window_position(display, 200, 50);                                       //Ustawia pozycje okna
+    al_set_window_title(display, "Arok The Card Game");                             //Ustawia tytuł gry
     std::cout << "Gra zostala uruchomiona!\n";
 
     //Sprawdzenie czy okno istnieje

@@ -12,7 +12,7 @@ Skills::Skills()
 {
 	id = 0;
 	name = "Brak";
-	descr = "Brak umiejętności";
+	descr = "";
 	Icon = Images::StatCircle;
 }
 int Skills::ReturnId()

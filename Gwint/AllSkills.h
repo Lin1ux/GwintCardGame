@@ -12,6 +12,7 @@ public:
 	static int horde;
 	static int thief;
 	static int transport;
+	static int summonerMortar;
 
 	static Skills None;
 	static Skills Brotherhood;
@@ -22,6 +23,7 @@ public:
 	static Skills Horde;
 	static Skills Thief;
 	static Skills Transport;
+	static Skills SummonerMortar;
 	static void SetSkills();
 };
 

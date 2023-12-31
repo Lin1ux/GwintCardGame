@@ -34,6 +34,7 @@ public:
 	RectanglePoints ReturnVertexesPosition();
 	void DrawCard(float x1, float y1);
 	void DrawBigCard(float x1, float y1);
+	void DrawBigCardDescr(float x1, float y1);
 	void DrawSmallCard(float x1, float y1);
 	RectanglePoints NormalCardVertexesPosition(float x1, float y1);
 	bool operator == (const Card & c);

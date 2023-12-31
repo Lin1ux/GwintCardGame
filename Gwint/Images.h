@@ -29,6 +29,7 @@ public:
 	static ALLEGRO_BITMAP* HeroCharacterFrame;
 	static ALLEGRO_BITMAP* StatFrame;
 	static ALLEGRO_BITMAP* NameFrame;
+	static ALLEGRO_BITMAP* DescrFrame;
 	static ALLEGRO_BITMAP* StatCircle;
 	//static ALLEGRO_BITMAP* CharacterFrame;
 	//static ALLEGRO_BITMAP* CharacterFrame;

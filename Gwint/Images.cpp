@@ -25,6 +25,7 @@ ALLEGRO_BITMAP* Images::HeroCharacterFrame;
 ALLEGRO_BITMAP* Images::CharacterFrame;
 ALLEGRO_BITMAP* Images::StatFrame;
 ALLEGRO_BITMAP* Images::NameFrame;
+ALLEGRO_BITMAP* Images::DescrFrame;
 ALLEGRO_BITMAP* Images::StatCircle;
 
 //Za³adowuje obrazki
@@ -54,6 +55,7 @@ void Images::SetImages()
 	Images::HeroCharacterFrame = al_load_bitmap("images/CharacterFrameGold.png");
 	Images::StatFrame = al_load_bitmap("images/StatFrame.png");
 	Images::NameFrame = al_load_bitmap("images/textFrame.png");
+	Images::DescrFrame = al_load_bitmap("images/SkillDescr.png");
 	Images::StatCircle = al_load_bitmap("images/StatCircle.png");
 }
 

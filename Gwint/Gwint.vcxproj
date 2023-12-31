@@ -222,6 +222,7 @@
     <Image Include="images\Raptor.png" />
     <Image Include="images\Reptilian.png" />
     <Image Include="images\Sarkozuch.png" />
+    <Image Include="images\SkillDescr.png" />
     <Image Include="images\StatCircle.png" />
     <Image Include="images\StatFrame.png" />
     <Image Include="images\Terizino.png" />

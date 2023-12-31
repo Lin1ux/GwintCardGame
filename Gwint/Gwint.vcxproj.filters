@@ -184,6 +184,9 @@
     <Image Include="images\CharacterFrameGold.png">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="images\SkillDescr.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="fonts\Arialic Hollow.ttf" />

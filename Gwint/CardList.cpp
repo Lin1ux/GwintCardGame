@@ -37,7 +37,7 @@ void CardList::SetCards()
 	Guts = Card(true, 1, 9, 50, AllSkills::Executioner, "Jelito", Images::Guts);
 	Liniux = Card(true, 1, 8, 50, AllSkills::Thief, "Liniux", Images::Liniux);
 	Mimic = Card(false, 1, 2, 30, AllSkills::Thief, "Mimik", Images::Mimic);
-	Mortar = Card(false, 2, 4, 20, AllSkills::Horde, "Moździerz", Images::Mortar);
+	Mortar = Card(false, 2, 4, 20, AllSkills::Archer, "Moździerz", Images::Mortar);
 	FrozenDog = Card(false, 1, 4, 30, AllSkills::Horde, "Ogar Mrozu", Images::FrozenDog);
 	Omobamidele = Card(true, 2, 7, 40, AllSkills::Archer, "Omobamidele", Images::Omobamidele);
 	Parasaurus = Card(false, 1, 1, 20, AllSkills::Transport, "Parazaur", Images::Parasaurus);
@@ -45,7 +45,7 @@ void CardList::SetCards()
 	Reptile = Card(false, 2, 4, 35, AllSkills::Brotherhood, "Reptilian", Images::Reptile);
 	Sarco = Card(false, 1, 7, 35, AllSkills::None, "Sarcozuch", Images::Sarco);
 	Terizino = Card(false, 1, 10, 45, AllSkills::None, "Terizinozaur", Images::Terizino);
-	Tytus = Card(true, 2, 6, 30, AllSkills::Horde, "Tytus", Images::Tytus);
+	Tytus = Card(true, 2, 6, 30, AllSkills::SummonerMortar, "Tytus", Images::Tytus);
 	Zenon = Card(true, 1, 4, 35, AllSkills::Medic, "Zenon", Images::Zenon);
 }
 

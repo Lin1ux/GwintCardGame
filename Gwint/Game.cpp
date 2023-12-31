@@ -1,11 +1,11 @@
-#include "Game.h"			
+﻿#include "Game.h"			
 #include<iostream>
 //#include<vector>
 #include <allegro5/allegro_ttf.h>				//Wczytywanie czcionek .ttf
 #include <allegro5/allegro_font.h>				//Czcionki
-#include <allegro5/allegro_primitives.h>		//Prymitywy (kwadraty, tr�jk�ty itd.)
+#include <allegro5/allegro_primitives.h>		//Prymitywy (kwadraty, trójkąty itd.)
 #include <allegro5/allegro_image.h>				//Obrazki
-#include <allegro5/allegro_native_dialog.h>		//Do Error�w
+#include <allegro5/allegro_native_dialog.h>		//Do Errorów
 
 #include "PlayerInfo.h"
 #include "Colors.h"
@@ -27,18 +27,18 @@ Game::Game(ALLEGRO_DISPLAY* Disp,std::vector<Card> PlayerDeck, std::vector<Card>
 	Enemy = PlayerInfo(EnemyDeck);
 }
 
-//G��wna cz�� gry 
+//Główna część gry 
 int Game::GameLoop()
 {
 	if (!al_init())
 	{
-		al_show_native_message_box(NULL, NULL, NULL, "Nie udalo si� zaladowac biblioteki Allegro", NULL, NULL);
+		al_show_native_message_box(NULL, NULL, NULL, "Nie udalo się zaladowac biblioteki Allegro", NULL, NULL);
 		return -1;
 	}
 	//Timer
 	ALLEGRO_TIMER* timer = al_create_timer(1.0 / settings::FPS());
 
-	//Ustawianie Statycznych obiekt�w
+	//Ustawianie Statycznych obiektów
 	Images::SetImages();
 	Fonts::SetFonts();
 	AllSkills::SetSkills();
@@ -51,27 +51,30 @@ int Game::GameLoop()
 	al_register_event_source(event_queue, al_get_mouse_event_source());
 
 
-	al_start_timer(timer); //inicjalizacja timera | Nie dawa� do p�tli gry
+	al_start_timer(timer); //inicjalizacja timera | Nie dawać do pętli gry
 
 	//Przyciski
+	Button StartGame(settings::PosX(0.7f), settings::PosY(0.5f), settings::PosX(0.8f), settings::PosY(0.55f));
 	Button HandButtons[10];
 	//Obiekty
 	std::vector<Card> PlayerHand;
 
 	float mouseX = 0;			//X myszy
 	float  mouseY = 0;			//Y myszy
-	int mouseButton = 0;		//Wci�ni�ty przycisk myszy
-	bool GameOver = false;		//P�tla
+	int mouseButton = 0;		//Wciśnięty przycisk myszy
+	bool GameOver = false;		//Pętla
+	bool GameBegin = true;		//Początek gry
+	int CardsChanged = 0;		//Liczba odrzuconych kart
 	while (!GameOver)
 	{
 		ALLEGRO_EVENT events;
-		al_wait_for_event(event_queue, &events); //Czeka do wci�ni�cia przycisku
+		al_wait_for_event(event_queue, &events); //Czeka do wciśnięcia przycisku
 
 		if (events.type == ALLEGRO_EVENT_KEY_UP)
 		{
 			switch (events.keyboard.keycode)
 			{
-			case ALLEGRO_KEY_ESCAPE: //wci�niecie Escape
+			case ALLEGRO_KEY_ESCAPE: //wciśniecie Escape
 				GameOver = true;
 				std::cout << "Wcisnieto ESC\n";
 				break;
@@ -115,29 +118,75 @@ int Game::GameLoop()
 		}
 		if (events.type == ALLEGRO_EVENT_TIMER)
 		{
-			//Rysowanie
-			al_clear_to_color(Colors::darkGray); //t�o
+			
+			al_clear_to_color(Colors::darkGray); //tło
 			PlayerHand = Player.ReturnPlayerHand();
-			for (int i = 0; i < PlayerHand.size(); i++)
-			{
-				HandButtons[i] = Button(PlayerHand[i].NormalCardVertexesPosition(0.05f + i * 0.08f, 0.8f));
-				
-				if (HandButtons[i].MouseOn(mouseX, mouseY))
+			if (GameBegin) //Początek gry --> odrzucanie kart
+			{	
+				//Rysowanie
+				al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.24f), ALLEGRO_ALIGN_CENTER, "Wybierz kartę którą chcesz odrzucić");
+				al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.29f), ALLEGRO_ALIGN_CENTER, ("Liczba dostępnych przelosowań:  "+std::to_string(2 - CardsChanged)).c_str());
+				for (int i = 0; i < PlayerHand.size(); i++)
 				{
-					PlayerHand[i].DrawBigCard(0.02, 0.2);
-					PlayerHand[i].DrawCard(0.05f + i * 0.08f, 0.76f);
-
+					if (i < 5)
+					{
+						PlayerHand[i].DrawCard(0.25f + i * 0.08f, 0.36f);
+					}
+					else
+					{
+						PlayerHand[i].DrawCard(0.25f + (i % (5)) * 0.08f, 0.56f);
+					}
+					HandButtons[i] = Button(PlayerHand[i].ReturnVertexesPosition());
+					if (HandButtons[i].MouseOn(mouseX, mouseY))	//Rysowanie dużej karty
+					{
+						PlayerHand[i].DrawBigCardDescr(0.02f, 0.1f);
+					}
 				}
-				else
+				//Przyciski
+				if (StartGame.MouseOn(mouseX, mouseY) && mouseButton == 1)	//Rozpoczęcie gracza nie wykorzystując wszystkich przelosowań
 				{
-					PlayerHand[i].DrawCard(0.05f + i * 0.08f, 0.8f);
+					GameBegin = false;
 				}
-				//HandButtons[i].DrawHitbox();
+				for (int i = 0; i < PlayerHand.size();i++)
+				{
+					if (HandButtons[i].MouseOn(mouseX, mouseY) && mouseButton == 1)	//Rysowanie dużej karty
+					{
+						Player.PutToStack(Player.UseCard(i));	//Usuwa kartę z ręki i dodaje do nie używanych kart
+						Player.TakeCard();
+						CardsChanged += 1;
+						mouseButton = 0;
+					}
+				}
+				if (CardsChanged >= 2)	//Osiągnięcie limitu przelosowań kart
+				{
+					GameBegin = false;
+				}
+				StartGame.DrawHitbox();
 			}
-			OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.92),settings::PosY(0.93) }, { 100,100 },
-				{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player.ReturnAmountOfCardStack()).c_str());
-			CardList::BrotherOfBlood.DrawCard(0.895, 0.75);
-			//Player.DrawHand();
+			else
+			{
+				
+				for (int i = 0; i < PlayerHand.size(); i++)
+				{
+					HandButtons[i] = Button(PlayerHand[i].NormalCardVertexesPosition(0.05f + i * 0.08f, 0.8f));
+				
+					if (HandButtons[i].MouseOn(mouseX, mouseY))
+					{
+						PlayerHand[i].DrawBigCardDescr(0.02, 0.1f);
+						PlayerHand[i].DrawCard(0.05f + i * 0.08f, 0.76f);
+
+					}
+					else
+					{
+						PlayerHand[i].DrawCard(0.05f + i * 0.08f, 0.8f);
+					}
+					//HandButtons[i].DrawHitbox();
+				}
+				OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.92),settings::PosY(0.93) }, { 100,100 },
+					{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player.ReturnAmountOfCardStack()).c_str());
+				CardList::BrotherOfBlood.DrawCard(0.895, 0.75);
+				//Player.DrawHand();
+			}
 			al_flip_display();
 		}
 	}

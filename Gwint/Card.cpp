@@ -169,6 +169,16 @@ void Card::DrawSmallCard(float x1, float y1)
 	//OtherFunctions::DrawRectangle(vertexes, Colors::red, 5);
 	
 }
+//Rysuje dużą kartę z opisem umiejętności
+//---------------------------------------
+void Card::DrawBigCardDescr(float x1, float y1)
+{
+	DrawBigCard(x1, y1);
+	float ImgSizeX = (PosX(x1 + 0.12) - PosX(x1)) / settings::ScrWidth();	//Szerokość karty
+	float DownEdgePos = vertexes.P3.y;										//Dolna krawędź karty (współrzędna y)
+	al_draw_scaled_bitmap(Images::DescrFrame, 0, 0, 330, 400, PosX(x1), DownEdgePos, PosX(ImgSizeX*1.1), PosY(ImgSizeX*1.21f * settings::ProportionScreenWH()), NULL); //ALLEGRO_ALIGN_CENTER
+	al_draw_multiline_text(Fonts::NameFont, Colors::white, (vertexes.P1.x+ vertexes.P2.x)/2, DownEdgePos+(DownEdgePos*0.01), PosX(ImgSizeX), PosY(ImgSizeX * 0.1f * settings::ProportionScreenWH()), ALLEGRO_ALIGN_CENTER, (skill.ReturnName() + ":\n" + skill.ReturnDescr()).c_str());
+}
 //Zwraca Obecną wartość karty
 //---------------------
 int Card::ReturnValue()
