@@ -31,6 +31,13 @@ public:
 	static ALLEGRO_BITMAP* NameFrame;
 	static ALLEGRO_BITMAP* DescrFrame;
 	static ALLEGRO_BITMAP* StatCircle;
+	static ALLEGRO_BITMAP* MeleeCircle;
+	static ALLEGRO_BITMAP* RangeCircle;
+	//Game UI
+	static ALLEGRO_BITMAP* EmptyCrystal;
+	static ALLEGRO_BITMAP* YellowCrystal;
+	static ALLEGRO_BITMAP* PurpleCrystal;
+	 
 	//static ALLEGRO_BITMAP* CharacterFrame;
 	//static ALLEGRO_BITMAP* CharacterFrame;
 

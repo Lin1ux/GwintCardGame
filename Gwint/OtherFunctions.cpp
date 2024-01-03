@@ -44,4 +44,5 @@ float OtherFunctions::AlignCenter(float start, float end, float size)
 }
 
 
+
 //al_draw_scaled_bitmap(Images::StatFrame, 0, 0, 330, 100, PosX(x1), PosY(DownEdgePos), PosX(ImgSizeX * 1.1), PosY(ImgSizeX * 0.3 * settings::ProportionScreenWH()), NULL);

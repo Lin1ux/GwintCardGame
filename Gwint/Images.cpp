@@ -27,6 +27,12 @@ ALLEGRO_BITMAP* Images::StatFrame;
 ALLEGRO_BITMAP* Images::NameFrame;
 ALLEGRO_BITMAP* Images::DescrFrame;
 ALLEGRO_BITMAP* Images::StatCircle;
+ALLEGRO_BITMAP* Images::MeleeCircle;
+ALLEGRO_BITMAP* Images::RangeCircle;
+//Deklaracja czêœci interfejsu gry
+ALLEGRO_BITMAP* Images::EmptyCrystal;
+ALLEGRO_BITMAP* Images::YellowCrystal;
+ALLEGRO_BITMAP* Images::PurpleCrystal;
 
 //Za³adowuje obrazki
 //-----------------------
@@ -57,5 +63,11 @@ void Images::SetImages()
 	Images::NameFrame = al_load_bitmap("images/textFrame.png");
 	Images::DescrFrame = al_load_bitmap("images/SkillDescr.png");
 	Images::StatCircle = al_load_bitmap("images/StatCircle.png");
+	Images::MeleeCircle = al_load_bitmap("images/Melee Circle.png");
+	Images::RangeCircle = al_load_bitmap("images/Range Circle.png");
+	//Deklaracja czêœci interfejsu gry
+	Images::EmptyCrystal = al_load_bitmap("images/Empty Crystal.png");
+	Images::YellowCrystal = al_load_bitmap("images/YellowCrystal.png");
+	Images::PurpleCrystal = al_load_bitmap("images/PurpleCrystal.png");
 }
 

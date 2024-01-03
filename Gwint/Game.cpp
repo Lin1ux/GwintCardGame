@@ -25,6 +25,8 @@ Game::Game(ALLEGRO_DISPLAY* Disp,std::vector<Card> PlayerDeck, std::vector<Card>
 	PlayerTurn = true;
 	Player = PlayerInfo(PlayerDeck);
 	Enemy = PlayerInfo(EnemyDeck);
+	mouseButton = 0;
+	ClearButtons();
 }
 
 //Główna część gry 
@@ -53,11 +55,6 @@ int Game::GameLoop()
 
 	al_start_timer(timer); //inicjalizacja timera | Nie dawać do pętli gry
 
-	//Przyciski
-	Button StartGame(settings::PosX(0.7f), settings::PosY(0.5f), settings::PosX(0.8f), settings::PosY(0.55f));
-	Button HandButtons[10];
-	Button MeleeButtons[6];
-	Button RangeButtons[6];
 	//Obiekty
 	std::vector<Card> PlayerHand;
 	std::vector<Card> PFirst;
@@ -65,16 +62,15 @@ int Game::GameLoop()
 
 	float mouseX = 0;			//X myszy
 	float  mouseY = 0;			//Y myszy
-	int mouseButton = 0;		//Wciśnięty przycisk myszy
 	bool GameOver = false;		//Pętla
-	bool GameBegin = true;		//Początek gry
+	bool GameStart = true;		//Początek gry
 	int CardsChanged = 0;		//Liczba odrzuconych kart
 	while (!GameOver)
 	{
 		ALLEGRO_EVENT events;
-		al_wait_for_event(event_queue, &events); //Czeka do wciśnięcia przycisku
+		al_wait_for_event(event_queue, &events);	//Czeka do wciśnięcia przycisku
 
-		if (events.type == ALLEGRO_EVENT_KEY_UP)
+		if (events.type == ALLEGRO_EVENT_KEY_UP)	//Puszczenie klawisza klawiatury
 		{
 			switch (events.keyboard.keycode)
 			{
@@ -84,7 +80,7 @@ int Game::GameLoop()
 				break;
 			}
 		}
-		if (events.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+		if (events.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)	//Puszczemie przycisku myszy
 		{
 			if (events.mouse.button & 1)
 			{
@@ -99,7 +95,7 @@ int Game::GameLoop()
 				mouseButton = 0;
 			}
 		}
-		else if (events.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+		else if (events.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)	//Wciśnięcie przycisku myszy
 		{
 			if (events.mouse.button & 1)
 			{
@@ -113,124 +109,223 @@ int Game::GameLoop()
 			{
 				mouseButton = 0;
 			}
+			float mouseX_percent = (float)events.mouse.x / settings::ScrWidth();
+			float mouseY_percent = (float)events.mouse.y / settings::ScrHeight();
+			printf("X - %d (%.3f)\nY - %d (%.3f)\n\n", events.mouse.x, mouseX_percent, events.mouse.y, mouseY_percent);
 		}
-		if (events.type == ALLEGRO_EVENT_MOUSE_AXES)
+		if (events.type == ALLEGRO_EVENT_MOUSE_AXES)				//Pozycja kursora
 		{
 			mouseX = events.mouse.x;
 			mouseY = events.mouse.y;
 			mouseButton = 0;
 		}
-		if (events.type == ALLEGRO_EVENT_TIMER)
+		if (events.type == ALLEGRO_EVENT_TIMER && GameStart)		//Początek gry
 		{
-			
-			al_clear_to_color(Colors::darkGray); //tło
-			PlayerHand = Player.ReturnPlayerHand();
-			PFirst = Player.ReturnMeleeRow();
-			PSecond = Player.ReturnRangeRow();
-			if (GameBegin) //Początek gry --> odrzucanie kart
-			{	
-				//Rysowanie
-				al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.24f), ALLEGRO_ALIGN_CENTER, "Wybierz kartę którą chcesz odrzucić");
-				al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.29f), ALLEGRO_ALIGN_CENTER, ("Liczba dostępnych przelosowań:  "+std::to_string(2 - CardsChanged)).c_str());
-				for (int i = 0; i < PlayerHand.size(); i++)
-				{
-					if (i < 5)
-					{
-						PlayerHand[i].DrawCard(0.25f + i * 0.08f, 0.36f);
-					}
-					else
-					{
-						PlayerHand[i].DrawCard(0.25f + (i % (5)) * 0.08f, 0.56f);
-					}
-					HandButtons[i] = Button(PlayerHand[i].ReturnVertexesPosition());
-					if (HandButtons[i].MouseOn(mouseX, mouseY))	//Rysowanie dużej karty
-					{
-						PlayerHand[i].DrawBigCardDescr(0.02f, 0.1f);
-					}
-				}
-				//Przyciski
-				if (StartGame.MouseOn(mouseX, mouseY) && mouseButton == 1)	//Rozpoczęcie gracza nie wykorzystując wszystkich przelosowań
-				{
-					GameBegin = false;
-				}
-				for (int i = 0; i < PlayerHand.size();i++)
-				{
-					if (HandButtons[i].MouseOn(mouseX, mouseY) && mouseButton == 1)	//Rysowanie dużej karty
-					{
-						Player.PutToStack(Player.UseCard(i));	//Usuwa kartę z ręki i dodaje do nie używanych kart
-						Player.TakeCard();
-						CardsChanged += 1;
-						mouseButton = 0;
-					}
-				}
-				if (CardsChanged >= 2)	//Osiągnięcie limitu przelosowań kart
-				{
-					GameBegin = false;
-				}
-				StartGame.DrawHitbox();
-			}
-			else
-			{
-				//Rysowanie stołu
-				float StartDrawPointX;
-				
-				//Rysowanie 1 rzędu gracza
-				StartDrawPointX = OtherFunctions::AlignCenter(0.2f, 0.86f, +PFirst.size() * 0.08f);
-				for (int i = 0; i < PFirst.size(); i++)
-				{
-					MeleeButtons[i] = Button(PFirst[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.4f));
-					PFirst[i].DrawCard(StartDrawPointX + i * 0.08f, 0.4f);
-					if (MeleeButtons[i].MouseOn(mouseX, mouseY))
-					{
-						PFirst[i].DrawBigCardDescr(0.02, 0.1f);
-					}
-				}
-				//Rysowanie 2 rzędu gracza
-				StartDrawPointX = OtherFunctions::AlignCenter(0.2f, 0.8f, +PSecond.size() * 0.08f);
-				for (int i = 0; i < PSecond.size(); i++)
-				{
-					RangeButtons[i] = Button(PSecond[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.6f));
-					PSecond[i].DrawCard(StartDrawPointX + i * 0.08f, 0.6f);
-					if (RangeButtons[i].MouseOn(mouseX, mouseY))
-					{
-						PSecond[i].DrawBigCardDescr(0.02, 0.1f);
-					}
-				}
-				
-				//Rysowanie ręki gracza
-				StartDrawPointX = OtherFunctions::AlignCenter(0.01f,0.86f, +PlayerHand.size() * 0.08f);
-				for (int i = 0; i < PlayerHand.size(); i++)
-				{
-					HandButtons[i] = Button(PlayerHand[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.8f));
-				
-					if (HandButtons[i].MouseOn(mouseX, mouseY))
-					{
-						PlayerHand[i].DrawBigCardDescr(0.02, 0.1f);
-						PlayerHand[i].DrawCard(StartDrawPointX + i * 0.08f, 0.76f);
-						if (mouseButton == 1)
-						{
-							if (Player.CanPlay(PlayerHand[i]))
-							{	
-								std::cout<<"Zagrano" << PlayerHand[i].ReturnName() << "\n";
-								Player.PlayCard(Player.UseCard(i));		//Zagranie karty i usunięcie jej z ręki
-								mouseButton = 0;
-							}
-						}
-					}
-					else
-					{
-						PlayerHand[i].DrawCard(StartDrawPointX + i * 0.08f, 0.8f);
-					}
-					//HandButtons[i].DrawHitbox();
-				}
-
-				OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.92),settings::PosY(0.93) }, { 100,100 },
-					{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player.ReturnAmountOfCardStack()).c_str());
-				CardList::BrotherOfBlood.DrawCard(0.895, 0.75);
-				//Player.DrawHand();
-			}
-			al_flip_display();
+			al_clear_to_color(Colors::darkGray);					//tło
+			GameStart = GameBegin(mouseX, mouseY,&CardsChanged);	//Wymiana kart 
+			al_flip_display();										//Wrzucenie na ekran
+			continue;
+		}
+		if (events.type == ALLEGRO_EVENT_TIMER && !GameStart)		//Partia
+		{
+			al_clear_to_color(Colors::darkGray);	//tło
+			DrawOtherInfo();						//Rysowanie reszty informacji 
+			DrawPlayersCards(mouseX, mouseY);		//Rysowanie kart gracza	
+			al_flip_display();						//Wrzucenie na ekran
 		}
 	}
 	return 0;
+}
+//Możliwość wymiany kart w ręce gracza
+//Zwraca czy można zacząć grę
+//Oraz zmienia wartość liczby zmienionych kart (argument funkjcji)
+//----------------------------------------------------------------
+bool Game::GameBegin(float mouseX,float mouseY,int *CardsChanged)
+{
+	//Przyciski
+	Button StartGame(settings::PosX(0.7f), settings::PosY(0.5f), settings::PosX(0.8f), settings::PosY(0.55f));
+	std::vector<Card> PlayerHand = Player.ReturnPlayerHand();
+	//Rysowanie instrukcji
+	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.24f), ALLEGRO_ALIGN_CENTER, "Wybierz kartę którą chcesz odrzucić");
+	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.29f), ALLEGRO_ALIGN_CENTER, ("Liczba dostępnych przelosowań:  " + std::to_string(2 - *CardsChanged)).c_str());
+	//Rysowanie ręki gracza
+	for (int i = 0; i < PlayerHand.size(); i++)
+	{
+		if (i < 5)
+		{
+			PlayerHand[i].DrawCard(0.25f + i * 0.08f, 0.36f);
+		}
+		else
+		{
+			PlayerHand[i].DrawCard(0.25f + (i % (5)) * 0.08f, 0.56f);
+		}
+		HandButtons[i] = Button(PlayerHand[i].ReturnVertexesPosition());
+		if (HandButtons[i].MouseOn(mouseX, mouseY))	//Rysowanie dużej karty
+		{
+			PlayerHand[i].DrawBigCardDescr(0.02f, 0.1f);
+		}
+	}
+	//Przyciski
+	if (StartGame.MouseOn(mouseX, mouseY) && mouseButton == 1)	//Rozpoczęcie gracza nie wykorzystując wszystkich przelosowań
+	{
+		return false;
+	}
+	for (int i = 0; i < PlayerHand.size(); i++)
+	{
+		if (HandButtons[i].MouseOn(mouseX, mouseY) && mouseButton == 1)	//Rysowanie dużej karty
+		{
+			Player.PutToStack(Player.UseCard(i));	//Usuwa kartę z ręki i dodaje do nie używanych kart
+			Player.TakeCard();
+			*CardsChanged += 1;
+			mouseButton = 0;
+		}
+	}
+	if (*CardsChanged >= 2)	//Osiągnięcie limitu przelosowań kart
+	{
+		return false;
+	}
+	StartGame.DrawHitbox();
+	return true;
+}
+//Rysuje karty należące do gracza oraz sprawdza przyciski
+//---------------------------
+void Game::DrawPlayersCards(float mouseX,float mouseY)
+{
+	std::vector<Card> PlayerHand = Player.ReturnPlayerHand();
+	std::vector<Card> PFirst = Player.ReturnMeleeRow();
+	std::vector<Card> PSecond = Player.ReturnRangeRow();
+	ClearButtons();
+	float StartDrawPointX;
+
+	//Rysowanie 1 rzędu gracza
+	StartDrawPointX = OtherFunctions::AlignCenter(0.2f, 0.86f, +PFirst.size() * 0.08f);
+	for (int i = 0; i < PFirst.size(); i++)
+	{
+		MeleeButtons[i] = Button(PFirst[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.4f));
+		PFirst[i].DrawCard(StartDrawPointX + i * 0.08f, 0.4f);
+		if (MeleeButtons[i].MouseOn(mouseX, mouseY))
+		{
+			PFirst[i].DrawBigCardDescr(0.02, 0.1f);
+		}
+	}
+	//Rysowanie 2 rzędu gracza
+	StartDrawPointX = OtherFunctions::AlignCenter(0.2f, 0.8f, +PSecond.size() * 0.08f);
+	for (int i = 0; i < PSecond.size(); i++)
+	{
+		RangeButtons[i] = Button(PSecond[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.6f));
+		PSecond[i].DrawCard(StartDrawPointX + i * 0.08f, 0.6f);
+		if (RangeButtons[i].MouseOn(mouseX, mouseY))
+		{
+			PSecond[i].DrawBigCardDescr(0.02, 0.1f);
+		}
+	}
+
+	//Rysowanie ręki gracza
+	StartDrawPointX = OtherFunctions::AlignCenter(0.01f, 0.86f, +PlayerHand.size() * 0.08f);
+	for (int i = 0; i < PlayerHand.size(); i++)
+	{
+		HandButtons[i] = Button(PlayerHand[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.8f));
+
+		if (HandButtons[i].MouseOn(mouseX, mouseY))
+		{
+			PlayerHand[i].DrawBigCardDescr(0.02, 0.1f);
+			PlayerHand[i].DrawCard(StartDrawPointX + i * 0.08f, 0.76f);
+			if (mouseButton == 1 && Player.CanPlay(PlayerHand[i]))
+			{
+				Player.PlayCard(Player.UseCard(i));		//Zagranie karty i usunięcie jej z ręki
+				mouseButton = 0;
+			}
+		}
+		else
+		{
+			PlayerHand[i].DrawCard(StartDrawPointX + i * 0.08f, 0.8f);
+		}
+	}
+}
+//Rysuje inne informacje takie jak ilość kart i liczba wygranych rund
+//------------------------
+void Game::DrawOtherInfo()
+{
+	//Wygrane gracza
+	ALLEGRO_BITMAP* FirstCrystal;
+	ALLEGRO_BITMAP* SecondCrystal;
+	if (Enemy.ReturnRoundsWon() == 0)
+	{
+		FirstCrystal = Images::YellowCrystal;
+		SecondCrystal = Images::PurpleCrystal;
+	}
+	else if (Enemy.ReturnRoundsWon() == 1)
+	{
+		FirstCrystal = Images::EmptyCrystal;
+		SecondCrystal = Images::PurpleCrystal;
+	}
+	else
+	{
+		FirstCrystal = Images::EmptyCrystal;
+		SecondCrystal = Images::EmptyCrystal;
+	}
+	//Kryształy gracz
+	al_draw_scaled_bitmap(FirstCrystal, 0, 0, 100, 100, settings::PosX(0.17), settings::PosY(0.39), settings::PosX(0.015), settings::PosY(0.015 * settings::ProportionScreenWH()), NULL);
+	al_draw_scaled_bitmap(SecondCrystal, 0, 0, 100, 100, settings::PosX(0.19), settings::PosY(0.39), settings::PosX(0.015), settings::PosY(0.015 * settings::ProportionScreenWH()), NULL);
+	//Kryształy przeciwnika
+	if (Player.ReturnRoundsWon() == 0)
+	{
+		FirstCrystal = Images::YellowCrystal;
+		SecondCrystal = Images::PurpleCrystal;
+	}
+	else if (Player.ReturnRoundsWon() == 1)
+	{
+		FirstCrystal = Images::EmptyCrystal;
+		SecondCrystal = Images::PurpleCrystal;
+	}
+	else
+	{
+		FirstCrystal = Images::EmptyCrystal;
+		SecondCrystal = Images::EmptyCrystal;
+	}
+	al_draw_scaled_bitmap(FirstCrystal, 0, 0, 100, 100, settings::PosX(0.17), settings::PosY(0.34), settings::PosX(0.015), settings::PosY(0.015 * settings::ProportionScreenWH()), NULL);
+	al_draw_scaled_bitmap(SecondCrystal, 0, 0, 100, 100, settings::PosX(0.19), settings::PosY(0.34), settings::PosX(0.015), settings::PosY(0.015 * settings::ProportionScreenWH()), NULL);
+	//Rzędy gracza
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.783),settings::PosY(0.45) }, { 100,100 },
+		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player.ReturnMeleePoints()).c_str());
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.783),settings::PosY(0.65) }, { 100,100 },
+		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player.ReturnRangePoints()).c_str());
+	//Rzędy przeciwnika
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.783),settings::PosY(0.25) }, { 100,100 },
+		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Enemy.ReturnMeleePoints()).c_str());
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.783),settings::PosY(0.05) }, { 100,100 },
+		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Enemy.ReturnRangePoints()).c_str());
+	//Suma punktów rzędów
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.165),settings::PosY(0.25) }, { 100,100 },
+		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Enemy.CountPoints()).c_str());
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.165),settings::PosY(0.45) }, { 100,100 },
+		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player.CountPoints()).c_str());
+	//Nie dobrane karty
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.82) }, { 100,100 },
+		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player.ReturnAmountOfCardStack()).c_str());
+	CardList::BrotherOfBlood.DrawCard(0.865, 0.76);
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.12) }, { 100,100 },
+		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Enemy.ReturnAmountOfCardStack()).c_str());
+	CardList::BrotherOfBlood.DrawCard(0.865, 0.06);
+	//Talia użytych kart
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.62) }, { 100,100 },
+		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player.ReturnAmountOfCardUsed()).c_str());
+	CardList::BrotherOfBlood.DrawCard(0.865, 0.56);
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.32) }, { 100,100 },
+		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Enemy.ReturnAmountOfCardStack()).c_str());
+	CardList::BrotherOfBlood.DrawCard(0.865, 0.26);
+}
+
+void Game::ClearButtons()
+{
+	for (int i = 0; i < 10; i++)
+	{
+		HandButtons[i] = Button();
+	}
+	for (int i = 0; i < 6; i++)
+	{
+		MeleeButtons[i] = Button();
+		RangeButtons[i] = Button();
+	}
+
 }

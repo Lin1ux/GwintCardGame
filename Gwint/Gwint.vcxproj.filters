@@ -187,6 +187,21 @@
     <Image Include="images\SkillDescr.png">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="images\Empty Crystal.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Melee Circle.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\PurpleCrystal.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Range Circle.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\YellowCrystal.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="fonts\Arialic Hollow.ttf" />

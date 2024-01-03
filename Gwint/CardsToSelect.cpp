@@ -1,9 +1,45 @@
 ﻿#include "CardsToSelect.h"
 
+CardsToSelect::CardsToSelect()
+{
+	std::vector<Card> Cards = CardList::ReturnAllCards();
+	for (int i = 0; i < Cards.size(); i++)
+	{
+		AvaliableCards.push_back(Cards[i]);
+		if (AvaliableCards[i].ReturnIsHero())
+		{
+			CardsLeft.push_back(1);
+		}
+		else
+		{
+			CardsLeft.push_back(3);
+		}
+	}
+}
+
 //Konstruktor
 //--------------------------------------------------
 CardsToSelect::CardsToSelect(std::vector<Card> Cards)
 {
+	for (int i = 0; i < Cards.size(); i++)
+	{
+		AvaliableCards.push_back(Cards[i]);
+		if (AvaliableCards[i].ReturnIsHero())
+		{
+			CardsLeft.push_back(1);
+		}
+		else
+		{
+			CardsLeft.push_back(3);
+		}
+	}
+}
+//Ustawia nowe karty
+//--------------------------------------------------
+void CardsToSelect::SetCard(std::vector<Card> Cards)
+{
+	CardsLeft.clear();
+	AvaliableCards.clear();
 	for (int i = 0; i < Cards.size(); i++)
 	{
 		AvaliableCards.push_back(Cards[i]);

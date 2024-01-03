@@ -75,7 +75,14 @@ void Card::DrawCard(float x1, float y1)
 	}
 	//Dane karty
 	al_draw_scaled_bitmap(Images::StatFrame, 0, 0, 330, 100, PosX(x1), PosY(DownEdgePos), PosX(ImgSizeX * 1.1), PosY(ImgSizeX * 0.3 * settings::ProportionScreenWH()), NULL);
-	al_draw_scaled_bitmap(Images::StatCircle, 0, 0, 100, 100, PosX(x1 + 0.005), PosY(DownEdgePos + 0.002), PosX(ImgSizeX * 0.25), PosY(ImgSizeX * 0.25 * settings::ProportionScreenWH()), NULL);
+	if (row == 1)
+	{
+		al_draw_scaled_bitmap(Images::MeleeCircle, 0, 0, 100, 100, PosX(x1 + 0.005), PosY(DownEdgePos + 0.002), PosX(ImgSizeX * 0.25), PosY(ImgSizeX * 0.25 * settings::ProportionScreenWH()), NULL);
+	}
+	else
+	{
+		al_draw_scaled_bitmap(Images::RangeCircle, 0, 0, 100, 100, PosX(x1 + 0.005), PosY(DownEdgePos + 0.002), PosX(ImgSizeX * 0.25), PosY(ImgSizeX * 0.25 * settings::ProportionScreenWH()), NULL);
+	}
 	al_draw_scaled_bitmap(Images::StatCircle, 0, 0, 100, 100, PosX(x1 + 0.029), PosY(DownEdgePos + 0.002), PosX(ImgSizeX * 0.25), PosY(ImgSizeX * 0.25 * settings::ProportionScreenWH()), NULL);
 	al_draw_scaled_bitmap(skill.ReturnIcon(), 0, 0, 100, 100, PosX(x1 + 0.0525), PosY(DownEdgePos + 0.002), PosX(ImgSizeX * 0.25), PosY(ImgSizeX * 0.25 * settings::ProportionScreenWH()), NULL);
 	if (heroCard)
@@ -120,7 +127,14 @@ void Card::DrawBigCard(float x1, float y1)
 	al_draw_scaled_bitmap(Images::StatFrame, 0, 0, 330, 100, PosX(x1), PosY(DownEdgePos), PosX(ImgSizeX * 1.1), PosY(ImgSizeX * 0.3 * settings::ProportionScreenWH()), NULL);
 	//Dane karty
 	al_draw_scaled_bitmap(Images::StatCircle, 0, 0, 100, 100, PosX(x1 + 0.01), PosY(DownEdgePos + 0.012), PosX(ImgSizeX * 0.2), PosY(ImgSizeX * 0.2 * settings::ProportionScreenWH()), NULL);
-	al_draw_scaled_bitmap(Images::StatCircle, 0, 0, 100, 100, PosX(x1 + 0.04), PosY(DownEdgePos + 0.012), PosX(ImgSizeX * 0.2), PosY(ImgSizeX * 0.2 * settings::ProportionScreenWH()), NULL);
+	if (row == 1)
+	{
+		al_draw_scaled_bitmap(Images::MeleeCircle, 0, 0, 100, 100, PosX(x1 + 0.04), PosY(DownEdgePos + 0.012), PosX(ImgSizeX * 0.2), PosY(ImgSizeX * 0.2 * settings::ProportionScreenWH()), NULL);
+	}
+	else
+	{
+		al_draw_scaled_bitmap(Images::RangeCircle, 0, 0, 100, 100, PosX(x1 + 0.04), PosY(DownEdgePos + 0.012), PosX(ImgSizeX * 0.2), PosY(ImgSizeX * 0.2 * settings::ProportionScreenWH()), NULL);
+	}
 	al_draw_scaled_bitmap(Images::StatCircle, 0, 0, 100, 100, PosX(x1 + 0.07), PosY(DownEdgePos + 0.012), PosX(ImgSizeX * 0.2), PosY(ImgSizeX * 0.2 * settings::ProportionScreenWH()), NULL);
 	al_draw_scaled_bitmap(skill.ReturnIcon(), 0, 0, 100, 100, PosX(x1 + 0.1), PosY(DownEdgePos + 0.012), PosX(ImgSizeX * 0.2), PosY(ImgSizeX * 0.2 * settings::ProportionScreenWH()), NULL);
 	al_draw_text(Fonts::ValueFont, Colors::white, PosX(x1 + 0.022), PosY(DownEdgePos + 0.009), ALLEGRO_ALIGN_CENTER, std::to_string(cost).c_str());

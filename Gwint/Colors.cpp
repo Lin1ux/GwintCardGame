@@ -12,3 +12,4 @@
 	ALLEGRO_COLOR Colors::lightGreen = al_map_rgb(126, 214, 126);
 	ALLEGRO_COLOR Colors::blue = al_map_rgb(0, 0, 255);
 	ALLEGRO_COLOR Colors::lightGold = al_map_rgb(213, 189, 110);
+	ALLEGRO_COLOR Colors::yellow = al_map_rgb(255, 255, 0);

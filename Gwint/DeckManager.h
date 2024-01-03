@@ -14,6 +14,7 @@ private:
 	int minAmountOfCards;
 	std::vector<Card> Deck;
 public:
+	DeckManager();
 	DeckManager(int MaxGold, int MaxCard);
 	bool CanAddCard(Card Card);
 	bool CanStartGame();

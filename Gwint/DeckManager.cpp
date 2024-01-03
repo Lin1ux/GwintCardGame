@@ -1,5 +1,15 @@
 ﻿#include "DeckManager.h"
 
+DeckManager::DeckManager()
+{
+	maxCost = 0;
+	CurrentCost = 0;
+	gold = 0;
+	amountOfCards = 0;
+	minAmountOfCards = 0;
+	Deck = std::vector<Card>();
+}
+
 //Konstruktor
 //-----------------------------------------------
 DeckManager::DeckManager(int MaxGold, int MaxCard)

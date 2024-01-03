@@ -14,5 +14,6 @@ public:
 	static ALLEGRO_COLOR lightGreen;
 	static ALLEGRO_COLOR blue;
 	static ALLEGRO_COLOR lightGold;
+	static ALLEGRO_COLOR yellow;
 };
 

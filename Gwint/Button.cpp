@@ -75,10 +75,9 @@ bool Button::MouseOn(float mouseX, float mouseY)
 			Color = Colors::green;
 			return true;
 		}
-		else
-		{
-			Color = Colors::red;
-			return false;
-		}
+		Color = Colors::red;
+		return false;
 	}
+	Color = Colors::yellow;
+	return false;
 }

@@ -1,5 +1,6 @@
 #include <allegro5/allegro.h>               //Biblioteka Allegro
 #include <iostream>
+#include <vector>
 
 typedef struct Point
 {

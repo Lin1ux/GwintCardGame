@@ -1,4 +1,7 @@
 #include "PlayerInfo.h"
+#include "OtherFunctions.h"
+#include <algorithm>
+#include <random>
 
 PlayerInfo::PlayerInfo()
 {
@@ -20,7 +23,8 @@ PlayerInfo::PlayerInfo(std::vector<Card> DeckCards)
 	MeleeRow = std::vector<Card>();		//Karty w 1 rzêdzie (walka wrêcz)
 	RangeRow = std::vector<Card>();		//Karty w 2 rzêdzie (dystansowy)
 
-	//Dokoñczyæ ulosowiæ dobieranie rêki i reszty tali (Do testów to rozwi¹zanie jest lepsze)
+	//Dokoñczyæ Odkomentowaæ linijkê pod tym komentarzem (Do testów lepiej nie tasowaæ tali)
+	//std::random_shuffle(DeckCards.begin(), DeckCards.end());		//Przetasowanie kart w tali gracza
 	for (int i = 0; i < DeckCards.size(); i++)
 	{
 		if (i < 10)
@@ -31,18 +35,41 @@ PlayerInfo::PlayerInfo(std::vector<Card> DeckCards)
 		{
 			CardStack.push_back(DeckCards[i]);						//Karty nie dobrane
 		}
-
-	}
+	} 
 	CardUsed = std::vector<Card>();;								//Karty odrzucone
+}
+//Zlicza punkty z 1 rzêdu
+//---------------------------------
+int PlayerInfo::ReturnMeleePoints()
+{
+	int MeleePoints = 0;
+	//Zliczanie wartoœci z 1 rzêdu
+	for (int i = 0; i<MeleeRow.size(); i++)
+	{
+		MeleePoints += MeleeRow[i].ReturnValue();
+	}
+	return MeleePoints;
+}
+//Zlicza punkty z 2 rzêdu
+//----------------------------------
+int PlayerInfo::ReturnRangePoints()
+{
+	int RangePoints = 0;
+	//Zliczanie wartoœci z 1 rzêdu
+	for (int i = 0; i<RangeRow.size(); i++)
+	{
+		RangePoints += RangeRow[i].ReturnValue();
+	}
+	return RangePoints;
 }
 
 //Zlicza punkty z obu rzêdów
 //---------------------------
 int PlayerInfo::CountPoints()
 {
-	Points = 0;
+	Points = ReturnMeleePoints() + ReturnRangePoints();
 	//Zliczanie wartoœci z 1 rzêdu
-	for (int i = 0; MeleeRow.size(); i++)
+	/*for (int i = 0; MeleeRow.size(); i++)
 	{
 		Points += MeleeRow[i].ReturnValue();
 	}
@@ -50,7 +77,7 @@ int PlayerInfo::CountPoints()
 	for (int i = 0; RangeRow.size(); i++)
 	{
 		Points += RangeRow[i].ReturnValue();
-	}
+	}*/
 	return Points;
 }
 
@@ -116,8 +143,6 @@ void PlayerInfo::PutToStack(Card NewCard)
 //------------------------------------
 bool PlayerInfo::CanPlay(Card NewCard)
 {
-	std::cout << "1: " << MeleeRow.size() << "\n";
-	std::cout << "2: " << RangeRow.size() << "\n";
 	if (NewCard.ReturnRow() == 1 && MeleeRow.size() < 6)
 	{
 		return true;

@@ -211,14 +211,18 @@
     <Image Include="images\CharacterFrame.png" />
     <Image Include="images\CharacterFrameGold.png" />
     <Image Include="images\Czempion Kultu.png" />
+    <Image Include="images\Empty Crystal.png" />
     <Image Include="images\Golem.png" />
     <Image Include="images\Jelito.png" />
     <Image Include="images\Liniux.png" />
+    <Image Include="images\Melee Circle.png" />
     <Image Include="images\Mimik.png" />
     <Image Include="images\Mozdzierz.png" />
     <Image Include="images\Ogar Mrozu.png" />
     <Image Include="images\Omobamidele.png" />
     <Image Include="images\Parazaur.png" />
+    <Image Include="images\PurpleCrystal.png" />
+    <Image Include="images\Range Circle.png" />
     <Image Include="images\Raptor.png" />
     <Image Include="images\Reptilian.png" />
     <Image Include="images\Sarkozuch.png" />
@@ -228,6 +232,7 @@
     <Image Include="images\Terizino.png" />
     <Image Include="images\TextFrame.png" />
     <Image Include="images\Tytus.png" />
+    <Image Include="images\YellowCrystal.png" />
     <Image Include="images\Zenon.png" />
   </ItemGroup>
   <ItemGroup>
