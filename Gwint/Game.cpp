@@ -128,9 +128,13 @@ int Game::GameLoop()
 		}
 		if (events.type == ALLEGRO_EVENT_TIMER && !GameStart)		//Partia
 		{
+			Enemy.SetRoundFinished(true);			//Dokończyć usunąć (do testów)
+			
 			al_clear_to_color(Colors::darkGray);	//tło
 			DrawOtherInfo();						//Rysowanie reszty informacji 
 			DrawPlayersCards(mouseX, mouseY);		//Rysowanie kart gracza	
+			RoundInfo(mouseX, mouseY);				//Przycisk końca rundy
+			RoundResult();							//Koniec rundy
 			al_flip_display();						//Wrzucenie na ekran
 		}
 	}
@@ -314,6 +318,52 @@ void Game::DrawOtherInfo()
 	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.32) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Enemy.ReturnAmountOfCardStack()).c_str());
 	CardList::BrotherOfBlood.DrawCard(0.865, 0.26);
+}
+//Odpowiada za koniec rundy
+//--------------------------------------------
+void Game::RoundInfo(float mouseX,float mouseY)
+{
+	Button EndRound(settings::PosX(0.865f), settings::PosY(0.47f), settings::PosX(0.945f), settings::PosY(0.515f));
+	EndRound.SetText("Koniec tury");
+	if (EndRound.MouseOn(mouseX,mouseY) && mouseButton == 1)
+	{
+		Player.SetRoundFinished(true);
+		mouseButton = 0;	
+	}
+	EndRound.DrawImage();
+	//EndRound.DrawHitbox();
+	EndRound.DrawText(Fonts::SmallValueFont,settings::PosY(0.004) );
+}
+//Oblicza wynik rundy i czyści stół, zwraca true jeśli runda się zakończyła
+//-------------------------------------------------------------------------
+bool Game::RoundResult()
+{
+	if (!Player.IsFinishedRound() || !Enemy.IsFinishedRound())
+	{
+		return false;
+	}
+	int playerPoints = Player.CountPoints();
+	int enemyPoints = Enemy.CountPoints();
+	//Sprawdzanie kto wygrał rundę
+	if (playerPoints > enemyPoints)
+	{
+		Player.RoundWon();
+	}
+	else if (playerPoints < enemyPoints)
+	{
+		Enemy.RoundWon();
+	}
+	else
+	{
+		Player.RoundWon();
+		Enemy.RoundWon();
+	}
+	//Przygotowanie do następnej rundy
+	Player.SetRoundFinished(false);
+	Enemy.SetRoundFinished(false);
+	Player.EndRound();
+	Enemy.EndRound();
+	return true;
 }
 
 void Game::ClearButtons()

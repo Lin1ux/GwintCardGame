@@ -5,6 +5,7 @@
 class PlayerInfo
 {
 private:
+	bool RoundFinished;				//Czy skoñczono runde
 	int Points;						//Punkty
 	int RoundsWon;					//Wygrane rundy
 	std::vector<Card> MeleeRow;		//Karty w 1 rzêdzie (walka wrêcz)
@@ -15,9 +16,12 @@ private:
 public:
 	PlayerInfo();								
 	PlayerInfo(std::vector<Card> DeckCards);							//Konstruktor, Dobiera karty do rêki i nie dobrane karty
+	bool IsFinishedRound();												//Czy zakoñczono rundê
+	void SetRoundFinished(bool newState);								//Zmienia wartoœæ koñca rundy
 	int ReturnMeleePoints();											//Zlicza punkty z 1 rzêdu
 	int ReturnRangePoints();											//Zlicza punkty z 2 rzêdu
 	int CountPoints();													//Zlicza punkty z obu rzêdów
+	int ReturnPoints();													//Zwraca punkty
 	int ReturnRoundsWon();												//Zwraca liczbê wygranych rund
 	void RoundWon();													//Zwiêksza liczbê wygranych rund o 1
 	void EndRound();													//Czyœci stó³ i wrzuca usuniête karty do stosu odrzuconych

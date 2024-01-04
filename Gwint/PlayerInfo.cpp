@@ -5,6 +5,7 @@
 
 PlayerInfo::PlayerInfo()
 {
+	RoundFinished = false;
 	Points = 0;
 	RoundsWon = 0;
 	MeleeRow = std::vector<Card>();
@@ -18,6 +19,7 @@ PlayerInfo::PlayerInfo()
 //------------------------------------------------------
 PlayerInfo::PlayerInfo(std::vector<Card> DeckCards)
 {
+	RoundFinished = false;				//Koniec Rundy
 	Points = 0;							//Punkty
 	RoundsWon = 0;						//Wygrane rundy
 	MeleeRow = std::vector<Card>();		//Karty w 1 rzêdzie (walka wrêcz)
@@ -37,6 +39,18 @@ PlayerInfo::PlayerInfo(std::vector<Card> DeckCards)
 		}
 	} 
 	CardUsed = std::vector<Card>();;								//Karty odrzucone
+}
+//Czy zakoñczono rundê
+//--------------------------------
+bool PlayerInfo::IsFinishedRound()
+{
+	return RoundFinished;
+}
+//Zmienia wartoœæ koñca rundy
+//----------------------------------------------
+void PlayerInfo::SetRoundFinished(bool newState)
+{
+	RoundFinished = newState;
 }
 //Zlicza punkty z 1 rzêdu
 //---------------------------------
@@ -68,16 +82,12 @@ int PlayerInfo::ReturnRangePoints()
 int PlayerInfo::CountPoints()
 {
 	Points = ReturnMeleePoints() + ReturnRangePoints();
-	//Zliczanie wartoœci z 1 rzêdu
-	/*for (int i = 0; MeleeRow.size(); i++)
-	{
-		Points += MeleeRow[i].ReturnValue();
-	}
-	//Zliczanie wartoœci z 2 rzêdu
-	for (int i = 0; RangeRow.size(); i++)
-	{
-		Points += RangeRow[i].ReturnValue();
-	}*/
+	return Points;
+}
+//Zwraca punkty
+//----------------------------
+int PlayerInfo::ReturnPoints()
+{
 	return Points;
 }
 
