@@ -16,6 +16,9 @@ private:
 	int sizeX;
 	int sizeY;
 	std::string text;
+	ALLEGRO_COLOR CurrentTextColor;
+	ALLEGRO_COLOR TextColor1;
+	ALLEGRO_COLOR TextColor2;
 public:
 	Button();
 	Button(float X1, float Y1, float X2, float Y2);
@@ -25,6 +28,7 @@ public:
 	bool ChangeState(bool newState);
 	void SetImage(ALLEGRO_BITMAP* Newimage,int sx,int sy);
 	void SetText(std::string newText);
+	void SetColor(ALLEGRO_COLOR Color1, ALLEGRO_COLOR Color2);
 	void DrawHitbox();
 	void DrawImage();
 	void DrawText(ALLEGRO_FONT* Font, float moveY);

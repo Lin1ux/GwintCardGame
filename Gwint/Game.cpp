@@ -24,7 +24,8 @@ Game::Game(ALLEGRO_DISPLAY* Disp,std::vector<Card> PlayerDeck, std::vector<Card>
 	Display = Disp;
 	PlayerTurn = true;
 	Player = PlayerInfo(PlayerDeck);
-	Enemy = PlayerInfo(EnemyDeck);
+	//Enemy = PlayerInfo(EnemyDeck);
+	Enemy = PlayerInfo(PlayerDeck);	//Dokończyć zmienić później na talię przeciwnika 
 	mouseButton = 0;
 	ClearButtons();
 }
@@ -59,6 +60,7 @@ int Game::GameLoop()
 	std::vector<Card> PlayerHand;
 	std::vector<Card> PFirst;
 	std::vector<Card> PSecond;
+	Card LastPlayedCard;
 
 	float mouseX = 0;			//X myszy
 	float  mouseY = 0;			//Y myszy
@@ -128,14 +130,19 @@ int Game::GameLoop()
 		}
 		if (events.type == ALLEGRO_EVENT_TIMER && !GameStart)		//Partia
 		{
-			Enemy.SetRoundFinished(true);			//Dokończyć usunąć (do testów)
+			Enemy.SetRoundFinished(true);							//Dokończyć usunąć (do testów)
 			
-			al_clear_to_color(Colors::darkGray);	//tło
-			DrawOtherInfo();						//Rysowanie reszty informacji 
-			DrawPlayersCards(mouseX, mouseY);		//Rysowanie kart gracza	
-			RoundInfo(mouseX, mouseY);				//Przycisk końca rundy
-			RoundResult();							//Koniec rundy
-			al_flip_display();						//Wrzucenie na ekran
+			al_clear_to_color(Colors::darkGray);					//tło
+			DrawOtherInfo();										//Rysowanie reszty informacji 
+			LastPlayedCard = DrawPlayersCards(mouseX, mouseY);		//Rysowanie kart gracza i zagranie karty
+			while (LastPlayedCard != Card())						
+			{
+				LastPlayedCard = AbilityManager(LastPlayedCard);	//Używa umiejętności karty
+			}
+			//LastPlayedCard = Card();								//Wyczyszczenie użytej karty
+			RoundInfo(mouseX, mouseY);								//Przycisk końca rundy
+			RoundResult();											//Koniec rundy
+			al_flip_display();										//Wrzucenie na ekran
 		}
 	}
 	return 0;
@@ -146,8 +153,10 @@ int Game::GameLoop()
 //----------------------------------------------------------------
 bool Game::GameBegin(float mouseX,float mouseY,int *CardsChanged)
 {
-	//Przyciski
+	//Przycisk startu gry
 	Button StartGame(settings::PosX(0.7f), settings::PosY(0.5f), settings::PosX(0.8f), settings::PosY(0.55f));
+	StartGame.SetColor(Colors::white, Colors::lightGray);
+	StartGame.SetText("Rozpocznij");
 	std::vector<Card> PlayerHand = Player.ReturnPlayerHand();
 	//Rysowanie instrukcji
 	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.24f), ALLEGRO_ALIGN_CENTER, "Wybierz kartę którą chcesz odrzucić");
@@ -188,16 +197,19 @@ bool Game::GameBegin(float mouseX,float mouseY,int *CardsChanged)
 	{
 		return false;
 	}
-	StartGame.DrawHitbox();
+	StartGame.DrawImage();
+	StartGame.DrawText(Fonts::NameFont, settings::PosY(0.005f));
+	//StartGame.DrawHitbox();
 	return true;
 }
 //Rysuje karty należące do gracza oraz sprawdza przyciski
 //---------------------------
-void Game::DrawPlayersCards(float mouseX,float mouseY)
+Card Game::DrawPlayersCards(float mouseX,float mouseY)
 {
 	std::vector<Card> PlayerHand = Player.ReturnPlayerHand();
 	std::vector<Card> PFirst = Player.ReturnMeleeRow();
 	std::vector<Card> PSecond = Player.ReturnRangeRow();
+	Card PlayedCard = Card();
 	ClearButtons();
 	float StartDrawPointX;
 
@@ -234,8 +246,9 @@ void Game::DrawPlayersCards(float mouseX,float mouseY)
 		{
 			PlayerHand[i].DrawBigCardDescr(0.02, 0.1f);
 			PlayerHand[i].DrawCard(StartDrawPointX + i * 0.08f, 0.76f);
-			if (mouseButton == 1 && Player.CanPlay(PlayerHand[i]))
+			if (mouseButton == 1 && Player.CanPlay(PlayerHand[i]) && PlayerTurn)
 			{
+				PlayedCard = PlayerHand[i];
 				Player.PlayCard(Player.UseCard(i));		//Zagranie karty i usunięcie jej z ręki
 				mouseButton = 0;
 			}
@@ -245,6 +258,55 @@ void Game::DrawPlayersCards(float mouseX,float mouseY)
 			PlayerHand[i].DrawCard(StartDrawPointX + i * 0.08f, 0.8f);
 		}
 	}
+	return PlayedCard;
+}
+//Sprawdza i używa odpowiedniej umiejętności
+//------------------------------------------
+Card Game::AbilityManager(Card UsedCard)
+{
+	Card NewCard = Card();
+	//Umiejętność kart gracza
+	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Horde)	//Horda
+	{
+		NewCard = Player.UseCard(UsedCard);	
+		if (NewCard != Card())
+		{
+			Player.PlayCard(NewCard);
+			return NewCard;
+		}
+		NewCard = Player.UseStackCard(UsedCard);
+		std::cout << NewCard.ReturnName()<<":"<<NewCard.ReturnCost() << "\n";
+		if (NewCard != Card())
+		{
+			Player.PlayCard(NewCard);
+			return NewCard;
+		}
+	}
+	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Thief)	//Złodziej
+	{
+		NewCard = Enemy.TakeCardFromStack();
+		if (Player.CanPlay(NewCard))
+		{
+			Player.PlayCard(NewCard);
+		}
+		//Player.TakeCard(Enemy.TakeCardFromStack());
+	}
+	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Transport)	//Transport
+	{
+		
+		//TakeCard
+
+	}
+	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::SummonerMortar)	//Przywoływacz moździerz
+	{
+		NewCard = CardList::Mortar;
+		if (Player.CanPlay(NewCard))
+		{
+			Player.PlayCard(NewCard);
+		}
+	}
+	//Umiejętność kart przeciwnika
+	return NewCard;
 }
 //Rysuje inne informacje takie jak ilość kart i liczba wygranych rund
 //------------------------
@@ -316,7 +378,7 @@ void Game::DrawOtherInfo()
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player.ReturnAmountOfCardUsed()).c_str());
 	CardList::BrotherOfBlood.DrawCard(0.865, 0.56);
 	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.32) }, { 100,100 },
-		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Enemy.ReturnAmountOfCardStack()).c_str());
+		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Enemy.ReturnAmountOfCardUsed()).c_str());
 	CardList::BrotherOfBlood.DrawCard(0.865, 0.26);
 }
 //Odpowiada za koniec rundy
@@ -324,7 +386,9 @@ void Game::DrawOtherInfo()
 void Game::RoundInfo(float mouseX,float mouseY)
 {
 	Button EndRound(settings::PosX(0.865f), settings::PosY(0.47f), settings::PosX(0.945f), settings::PosY(0.515f));
+	EndRound.SetColor(Colors::white, Colors::lightGray);
 	EndRound.SetText("Koniec tury");
+
 	if (EndRound.MouseOn(mouseX,mouseY) && mouseButton == 1)
 	{
 		Player.SetRoundFinished(true);
@@ -365,7 +429,8 @@ bool Game::RoundResult()
 	Enemy.EndRound();
 	return true;
 }
-
+//Czyści zawartość przycisków
+//---------------------------
 void Game::ClearButtons()
 {
 	for (int i = 0; i < 10; i++)

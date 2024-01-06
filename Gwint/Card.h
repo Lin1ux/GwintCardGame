@@ -24,22 +24,23 @@ private:
 	float PosX(float x);
 	float PosY(float x);
 public:
-	Card(bool IsHero,int newRow,int newValue,int newCost, Skills newSkill, std::string newName, ALLEGRO_BITMAP* Image);
-	Card(const Card & c);
-	Card();
-	int ReturnValue();
-	int ReturnCost();
-	int ReturnRow();
-	bool ReturnIsHero();
-	std::string ReturnName();
-	RectanglePoints ReturnVertexesPosition();
-	void DrawCard(float x1, float y1);
-	void DrawBigCard(float x1, float y1);
-	void DrawBigCardDescr(float x1, float y1);
-	void DrawSmallCard(float x1, float y1);
-	RectanglePoints NormalCardVertexesPosition(float x1, float y1);
-	bool operator == (const Card & c);
-	bool operator != (const Card& c);
+	Card(bool IsHero,int newRow,int newValue,int newCost, Skills newSkill, std::string newName, ALLEGRO_BITMAP* Image);	//Konstruktor
+	Card(const Card & c);												//Konstruktor
+	Card();																//Konstruktor
+	int ReturnValue();													//Zwraca aktualn¹ wartoœæ karty	
+	int ReturnCost();													//Zwraca koszt karty
+	int ReturnRow();													//Zwraca rz¹d karty na który mo¿na j¹ zagraæ
+	Skills ReturnSkill();												//Zwraca umiejêtnoœæ karty
+	bool ReturnIsHero();												//Zwraca czy karta jest z³ota
+	std::string ReturnName();											//Zwraca nazwê karty
+	RectanglePoints ReturnVertexesPosition();							//Zwraca wspó³rzêdne wierzcho³ków ostatniej narysowanej karty
+	void DrawCard(float x1, float y1);									//Rysuje kartê z podstawowymi danymi
+	void DrawBigCard(float x1, float y1);								//Rysuje kartê z wszystkimi danymi
+	void DrawBigCardDescr(float x1, float y1);							//Rysuje kartê z wszystkimi danymi oraz opisem umiejêtnoœci
+	void DrawSmallCard(float x1, float y1);								//Rysuje kartê z nazw¹ 
+	RectanglePoints NormalCardVertexesPosition(float x1, float y1);		//Zwraca wspó³rzêdne wierzcho³ków zwyk³ej karty na podanym punkcie
+	bool operator == (const Card & c);									//Do porównanie kart
+	bool operator != (const Card& c);									//Do porównania kart
 
 };
 

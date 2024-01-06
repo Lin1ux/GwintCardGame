@@ -25,6 +25,9 @@ Button::Button()
 	sizeX = 330;
 	sizeY = 100;
 	text = "";
+	CurrentTextColor = Colors::white;
+	TextColor1 = Colors::white;
+	TextColor2 = Colors::white;
 }
 //Konstruktor z punktami
 //----------------------------------------------------
@@ -40,6 +43,9 @@ Button::Button(float X1, float Y1, float X2, float Y2)
 	sizeX = 330;
 	sizeY = 100;
 	text = "";
+	CurrentTextColor = Colors::white;
+	TextColor1 = Colors::white;
+	TextColor2 = Colors::white;
 }
 Button::Button(Point P1, Point P2)
 {
@@ -53,6 +59,9 @@ Button::Button(Point P1, Point P2)
 	sizeX = 330;
 	sizeY = 100;
 	text = "";
+	CurrentTextColor = Colors::white;
+	TextColor1 = Colors::white;
+	TextColor2 = Colors::white;
 }
 
 Button::Button(RectanglePoints Points)
@@ -67,6 +76,9 @@ Button::Button(RectanglePoints Points)
 	sizeX = 330;
 	sizeY = 100;
 	text = "";
+	CurrentTextColor = Colors::white;
+	TextColor1 = Colors::white;
+	TextColor2 = Colors::white;
 }
 //Czy przycisk jest aktywny
 //-------------------------
@@ -94,6 +106,12 @@ void Button::SetText(std::string newText)
 {
 	text = newText;
 }
+void Button::SetColor(ALLEGRO_COLOR Color1, ALLEGRO_COLOR Color2)
+{
+	CurrentTextColor = Color1;
+	TextColor1 = Color1;
+	TextColor2 = Color2;
+}
 //Rysuje wizualizacje hitboxa przycisku
 //--------------------------------------
 void Button::DrawHitbox()
@@ -110,7 +128,7 @@ void Button::DrawImage()
 //--------------------------------------
 void Button::DrawText(ALLEGRO_FONT* Font,float moveY)
 {
-	al_draw_text(Font, Colors::white, x1+(x2 - x1) / 2, y1+ moveY, ALLEGRO_ALIGN_CENTER, text.c_str());
+	al_draw_text(Font, CurrentTextColor, x1+(x2 - x1) / 2, y1+ moveY, ALLEGRO_ALIGN_CENTER, text.c_str());
 }
 //Sprawdza czy podany punkt znajduje siê na aktywnym przycisku
 //------------------------------------------------------------
@@ -121,9 +139,11 @@ bool Button::MouseOn(float mouseX, float mouseY)
 		if (mouseX > x1 && mouseY > y1 && mouseX < x2 && mouseY < y2)
 		{
 			Color = Colors::green;
+			CurrentTextColor = TextColor2;
 			return true;
 		}
 		Color = Colors::red;
+		CurrentTextColor = TextColor1;
 		return false;
 	}
 	Color = Colors::yellow;

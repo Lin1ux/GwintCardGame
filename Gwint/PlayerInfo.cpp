@@ -129,8 +129,7 @@ void PlayerInfo::TakeCard()
 {
 	if (PlayerHand.size() < 10)
 	{
-		Card NewCard = CardStack.back();
-		CardStack.pop_back();
+		Card NewCard = TakeCardFromStack();
 		PlayerHand.push_back(NewCard);
 	}
 }
@@ -149,17 +148,40 @@ void PlayerInfo::PutToStack(Card NewCard)
 {
 	CardStack.insert(CardStack.begin(), NewCard);
 }
+Card PlayerInfo::TakeCardFromStack()
+{
+	Card Card = CardStack.back();
+	CardStack.pop_back();
+	return Card;
+}
+Card PlayerInfo::UseStackCard(Card CardToRemove)
+{
+	for (int i = 0; i < CardStack.size(); i++)
+	{
+		if (CardToRemove == CardStack[i])
+		{
+			Card removedCard = CardStack[i];
+			CardStack.erase(CardStack.begin() + i);
+			return removedCard;
+		}
+	}
+	return Card();
+}
 //Sprawdza czy mo¿na zagraæ kartê
 //------------------------------------
 bool PlayerInfo::CanPlay(Card NewCard)
 {
-	if (NewCard.ReturnRow() == 1 && MeleeRow.size() < 6)
+	if (!RoundFinished)
 	{
-		return true;
-	}
-	else if (NewCard.ReturnRow() == 2 && RangeRow.size() < 6)
-	{
-		return true;
+		if (NewCard.ReturnRow() == 1 && MeleeRow.size() < 6)
+		{
+			return true;
+		}
+		else if (NewCard.ReturnRow() == 2 && RangeRow.size() < 6)
+		{
+			return true;
+		}		
+		return false;
 	}
 	return false;
 }
@@ -184,11 +206,28 @@ void PlayerInfo::DrawHand()
 		PlayerHand[i].DrawCard(0.15f + i * 0.08f, 0.8f);
 	}
 }
+//Usuwa kartê z rêki i zwraca j¹
+//---------------------------------
 Card PlayerInfo::UseCard(int index)
 {
 	Card removedCard = PlayerHand[index];
 	PlayerHand.erase(PlayerHand.begin() + index);
 	return removedCard;
+}
+//Usuwa podan¹ kartê jeœli znajduje siê rêce i zwraca j¹
+//--------------------------------------------------------
+Card PlayerInfo::UseCard(Card CardToUse)
+{
+	for (int i = 0; i < PlayerHand.size();i++)
+	{
+		if (CardToUse == PlayerHand[i])
+		{
+			Card removedCard = PlayerHand[i];
+			PlayerHand.erase(PlayerHand.begin() + i);
+			return removedCard;
+		}
+	}
+	return Card();
 }
 //Zwraca karty w 1 rzêdzie
 //--------------------------------------------
@@ -232,5 +271,6 @@ int PlayerInfo::ReturnAmountOfCardUsed()
 {
 	return CardUsed.size();
 }
+
 
 

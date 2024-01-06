@@ -52,7 +52,7 @@ Card::Card()
 	row = 1;
 	skill = AllSkills::None;
 	name = "";
-	CardImage = Images::Bert;
+	CardImage = Images::Empty;
 	Point zeroPoint = { 0,0 };
 	vertexes = { zeroPoint ,zeroPoint ,zeroPoint ,zeroPoint };
 }
@@ -206,9 +206,16 @@ int Card::ReturnCost()
 	return cost;
 }
 //Zwraca rząd karty
+//-------------------
 int Card::ReturnRow()
 {
 	return row;
+}
+//Zwraca Umiejętność karty
+//------------------------
+Skills Card::ReturnSkill()
+{
+	return skill;
 }
 //Czy karta jest bohaterem
 //------------------------

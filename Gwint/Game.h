@@ -16,7 +16,8 @@ private:
 	Button MeleeButtons[6];
 	Button RangeButtons[6];
 	bool GameBegin(float mouseX, float mouseY,int *CardsChanged);	//Mo¿liwoœæ wymiany kart w rêce gracza
-	void DrawPlayersCards(float mouseX, float mouseY);				//Rysuje karty nale¿¹ce do gracza oraz sprawdza przyciski
+	Card DrawPlayersCards(float mouseX, float mouseY);				//Rysuje karty nale¿¹ce do gracza oraz sprawdza przyciski pozwala na zagranie karty i zwraca zagran¹ kartê
+	Card AbilityManager(Card UsedCard);								//Sprawdza i u¿ywa odpowiedniej umiejêtnoœci i zwraca nowo zagran¹ kartê jeœli umiejêtnoœæ zagrywa dodatkowe karty
 	void DrawOtherInfo();											//Rysuje inne informacje takie jak iloœæ kart i liczba wygranych rund
 	void RoundInfo(float mouseX, float mouseY);						//Odpowiada za koniec rundy
 	bool RoundResult();												//Oblicza wynik rundy i czyœci stó³, zwraca true jeœli runda siê zakoñczy³a

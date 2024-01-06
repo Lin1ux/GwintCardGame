@@ -212,6 +212,7 @@
     <Image Include="images\CharacterFrameGold.png" />
     <Image Include="images\Czempion Kultu.png" />
     <Image Include="images\Empty Crystal.png" />
+    <Image Include="images\Empty.png" />
     <Image Include="images\Golem.png" />
     <Image Include="images\Jelito.png" />
     <Image Include="images\Liniux.png" />

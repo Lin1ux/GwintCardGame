@@ -3,6 +3,7 @@
 #include <allegro5/allegro_image.h>
 
 //Deklaracja Postaci
+ALLEGRO_BITMAP* Images::Empty;
 ALLEGRO_BITMAP* Images::Bert;
 ALLEGRO_BITMAP* Images::BrotherOfBlood;
 ALLEGRO_BITMAP* Images::FrozenChempion;
@@ -39,6 +40,7 @@ ALLEGRO_BITMAP* Images::PurpleCrystal;
 void Images::SetImages()
 {
 	//Postacie
+	Images::Empty = al_load_bitmap("images/Empty.png");
 	Images::Bert = al_load_bitmap("images/Bert.png");
 	Images::BrotherOfBlood = al_load_bitmap("images/Brat Krwi.png");
 	Images::FrozenChempion = al_load_bitmap("images/Czempion Kultu.png");

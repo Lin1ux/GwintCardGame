@@ -7,6 +7,7 @@ class Images
 	//Postacie
 public:
 	//Characters
+	static ALLEGRO_BITMAP* Empty;
 	static ALLEGRO_BITMAP* Bert;
 	static ALLEGRO_BITMAP* BrotherOfBlood;
 	static ALLEGRO_BITMAP* FrozenChempion;
