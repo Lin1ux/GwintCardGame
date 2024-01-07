@@ -9,6 +9,7 @@ class Game
 private:
 	ALLEGRO_DISPLAY* Display;
 	int mouseButton;
+	int skillId;
 	bool PlayerTurn;
 	PlayerInfo Player;
 	PlayerInfo Enemy;

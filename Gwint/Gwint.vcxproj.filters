@@ -205,6 +205,21 @@
     <Image Include="images\Empty.png">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="images\Karnotaur.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Krokoliszek królewski.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Moloch.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Serafin.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Tarczownik.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="fonts\Arialic Hollow.ttf" />

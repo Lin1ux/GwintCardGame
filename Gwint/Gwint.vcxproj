@@ -215,9 +215,12 @@
     <Image Include="images\Empty.png" />
     <Image Include="images\Golem.png" />
     <Image Include="images\Jelito.png" />
+    <Image Include="images\Karnotaur.png" />
+    <Image Include="images\Krokoliszek królewski.png" />
     <Image Include="images\Liniux.png" />
     <Image Include="images\Melee Circle.png" />
     <Image Include="images\Mimik.png" />
+    <Image Include="images\Moloch.png" />
     <Image Include="images\Mozdzierz.png" />
     <Image Include="images\Ogar Mrozu.png" />
     <Image Include="images\Omobamidele.png" />
@@ -227,9 +230,11 @@
     <Image Include="images\Raptor.png" />
     <Image Include="images\Reptilian.png" />
     <Image Include="images\Sarkozuch.png" />
+    <Image Include="images\Serafin.png" />
     <Image Include="images\SkillDescr.png" />
     <Image Include="images\StatCircle.png" />
     <Image Include="images\StatFrame.png" />
+    <Image Include="images\Tarczownik.png" />
     <Image Include="images\Terizino.png" />
     <Image Include="images\TextFrame.png" />
     <Image Include="images\Tytus.png" />

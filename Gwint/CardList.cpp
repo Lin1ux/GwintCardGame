@@ -6,6 +6,8 @@
 #include "Images.h"
 #include "AllSkills.h"
 
+int CardList::front;
+int CardList::back;
 Card CardList::Bert;
 Card CardList::BrotherOfBlood;
 Card CardList::FrozenChempion;
@@ -28,6 +30,8 @@ Card CardList::Zenon;
 //------------------------------------
 void CardList::SetCards()
 {
+	front = 1;
+	back = 2;
 	AllSkills::SetSkills();			//Upewnienie, że wszystkie umiejętności zostały ustawione
 	//Ustawianie danych kart
 	Bert = Card(false, 2, 3,10, AllSkills::None, "Bert", Images::Bert);

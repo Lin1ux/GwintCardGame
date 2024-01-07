@@ -67,6 +67,7 @@ int Game::GameLoop()
 	bool GameOver = false;		//Pętla
 	bool GameStart = true;		//Początek gry
 	int CardsChanged = 0;		//Liczba odrzuconych kart
+	//int skillId = 0;			//Do kontrolowania interfejsu dla specjalnych umiejętności
 	while (!GameOver)
 	{
 		ALLEGRO_EVENT events;
@@ -126,6 +127,28 @@ int Game::GameLoop()
 			al_clear_to_color(Colors::darkGray);					//tło
 			GameStart = GameBegin(mouseX, mouseY,&CardsChanged);	//Wymiana kart 
 			al_flip_display();										//Wrzucenie na ekran
+			continue;
+		}
+		if (events.type == ALLEGRO_EVENT_TIMER && !GameStart && skillId == AllSkills::transport)	//Transport
+		{
+			Card CardToTake;
+			al_clear_to_color(Colors::darkGray);												//tło
+			DrawOtherInfo();																	//Rysowanie reszty informacji 
+			CardToTake = DrawPlayersCards(mouseX, mouseY);										//Rysowanie kart gracza i zagranie karty
+			if (Player.ReturnAmountOfCardOnTable() - Player.NumberOfCardsWithSkill(AllSkills::Transport) < 1)
+			{
+				skillId = 0;
+				continue;
+			}
+			if (CardToTake.ReturnSkill() != AllSkills::Transport && CardToTake != Card() && mouseButton == 1)		
+			{
+				Player.TakeCard(CardToTake);
+				Player.RemoveCardFromTable(CardToTake);
+				//Player.TakeCard(Player.RemoveCardFromTable(CardToTake));						//Wymiana karty
+				skillId = 0;
+				mouseButton = 0;
+			}
+			al_flip_display();
 			continue;
 		}
 		if (events.type == ALLEGRO_EVENT_TIMER && !GameStart)		//Partia
@@ -203,7 +226,7 @@ bool Game::GameBegin(float mouseX,float mouseY,int *CardsChanged)
 	return true;
 }
 //Rysuje karty należące do gracza oraz sprawdza przyciski
-//---------------------------
+//----------------------------------------------------
 Card Game::DrawPlayersCards(float mouseX,float mouseY)
 {
 	std::vector<Card> PlayerHand = Player.ReturnPlayerHand();
@@ -221,6 +244,10 @@ Card Game::DrawPlayersCards(float mouseX,float mouseY)
 		PFirst[i].DrawCard(StartDrawPointX + i * 0.08f, 0.4f);
 		if (MeleeButtons[i].MouseOn(mouseX, mouseY))
 		{
+			if (skillId != 0)
+			{
+				PlayedCard = PFirst[i];
+			}
 			PFirst[i].DrawBigCardDescr(0.02, 0.1f);
 		}
 	}
@@ -232,6 +259,10 @@ Card Game::DrawPlayersCards(float mouseX,float mouseY)
 		PSecond[i].DrawCard(StartDrawPointX + i * 0.08f, 0.6f);
 		if (RangeButtons[i].MouseOn(mouseX, mouseY))
 		{
+			if (skillId != 0)
+			{
+				PlayedCard = PSecond[i];
+			}
 			PSecond[i].DrawBigCardDescr(0.02, 0.1f);
 		}
 	}
@@ -293,9 +324,8 @@ Card Game::AbilityManager(Card UsedCard)
 	}
 	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Transport)	//Transport
 	{
-		
+		skillId = AllSkills::transport;
 		//TakeCard
-
 	}
 	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::SummonerMortar)	//Przywoływacz moździerz
 	{

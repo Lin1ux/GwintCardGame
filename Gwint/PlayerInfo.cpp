@@ -1,5 +1,6 @@
 #include "PlayerInfo.h"
 #include "OtherFunctions.h"
+#include "CardList.h"
 #include <algorithm>
 #include <random>
 
@@ -177,7 +178,7 @@ bool PlayerInfo::CanPlay(Card NewCard)
 		{
 			return true;
 		}
-		else if (NewCard.ReturnRow() == 2 && RangeRow.size() < 6)
+		if (NewCard.ReturnRow() == 2 && RangeRow.size() < 6)
 		{
 			return true;
 		}		
@@ -229,6 +230,35 @@ Card PlayerInfo::UseCard(Card CardToUse)
 	}
 	return Card();
 }
+//Usuwa kartê z sto³u
+//-----------------------------------------------------
+Card PlayerInfo::RemoveCardFromTable(Card CardToRemove)
+{
+	Card RemovedCard = Card();
+	if (CardToRemove.ReturnRow() == CardList::front)
+	{
+		for (int i = 0; i < MeleeRow.size(); i++)
+		{
+			if (CardToRemove == MeleeRow[i])
+			{
+				RemovedCard = Card();
+				MeleeRow.erase(MeleeRow.begin() + i);
+			}
+		}	
+	}
+	if (CardToRemove.ReturnRow() == CardList::back)
+	{
+		for (int i = 0; i < RangeRow.size(); i++)
+		{
+			if (CardToRemove == RangeRow[i])
+			{
+				RemovedCard = Card();
+				RangeRow.erase(RangeRow.begin() + i);
+			}
+		}
+	}
+	return RemovedCard;
+}
 //Zwraca karty w 1 rzêdzie
 //--------------------------------------------
 std::vector<Card> PlayerInfo::ReturnMeleeRow()
@@ -271,6 +301,33 @@ int PlayerInfo::ReturnAmountOfCardUsed()
 {
 	return CardUsed.size();
 }
+//Zwraca liczbê kart na stole
+//-----------------------------------------
+int PlayerInfo::ReturnAmountOfCardOnTable()
+{
+	return  MeleeRow.size() + RangeRow.size();
+}
+//Zwraca liczbê kart na stole posiadaj¹ce dan¹ umiejêtnoœæ
+int PlayerInfo::NumberOfCardsWithSkill(Skills Skill)
+{
+	int sum = 0;
+	for (int i = 0; i < MeleeRow.size(); i++)
+	{
+		if (MeleeRow[i].ReturnSkill() == Skill)
+		{
+			sum += 1;
+		}
+	}
+	for (int i = 0; i < RangeRow.size(); i++)
+	{
+		if (RangeRow[i].ReturnSkill() == Skill)
+		{
+			sum += 1;
+		}
+	}
+	return sum;
+}
+
 
 
 

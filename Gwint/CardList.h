@@ -11,6 +11,8 @@
 class CardList
 {
 public:
+	static int front;
+	static int back;
 	static Card Bert;
 	static Card BrotherOfBlood;
 	static Card FrozenChempion;

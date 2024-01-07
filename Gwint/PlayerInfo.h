@@ -36,12 +36,16 @@ public:
 	//Nie dobrane karty
 	void PutToStack(Card NewCard);										//Wrzuca kartê do tali nie dobranych kart
 	Card TakeCardFromStack();											//Dobiera kartê z nie u¿ytych kart
-	Card UseStackCard(Card CardToRemove);									//Usuwa wybran¹ kartê z nie u¿ytych kart i zwraca j¹
+	Card UseStackCard(Card CardToRemove);								//Usuwa wybran¹ kartê z nie u¿ytych kart i zwraca j¹
 	//Zagranie karty
 	bool CanPlay(Card NewCard);											//Sprawdza czy mo¿na zagraæ kartê
 	void PlayCard(Card NewCard);										//Umieszcza kartê na stó³ do odpowiedniego rzêdu
 	Card UseCard(int index);											//Usuwa kartê z rêki i zwraca j¹
 	Card UseCard(Card CardToUse);										//Usuwa podan¹ kartê jeœli znajduje siê rêce i zwraca j¹
+	//Stó³
+	Card RemoveCardFromTable(Card CardToRemove);						//Usuwa kartê z sto³u
+	int ReturnAmountOfCardOnTable();									//Zwraca liczbê kart na stole
+	int NumberOfCardsWithSkill(Skills Skill);							//Zwraca liczbê kart na stole posiadaj¹ce dan¹ umiejêtnoœæ
 	//Zwracanie kart
 	std::vector<Card> ReturnMeleeRow();									//Zwraca karty w 1 rzêdzie
 	std::vector<Card> ReturnRangeRow();									//Zwraca karty w 2 rzêdzie
