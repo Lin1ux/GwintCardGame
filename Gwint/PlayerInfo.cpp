@@ -131,7 +131,11 @@ void PlayerInfo::TakeCard()
 	if (PlayerHand.size() < 10)
 	{
 		Card NewCard = TakeCardFromStack();
-		PlayerHand.push_back(NewCard);
+		//Zabezpieczenie przed dodaniem pustej karty
+		if (NewCard != Card())
+		{
+			PlayerHand.push_back(NewCard);
+		}
 	}
 }
 //Jeœli jest miejsce dodaje podan¹ kartê do rêki
@@ -206,6 +210,12 @@ void PlayerInfo::DrawHand()
 	{
 		PlayerHand[i].DrawCard(0.15f + i * 0.08f, 0.8f);
 	}
+}
+//Zwraca liczbê kart w rêce
+//-----------------------------------
+int PlayerInfo::AmountOfCardsInHand()
+{
+	return PlayerHand.size();
 }
 //Usuwa kartê z rêki i zwraca j¹
 //---------------------------------
@@ -295,6 +305,10 @@ std::vector<Card> PlayerInfo::ReturnCardUsed()
 {
 	return CardUsed;
 }
+void PlayerInfo::AddCardToGraveyard(Card Card)
+{
+	CardUsed.push_back(Card);
+}
 //Zwraca liczbê kart zu¿ytych
 //--------------------------------------
 int PlayerInfo::ReturnAmountOfCardUsed()
@@ -327,7 +341,40 @@ int PlayerInfo::NumberOfCardsWithSkill(Skills Skill)
 	}
 	return sum;
 }
-
+//Zwraca liczbê podanych kart
+//----------------------------------------------------
+int PlayerInfo::NumberOfSpecificCards(Card CardToFind)
+{
+	int sum = 0;
+	for (int i = 0; i < MeleeRow.size(); i++)
+	{
+		if (MeleeRow[i] == CardToFind)
+		{
+			sum += 1;
+		}
+	}
+	for (int i = 0; i < RangeRow.size(); i++)
+	{
+		if (RangeRow[i] == CardToFind)
+		{
+			sum += 1;
+		}
+	}
+	return sum;
+}
+//Ustawia mno¿nik karty o podanym indeksie i rzêdzie
+void PlayerInfo::SetMultiplayerOfCard(int row, int index, int value)
+{
+	Card test;
+	if (row == CardList::front)
+	{
+		MeleeRow[index].ChangeMultiplayer(value);
+	}
+	if (row == CardList::back)
+	{
+		RangeRow[index].ChangeMultiplayer(value);
+	}
+}
 
 
 

@@ -144,7 +144,6 @@ int Game::GameLoop()
 			{
 				Player.TakeCard(CardToTake);
 				Player.RemoveCardFromTable(CardToTake);
-				//Player.TakeCard(Player.RemoveCardFromTable(CardToTake));						//Wymiana karty
 				skillId = 0;
 				mouseButton = 0;
 			}
@@ -154,7 +153,7 @@ int Game::GameLoop()
 		if (events.type == ALLEGRO_EVENT_TIMER && !GameStart)		//Partia
 		{
 			Enemy.SetRoundFinished(true);							//Dokończyć usunąć (do testów)
-			
+
 			al_clear_to_color(Colors::darkGray);					//tło
 			DrawOtherInfo();										//Rysowanie reszty informacji 
 			LastPlayedCard = DrawPlayersCards(mouseX, mouseY);		//Rysowanie kart gracza i zagranie karty
@@ -162,7 +161,6 @@ int Game::GameLoop()
 			{
 				LastPlayedCard = AbilityManager(LastPlayedCard);	//Używa umiejętności karty
 			}
-			//LastPlayedCard = Card();								//Wyczyszczenie użytej karty
 			RoundInfo(mouseX, mouseY);								//Przycisk końca rundy
 			RoundResult();											//Koniec rundy
 			al_flip_display();										//Wrzucenie na ekran
@@ -236,11 +234,55 @@ Card Game::DrawPlayersCards(float mouseX,float mouseY)
 	ClearButtons();
 	float StartDrawPointX;
 
+	std::vector<Card> BrotherHoodCards = std::vector<Card>();
+	//Umiejętności specjalne (Nwm czemu funkcja nie widzi zmian)
+	//Szukanie specjalnych kart I Rząd
+	for (int i = 0; i < PFirst.size(); i++)
+	{
+		if (PFirst[i].ReturnSkill() == AllSkills::Brotherhood && !CardInVector(BrotherHoodCards, PFirst[i]))
+		{
+			BrotherHoodCards.push_back(PFirst[i]);
+		}
+	}
+	//Nakładanie zmian
+	for (int i = 0; i < BrotherHoodCards.size(); i++)
+	{
+		int multiplayer = Player.NumberOfSpecificCards(BrotherHoodCards[i]);
+		for (int j = 0; j<PFirst.size(); j++)
+		{
+			if (PFirst[j] == BrotherHoodCards[i])
+			{
+				PFirst[j].ChangeMultiplayer(multiplayer);
+			}
+		}
+	}
+	BrotherHoodCards = std::vector<Card>();	//Czyszczenie vectora
+	//Szukanie specjalnych kart II rząd
+	for (int i = 0; i < PSecond.size(); i++)
+	{
+		if (PSecond[i].ReturnSkill() == AllSkills::Brotherhood && !CardInVector(BrotherHoodCards, PSecond[i]))
+		{
+			BrotherHoodCards.push_back(PSecond[i]);
+		}
+	}
+	//Nakładanie zmian
+	for (int i = 0; i < BrotherHoodCards.size(); i++)
+	{
+		int multiplayer = Player.NumberOfSpecificCards(BrotherHoodCards[i]);
+		for (int j = 0; j < PSecond.size(); j++)
+		{
+			if (PSecond[j] == BrotherHoodCards[i])
+			{
+				PSecond[j].ChangeMultiplayer(multiplayer);
+			}
+		}
+	}
 	//Rysowanie 1 rzędu gracza
 	StartDrawPointX = OtherFunctions::AlignCenter(0.2f, 0.86f, +PFirst.size() * 0.08f);
 	for (int i = 0; i < PFirst.size(); i++)
 	{
 		MeleeButtons[i] = Button(PFirst[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.4f));
+		//PFirst[i].ChangeMultiplayer(2);
 		PFirst[i].DrawCard(StartDrawPointX + i * 0.08f, 0.4f);
 		if (MeleeButtons[i].MouseOn(mouseX, mouseY))
 		{
@@ -252,7 +294,7 @@ Card Game::DrawPlayersCards(float mouseX,float mouseY)
 		}
 	}
 	//Rysowanie 2 rzędu gracza
-	StartDrawPointX = OtherFunctions::AlignCenter(0.2f, 0.8f, +PSecond.size() * 0.08f);
+	StartDrawPointX = OtherFunctions::AlignCenter(0.2f, 0.86f, +PSecond.size() * 0.08f);
 	for (int i = 0; i < PSecond.size(); i++)
 	{
 		RangeButtons[i] = Button(PSecond[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.6f));
@@ -297,6 +339,27 @@ Card Game::AbilityManager(Card UsedCard)
 {
 	Card NewCard = Card();
 	//Umiejętność kart gracza
+	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Brotherhood)	//Braterstwo
+	{
+		std::vector<Card> Table;
+		if (UsedCard.ReturnRow() == CardList::front)
+		{
+			Table = Player.ReturnMeleeRow();
+		}
+		if (UsedCard.ReturnRow() == CardList::back)
+		{
+			Table = Player.ReturnRangeRow();
+		}
+		int multiplayer = Player.NumberOfSpecificCards(UsedCard);
+		
+		for (int i = 0; i < Table.size(); i++)
+		{
+			if (Table[i] == UsedCard)
+			{
+				Player.SetMultiplayerOfCard(UsedCard.ReturnRow(), i, multiplayer);
+			}
+		}
+	}
 	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Horde)	//Horda
 	{
 		NewCard = Player.UseCard(UsedCard);	
@@ -325,14 +388,28 @@ Card Game::AbilityManager(Card UsedCard)
 	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Transport)	//Transport
 	{
 		skillId = AllSkills::transport;
-		//TakeCard
 	}
-	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::SummonerMortar)	//Przywoływacz moździerz
+	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::SummonerMortar)	//Przywołanie moździerza
 	{
 		NewCard = CardList::Mortar;
 		if (Player.CanPlay(NewCard))
 		{
 			Player.PlayCard(NewCard);
+		}
+	}
+	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Banish)	//Wygnanie
+	{
+		int PlayerHandCard = Player.AmountOfCardsInHand();
+		//Usunięcie kart z ręki i wrzucenie ich do cmentarza
+		for (int i = PlayerHandCard-1; i >= 0; i--)	
+		{
+			Card Card = Player.UseCard(i);
+			Player.AddCardToGraveyard(Card);
+		}
+		//Dobranie nowych kart
+		for (int i = 0; i < PlayerHandCard; i++)
+		{
+			Player.TakeCard();
 		}
 	}
 	//Umiejętność kart przeciwnika
@@ -474,4 +551,30 @@ void Game::ClearButtons()
 		RangeButtons[i] = Button();
 	}
 
+}
+
+void Game::BrotherhoodSkill(std::vector<Card> VectorCard, Card CardToFind)
+{
+	int multiplayer = Player.NumberOfSpecificCards(CardToFind);
+	for (int i = 0; i < VectorCard.size(); i++)
+	{
+		if (VectorCard[i] == CardToFind)
+		{
+			VectorCard[i].ChangeMultiplayer(multiplayer);
+		}
+	}
+}
+//Sprawdza czy karta jest w vectorze
+//--------------------------------------------------------------------
+bool Game::CardInVector(std::vector<Card> CardVector ,Card CardToFind)
+{
+	bool CardFound = false;
+	for (int i = 0; i < CardVector.size(); i++)
+	{
+		if (CardVector[i] == CardToFind)
+		{
+			return true;
+		}
+	}
+	return false;
 }

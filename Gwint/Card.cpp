@@ -19,6 +19,8 @@ Card::Card(bool IsHero, int newRow, int newValue,int newCost, Skills newSkill, s
 {
 	heroCard = IsHero;
 	value = newValue;
+	recievedDamage = 0;
+	multiplayer = 1;
 	currentValue = value;
 	cost = newCost;
 	row = newRow;
@@ -32,6 +34,8 @@ Card::Card(const Card& c)
 {
 	heroCard = c.heroCard;
 	value = c.value;
+	recievedDamage = 0;
+	multiplayer = 1;
 	currentValue = value;
 	cost = c.cost;
 	row = c.row;
@@ -47,6 +51,8 @@ Card::Card()
 {
 	heroCard = false;
 	value = 0;
+	recievedDamage = 0;
+	multiplayer = 1;
 	currentValue = value;
 	cost = 0;
 	row = 1;
@@ -89,9 +95,17 @@ void Card::DrawCard(float x1, float y1)
 	{
 		al_draw_text(Fonts::SmallValueFont, Colors::lightGold, PosX(x1 + 0.038), PosY(DownEdgePos - 0.0005), ALLEGRO_ALIGN_CENTER, std::to_string(currentValue).c_str());
 	}
-	else
+	else if(currentValue == value)
 	{
 		al_draw_text(Fonts::SmallValueFont, Colors::white, PosX(x1 + 0.038), PosY(DownEdgePos - 0.0005), ALLEGRO_ALIGN_CENTER, std::to_string(currentValue).c_str());
+	}
+	else if (currentValue > value)
+	{
+		al_draw_text(Fonts::SmallValueFont, Colors::lightGreen, PosX(x1 + 0.038), PosY(DownEdgePos - 0.0005), ALLEGRO_ALIGN_CENTER, std::to_string(currentValue).c_str());
+	}
+	else if (currentValue < value)
+	{
+		al_draw_text(Fonts::SmallValueFont, Colors::lightRed, PosX(x1 + 0.038), PosY(DownEdgePos - 0.0005), ALLEGRO_ALIGN_CENTER, std::to_string(currentValue).c_str());
 	}
 	vertexes = NormalCardVertexesPosition(x1, y1);
 	//OtherFunctions::DrawRectangle(vertexes, Colors::red, 5);
@@ -140,11 +154,11 @@ void Card::DrawBigCard(float x1, float y1)
 	al_draw_text(Fonts::ValueFont, Colors::white, PosX(x1 + 0.022), PosY(DownEdgePos + 0.009), ALLEGRO_ALIGN_CENTER, std::to_string(cost).c_str());
 	if (heroCard)
 	{
-		al_draw_text(Fonts::ValueFont, Colors::lightGold, PosX(x1 + 0.082), PosY(DownEdgePos + 0.009), ALLEGRO_ALIGN_CENTER, std::to_string(currentValue).c_str());
+		al_draw_text(Fonts::ValueFont, Colors::lightGold, PosX(x1 + 0.082), PosY(DownEdgePos + 0.009), ALLEGRO_ALIGN_CENTER, std::to_string(value).c_str());
 	}
 	else
 	{
-		al_draw_text(Fonts::ValueFont, Colors::white, PosX(x1 + 0.082), PosY(DownEdgePos + 0.009), ALLEGRO_ALIGN_CENTER, std::to_string(currentValue).c_str());
+		al_draw_text(Fonts::ValueFont, Colors::white, PosX(x1 + 0.082), PosY(DownEdgePos + 0.009), ALLEGRO_ALIGN_CENTER, std::to_string(value).c_str());
 	}
 	//Dolne pozycje wierzchołków
 	DownEdgePos += (ImgSizeX * 0.3 * settings::ProportionScreenWH());
@@ -211,6 +225,18 @@ int Card::ReturnRow()
 {
 	return row;
 }
+//Zwraca wartość otrzymanych obrażeń
+//----------------------------------
+int Card::ReturnReceivedDamage()
+{
+	return recievedDamage;
+}
+//Zwraca mnożnik karty
+//---------------------------
+int Card::ReturnMultiplayer()
+{
+	return multiplayer;
+}
 //Zwraca Umiejętność karty
 //------------------------
 Skills Card::ReturnSkill()
@@ -232,6 +258,24 @@ std::string Card::ReturnName()
 RectanglePoints Card::ReturnVertexesPosition()
 {
 	return vertexes;
+}
+//Zwiększa (lub zmniejsz jesli liczba jest ujemna) otrzymane obrażenia
+//-------------------------
+void Card::AddDamage(int x)
+{
+	recievedDamage += x;
+	CountValue();
+}
+void Card::ChangeMultiplayer(int x)
+{
+	multiplayer = x;
+	CountValue();
+}
+//Oblicza wartość karty
+//---------------------
+void Card::CountValue()
+{
+	currentValue = (value - recievedDamage) * multiplayer;
 }
 //Zwraca pozycję X z względu na procent
 //-------------------------------------
