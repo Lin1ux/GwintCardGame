@@ -11,6 +11,9 @@ int AllSkills::horde;
 int AllSkills::thief;
 int AllSkills::transport;
 int AllSkills::summonerMortar;
+int AllSkills::deadEater;
+int AllSkills::conflagration;
+int AllSkills::banish;
 
 Skills AllSkills::None;
 Skills AllSkills::Brotherhood;
@@ -22,6 +25,9 @@ Skills AllSkills::Horde;
 Skills AllSkills::Thief;
 Skills AllSkills::Transport;
 Skills AllSkills::SummonerMortar;
+Skills AllSkills::DeadEater;
+Skills AllSkills::Conflagration;
+Skills AllSkills::Banish;
 
 void AllSkills::SetSkills()
 {
@@ -36,15 +42,21 @@ void AllSkills::SetSkills()
 	AllSkills::thief = 7;
 	AllSkills::transport = 8;
 	AllSkills::summonerMortar = 9;
+	AllSkills::deadEater = 10;
+	AllSkills::conflagration = 11;
+	AllSkills::banish = 12;
 	//Umiejętności
-	None = Skills(none, "Brak", "", Images::StatCircle);
-	Brotherhood = Skills(brotherhood, "Braterstwo", "Zwiększa dwukrotnie wartość karty jeśli w tym samy rzędzie znajduje się ta sama karta", Images::StatCircle);
-	Medic = Skills(medic, "Medyk", "Wskrzesza ostatnią odrzuconą kartę", Images::StatCircle);
-	Spy = Skills(spy, "Szpieg", "Dobiera 2 karty ale zagrywany jest po stronie przeciwnika", Images::StatCircle);
-	Executioner = Skills(executioner, "Egzekutor", "Zabija najsilniejszego przeciwnika", Images::StatCircle);
-	Archer = Skills(archer, "Strzelec", "Zmniejsza maksymalną siłę wrogiej karty o 2", Images::StatCircle);
-	Horde = Skills(horde, "Wataha", "Przywołuje kartę tego samego typu", Images::StatCircle);
-	Thief = Skills(thief, "Złodziej", "Zabiera i zagrywa kartę z tali przeciwnika", Images::StatCircle);
-	Transport = Skills(transport, "Wierzchowiec", "Pozwala usunąć własną kartę i dodać ją do ręki", Images::StatCircle);
-	SummonerMortar = Skills(summonerMortar, "Przywoływacz", "Przywołuje Moździerz", Images::StatCircle);
+	None = Skills(none, "Brak", "", Images::None);
+	Brotherhood = Skills(brotherhood, "Braterstwo", "Zwiększa dwukrotnie wartość karty jeśli w tym samy rzędzie znajduje się ta sama karta", Images::Brotherhood);
+	Medic = Skills(medic, "Medyk", "Wskrzesza ostatnią odrzuconą kartę", Images::Medic);
+	Spy = Skills(spy, "Szpieg", "Dobiera 2 karty ale zagrywany jest po stronie przeciwnika", Images::Spy);
+	Executioner = Skills(executioner, "Egzekutor", "Zabija najsilniejszego przeciwnika", Images::Executioner);
+	Archer = Skills(archer, "Strzelec", "Zmniejsza maksymalną siłę wrogiej karty o 2", Images::Archer);
+	Horde = Skills(horde, "Wataha", "Przywołuje kartę tego samego typu", Images::Horde);
+	Thief = Skills(thief, "Złodziej", "Zabiera i zagrywa kartę z tali przeciwnika", Images::Thief);
+	Transport = Skills(transport, "Wierzchowiec", "Pozwala usunąć własną kartę i dodać ją do ręki", Images::Transport);
+	SummonerMortar = Skills(summonerMortar, "Przywoływacz", "Przywołuje Moździerz", Images::SummonerMortar);
+	DeadEater = Skills(deadEater, "Trupojad", "Pożera kartę z cmentarza i dodaje wartość pożartej karty do siebie", Images::DeadEater);
+	Conflagration = Skills(conflagration, "Pożoga", "Niszczy najsilniejsze karty na stole (karta nie niszczy siebie samej)", Images::Conflagration);
+	Banish = Skills(banish, "Wygnanie", "Przenosi wszystkie karty z rąk graczy do cmentarza i dobiera tyle samo kart ile zostało przeniesionych", Images::Banish);
 }

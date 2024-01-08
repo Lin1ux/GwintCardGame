@@ -345,6 +345,7 @@ void Game::DrawOtherInfo()
 	//Wygrane gracza
 	ALLEGRO_BITMAP* FirstCrystal;
 	ALLEGRO_BITMAP* SecondCrystal;
+	float ReverseCardSizeX = 0.07f;
 	if (Enemy.ReturnRoundsWon() == 0)
 	{
 		FirstCrystal = Images::YellowCrystal;
@@ -399,17 +400,17 @@ void Game::DrawOtherInfo()
 	//Nie dobrane karty
 	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.82) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player.ReturnAmountOfCardStack()).c_str());
-	CardList::BrotherOfBlood.DrawCard(0.865, 0.76);
+	al_draw_scaled_bitmap(Images::ReverseCard, 0, 0, 330, 430, settings::PosX(0.865), settings::PosY(0.76), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
 	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.12) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Enemy.ReturnAmountOfCardStack()).c_str());
-	CardList::BrotherOfBlood.DrawCard(0.865, 0.06);
+	al_draw_scaled_bitmap(Images::ReverseCard, 0, 0, 330, 430, settings::PosX(0.865), settings::PosY(0.06), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
 	//Talia użytych kart
 	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.62) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player.ReturnAmountOfCardUsed()).c_str());
-	CardList::BrotherOfBlood.DrawCard(0.865, 0.56);
+	al_draw_scaled_bitmap(Images::ReverseCard, 0, 0, 330, 430, settings::PosX(0.865), settings::PosY(0.56), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
 	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.32) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Enemy.ReturnAmountOfCardUsed()).c_str());
-	CardList::BrotherOfBlood.DrawCard(0.865, 0.26);
+	al_draw_scaled_bitmap(Images::ReverseCard, 0, 0, 330, 430, settings::PosX(0.865), settings::PosY(0.26), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
 }
 //Odpowiada za koniec rundy
 //--------------------------------------------

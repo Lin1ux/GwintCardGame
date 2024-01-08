@@ -13,6 +13,9 @@ public:
 	static int thief;
 	static int transport;
 	static int summonerMortar;
+	static int deadEater;
+	static int conflagration;
+	static int banish;
 
 	static Skills None;
 	static Skills Brotherhood;
@@ -24,6 +27,9 @@ public:
 	static Skills Thief;
 	static Skills Transport;
 	static Skills SummonerMortar;
+	static Skills DeadEater;
+	static Skills Conflagration;
+	static Skills Banish;
 	static void SetSkills();
 };
 

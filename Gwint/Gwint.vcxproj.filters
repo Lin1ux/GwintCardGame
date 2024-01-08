@@ -118,112 +118,151 @@
     <Text Include="test.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="images\Bert.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Brat Krwi.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Czempion Kultu.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Golem.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Jelito.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Liniux.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Mimik.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Mozdzierz.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Ogar Mrozu.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Omobamidele.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Parazaur.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Raptor.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Reptilian.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Sarkozuch.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Terizino.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Tytus.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Zenon.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\CharacterFrame.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\StatCircle.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\StatFrame.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\TextFrame.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\CharacterFrameGold.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\SkillDescr.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Empty Crystal.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Melee Circle.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\PurpleCrystal.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Range Circle.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\YellowCrystal.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Empty.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Karnotaur.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Krokoliszek królewski.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Moloch.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Serafin.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="images\Tarczownik.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
     <Font Include="fonts\Arialic Hollow.ttf" />
     <Font Include="fonts\Baloo-Regular.ttf" />
     <Font Include="fonts\TIMESS__.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\Characters\Bert.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Brat Krwi.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Czempion Kultu.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Empty.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Golem.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Jelito.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Karnotaur.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Krokoliszek.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Liniux.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Mimik.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Moloch.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Mozdzierz.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Ogar Mrozu.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Omobamidele.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Parazaur.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Raptor.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Reptilian.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Sarkozuch.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Serafin.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Tarczownik.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Terizino.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Tytus.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Zenon.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Skills\ArcherSkill.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Skills\BanishSkill.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Skills\BrotherhoodSkill.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Skills\DeadEaterSkill.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Skills\DeadSkill.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Skills\ExecutionSkill.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Skills\HordeSkill.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Skills\MedicSkill.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Skills\Melee Circle.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Skills\MortarSkill.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Skills\Range Circle.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Skills\SpySkill.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Skills\StatCircle.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Skills\ThiefSkill.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Skills\TransportSkill.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\CharacterFrame.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\CharacterFrameGold.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\Empty Crystal.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\PurpleCrystal.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\SkillDescr.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\StatFrame.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\TextFrame.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\YellowCrystal.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\ReverseCard.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
 </Project>
