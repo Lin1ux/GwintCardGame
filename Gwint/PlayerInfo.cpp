@@ -240,7 +240,7 @@ Card PlayerInfo::UseCard(Card CardToUse)
 	}
 	return Card();
 }
-//Usuwa kartê z sto³u
+//Usuwa pierwsz¹ znalezion¹ kartê 
 //-----------------------------------------------------
 Card PlayerInfo::RemoveCardFromTable(Card CardToRemove)
 {
@@ -251,8 +251,9 @@ Card PlayerInfo::RemoveCardFromTable(Card CardToRemove)
 		{
 			if (CardToRemove == MeleeRow[i])
 			{
-				RemovedCard = Card();
+				RemovedCard = MeleeRow[i];
 				MeleeRow.erase(MeleeRow.begin() + i);
+				break;
 			}
 		}	
 	}
@@ -262,10 +263,28 @@ Card PlayerInfo::RemoveCardFromTable(Card CardToRemove)
 		{
 			if (CardToRemove == RangeRow[i])
 			{
-				RemovedCard = Card();
+				RemovedCard = MeleeRow[i];
 				RangeRow.erase(RangeRow.begin() + i);
+				break;
 			}
 		}
+	}
+	return RemovedCard;
+}
+//Usuwa kartê z sto³u o podanym indeksie
+//------------------------------------------------------
+Card PlayerInfo::RemoveCardFromTable(int row, int index)
+{
+	Card RemovedCard = Card();
+	if (row == CardList::front)
+	{
+		RemovedCard = MeleeRow[index];
+		MeleeRow.erase(MeleeRow.begin() + index);
+	}
+	if (row == CardList::back)
+	{
+		RemovedCard = RangeRow[index];
+		RangeRow.erase(MeleeRow.begin() + index);
 	}
 	return RemovedCard;
 }
@@ -320,6 +339,20 @@ int PlayerInfo::ReturnAmountOfCardUsed()
 int PlayerInfo::ReturnAmountOfCardOnTable()
 {
 	return  MeleeRow.size() + RangeRow.size();
+}
+//Zwraca liczbê kart w wybranym rzêdzie
+//------------------------------------------------
+int PlayerInfo::ReturnAmountOfCardOnTable(int row)
+{
+	if (row == CardList::front)
+	{
+		return MeleeRow.size();
+	}
+	if (row == CardList::back)
+	{
+		return RangeRow.size();
+	}
+	return 0;
 }
 //Zwraca liczbê kart na stole posiadaj¹ce dan¹ umiejêtnoœæ
 int PlayerInfo::NumberOfCardsWithSkill(Skills Skill)

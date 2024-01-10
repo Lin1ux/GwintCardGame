@@ -23,14 +23,35 @@ Menu::Menu(ALLEGRO_DISPLAY* Disp, float DisplayWidth,float DisplayHeight)	//Kons
 	ScreenWidth = DisplayWidth;
 	ScreenHeight = DisplayHeight;
 	mouseButton = 0;
+	
+	//Ustawianie Statycznych obiektów
+	Images::SetImages();
+	Fonts::SetFonts();
+	AllSkills::SetSkills();
+	CardList::SetCards();
+	
 	//Przyciski Kart
+	//Przycisk następnej strony
 	PrevCards = Button(settings::PosX(0.3f), settings::PosY(0.85f), settings::PosX(0.39f), settings::PosY(0.95f));
+	PrevCards.SetColor(Colors::white, Colors::lightGray);
+	PrevCards.SetText("<-");
+	//Przycisk poprzedniej strony
 	NextCards = Button(settings::PosX(0.41f), settings::PosY(0.85f), settings::PosX(0.5f), settings::PosY(0.95f));
+	NextCards.SetColor(Colors::white, Colors::lightGray);
+	NextCards.SetText("->");
 	//Przyciski talii gracza
+	//Przycisk przewijania do góry tali
 	UpDeck = Button(settings::PosX(0.87f), settings::PosY(0.93f), settings::PosX(0.9f), settings::PosY(0.98f));
+	UpDeck.SetColor(Colors::white, Colors::lightGray);
+	UpDeck.SetText("/\\");
+	//Przycisk przewijania w dół tali
 	DownDeck = Button(settings::PosX(0.83f), settings::PosY(0.93f), settings::PosX(0.86f), settings::PosY(0.98f));
+	DownDeck.SetColor(Colors::white, Colors::lightGray);
+	DownDeck.SetText("\\/");
 	//Przycisk startu gry
 	StartGame = Button(settings::PosX(0.91f), settings::PosY(0.93f), settings::PosX(0.98f), settings::PosY(0.98f));
+	StartGame.SetColor(Colors::white, Colors::lightGray);
+	StartGame.SetText("Start");
 	StartGame.ChangeState(false);
 	Deck = DeckManager(600, 20);
 	MenuCards = CardsToSelect();
@@ -45,11 +66,6 @@ int Menu::MenuLoop()
 	//Timer
 	ALLEGRO_TIMER* timer = al_create_timer(1.0 / settings::FPS());
 
-	//Ustawianie Statycznych obiektów
-	Images::SetImages();
-	Fonts::SetFonts();
-	AllSkills::SetSkills();
-	CardList::SetCards();
 	//Załadowanie wszystkich kart dostępnych w grze
 	MenuCards.SetCard(CardList::ReturnAllCards());
 
@@ -140,11 +156,20 @@ int Menu::MenuLoop()
 			DrawCartToSelect(mouseX, mouseY, firstCard);				//Rysowanie kart do wyboru
 			DrawDeck(AmountOfShowCard, firstDeckCard, mouseX, mouseY);  //Rysowanie talii
 			//Rysowanie Przycisków
-			NextCards.DrawHitbox();
-			PrevCards.DrawHitbox();
-			UpDeck.DrawHitbox();
-			DownDeck.DrawHitbox();
-			StartGame.DrawHitbox();
+			NextCards.DrawImage();
+			NextCards.DrawText(Fonts::BigFont, settings::PosY(0.014f));
+			PrevCards.DrawImage();
+			PrevCards.DrawText(Fonts::BigFont, settings::PosY(0.014f));
+			//Przyciski talii
+			UpDeck.DrawImage();
+			UpDeck.DrawText(Fonts::NameFont, settings::PosY(0.004f));
+			DownDeck.DrawImage();
+			DownDeck.DrawText(Fonts::NameFont, settings::PosY(0.004f));
+			if (StartGame.IsActive())
+			{
+				StartGame.DrawImage();
+				StartGame.DrawText(Fonts::NameFont, settings::PosY(0.004f));
+			}
 			al_flip_display();
 		}
 	}

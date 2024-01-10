@@ -1,6 +1,12 @@
 #include <vector>
 #include "Card.h"
 
+typedef struct CardPos
+{
+	Card card;  //Karta
+	int index;  //Returned Index
+}CardPos;
+
 #pragma once
 class PlayerInfo
 {
@@ -16,7 +22,7 @@ private:
 
 public:
 	//Konstruktory
-	PlayerInfo();								
+	PlayerInfo();
 	PlayerInfo(std::vector<Card> DeckCards);							//Konstruktor, Dobiera karty do rêki i nie dobrane karty
 	//Koniec rundy
 	bool IsFinishedRound();												//Czy zakoñczono rundê
@@ -46,11 +52,13 @@ public:
 	Card UseCard(int index);											//Usuwa kartê o podanym indeksie z rêki i zwraca j¹
 	Card UseCard(Card CardToUse);										//Usuwa podan¹ kartê jeœli znajduje siê rêce i zwraca j¹
 	//Stó³
-	Card RemoveCardFromTable(Card CardToRemove);						//Usuwa kartê z sto³u
+	Card RemoveCardFromTable(Card CardToRemove);						//Usuwa pierwsz¹ znalezion¹ kartê 
+	Card RemoveCardFromTable(int row, int index);						//Usuwa kartê z sto³u o podanym indeksie
 	int ReturnAmountOfCardOnTable();									//Zwraca liczbê kart na stole
+	int ReturnAmountOfCardOnTable(int row);								//Zwraca liczbê kart w wybranym rzêdzie
 	int NumberOfCardsWithSkill(Skills Skill);							//Zwraca liczbê kart na stole posiadaj¹ce dan¹ umiejêtnoœæ
 	int NumberOfSpecificCards(Card CardToFind);							//Zwraca liczbê podanych kart
-	void SetMultiplayerOfCard(int row,int index,int value);				//Ustawia mno¿nik karty o podanym indeksie i rzêdzie							
+	void SetMultiplayerOfCard(int row, int index, int value);			//Ustawia mno¿nik karty o podanym indeksie i rzêdzie							
 	//Cmentarz (U¿yte karty)
 	void AddCardToGraveyard(Card Card);									//Dodaje kartê do cmentarza
 	int ReturnAmountOfCardUsed();										//Zwraca liczbê kart zu¿ytych
