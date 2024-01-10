@@ -236,12 +236,15 @@
     <Image Include="images\Characters\Zenon.png" />
     <Image Include="images\Skills\ArcherSkill.png" />
     <Image Include="images\Skills\BanishSkill.png" />
+    <Image Include="images\Skills\BanishSkillG.png" />
     <Image Include="images\Skills\BrotherhoodSkill.png" />
     <Image Include="images\Skills\DeadEaterSkill.png" />
+    <Image Include="images\Skills\DeadEaterSkillG.png" />
     <Image Include="images\Skills\DeadSkill.png" />
     <Image Include="images\Skills\ExecutionSkill.png" />
     <Image Include="images\Skills\HordeSkill.png" />
     <Image Include="images\Skills\MedicSkill.png" />
+    <Image Include="images\Skills\MedicSkillG.png" />
     <Image Include="images\Skills\Melee Circle.png" />
     <Image Include="images\Skills\MortarSkill.png" />
     <Image Include="images\Skills\Range Circle.png" />

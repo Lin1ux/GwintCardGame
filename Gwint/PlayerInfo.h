@@ -48,6 +48,7 @@ public:
 	int ReturnAmountOfCardStack();										//Zwraca liczbê nie u¿ytych kart
 	//Zagranie karty
 	bool CanPlay(Card NewCard);											//Sprawdza czy mo¿na zagraæ kartê
+	bool CanPlay(int row);												//Sprawdza czy mo¿na zagraæ kartê w podanym rzêdzie
 	void PlayCard(Card NewCard);										//Umieszcza kartê na stó³ do odpowiedniego rzêdu
 	Card UseCard(int index);											//Usuwa kartê o podanym indeksie z rêki i zwraca j¹
 	Card UseCard(Card CardToUse);										//Usuwa podan¹ kartê jeœli znajduje siê rêce i zwraca j¹
@@ -61,7 +62,9 @@ public:
 	void SetMultiplayerOfCard(int row, int index, int value);			//Ustawia mno¿nik karty o podanym indeksie i rzêdzie							
 	//Cmentarz (U¿yte karty)
 	void AddCardToGraveyard(Card Card);									//Dodaje kartê do cmentarza
+	int ReturnAmountOfCardsByRow(int row);								//Zwraca liczbê kart danego rzêdu
 	int ReturnAmountOfCardUsed();										//Zwraca liczbê kart zu¿ytych
+	Card RemoveCardFromGraveyard(Card Card);							//Usuwa kartê z cmentarza
 	//Zwracanie kart
 	std::vector<Card> ReturnMeleeRow();									//Zwraca karty w 1 rzêdzie
 	std::vector<Card> ReturnRangeRow();									//Zwraca karty w 2 rzêdzie

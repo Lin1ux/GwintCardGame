@@ -16,6 +16,8 @@ public:
 	static int deadEater;
 	static int conflagration;
 	static int banish;
+	static int goldDeadEater;
+	static int goldMedic;
 
 	static Skills None;
 	static Skills Brotherhood;
@@ -30,6 +32,8 @@ public:
 	static Skills DeadEater;
 	static Skills Conflagration;
 	static Skills Banish;
+	static Skills GoldDeadEater;
+	static Skills GoldMedic;
 	static void SetSkills();
 };
 

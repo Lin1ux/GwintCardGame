@@ -47,7 +47,7 @@ void CardList::SetCards()
 	FrozenChempion = Card(false, front, 5, 15, AllSkills::None, "Czempion", Images::FrozenChempion);
 	FrozenDog = Card(false, front, 4, 30, AllSkills::Horde, "Ogar Mrozu", Images::FrozenDog);
 	Golem = Card(false, front, 4, 10, AllSkills::None, "Golem", Images::Golem);
-	Guts = Card(true, front, 6, 45, AllSkills::DeadEater, "Jelito", Images::Guts);
+	Guts = Card(true, front, 6, 45, AllSkills::GoldDeadEater, "Jelito", Images::Guts);
 	Juggernaut = Card(false, front, 10, 45, AllSkills::Executioner, "Moloch", Images::Juggernaut);
 	Liniux = Card(true, front, 8, 50, AllSkills::Banish, "Liniux", Images::Liniux);
 	Mimic = Card(false, front, 2, 45, AllSkills::Thief, "Mimik", Images::Mimic);
@@ -61,7 +61,7 @@ void CardList::SetCards()
 	Shielder = Card(false, front, 3, 25, AllSkills::Brotherhood, "Tarczownik", Images::Shielder);
 	Terizino = Card(false, front, 10, 35, AllSkills::None, "Terizinozaur", Images::Terizino);
 	Tytus = Card(true, back, 6, 30, AllSkills::SummonerMortar, "Tytus", Images::Tytus);
-	Zenon = Card(true, front, 4, 40, AllSkills::Medic, "Zenon", Images::Zenon);
+	Zenon = Card(true, back, 4, 40, AllSkills::GoldMedic, "Zenon", Images::Zenon);
 }
 
 //Zwraca vector z wszystkimi kartami

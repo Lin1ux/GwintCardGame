@@ -44,6 +44,7 @@ ALLEGRO_BITMAP* Images::PurpleCrystal;
 ALLEGRO_BITMAP* Images::None;
 ALLEGRO_BITMAP* Images::Brotherhood;
 ALLEGRO_BITMAP* Images::Medic;
+ALLEGRO_BITMAP* Images::GoldenMedic;
 ALLEGRO_BITMAP* Images::Spy;
 ALLEGRO_BITMAP* Images::Executioner;
 ALLEGRO_BITMAP* Images::Archer;
@@ -52,6 +53,7 @@ ALLEGRO_BITMAP* Images::Thief;
 ALLEGRO_BITMAP* Images::Transport;
 ALLEGRO_BITMAP* Images::SummonerMortar;
 ALLEGRO_BITMAP* Images::DeadEater;
+ALLEGRO_BITMAP* Images::GoldenDeadEater;
 ALLEGRO_BITMAP* Images::Conflagration;
 ALLEGRO_BITMAP* Images::Banish;
 
@@ -101,6 +103,7 @@ void Images::SetImages()
 	Images::None = al_load_bitmap("images/Skills/StatCircle.png");
 	Images::Brotherhood = al_load_bitmap("images/Skills/BrotherhoodSkill.png");
 	Images::Medic = al_load_bitmap("images/Skills/MedicSkill.png");
+	Images::GoldenMedic = al_load_bitmap("images/Skills/MedicSkillG.png");
 	Images::Spy = al_load_bitmap("images/Skills/SpySkill.png");
 	Images::Executioner = al_load_bitmap("images/Skills/ExecutionSkill.png");
 	Images::Archer = al_load_bitmap("images/Skills/ArcherSkill.png");
@@ -109,6 +112,7 @@ void Images::SetImages()
 	Images::Transport = al_load_bitmap("images/Skills/TransportSkill.png");
 	Images::SummonerMortar = al_load_bitmap("images/Skills/MortarSkill.png");
 	Images::DeadEater = al_load_bitmap("images/Skills/DeadEaterSkill.png");
+	Images::GoldenDeadEater = al_load_bitmap("images/Skills/DeadEaterSkillG.png");
 	Images::Conflagration = al_load_bitmap("images/Skills/DeadSkill.png");
 	Images::Banish = al_load_bitmap("images/Skills/BanishSkill.png");
 }

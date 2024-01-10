@@ -122,6 +122,14 @@ void PlayerInfo::EndRound()
 		RangeRow.pop_back();
 		CardUsed.push_back(RemovedCard);
 	}
+	//Dobieranie kart
+	for (int i = 0; i < 3; i++)
+	{
+		if (CardStack.size() > 0)
+		{
+			TakeCard();
+		}
+	}
 	CountPoints();
 }
 //Jeœli jest miejsce dobiera kartê do rêki
@@ -178,14 +186,32 @@ bool PlayerInfo::CanPlay(Card NewCard)
 {
 	if (!RoundFinished)
 	{
-		if (NewCard.ReturnRow() == 1 && MeleeRow.size() < 6)
+		if (NewCard.ReturnRow() == CardList::front && MeleeRow.size() < 6)
 		{
 			return true;
 		}
-		if (NewCard.ReturnRow() == 2 && RangeRow.size() < 6)
+		if (NewCard.ReturnRow() == CardList::back && RangeRow.size() < 6)
 		{
 			return true;
 		}		
+		return false;
+	}
+	return false;
+}
+//Sprawdza czy mo¿na zagraæ kartê w podanym rzêdzie
+//-------------------------------------------------
+bool PlayerInfo::CanPlay(int row)
+{
+	if (!RoundFinished)
+	{
+		if (row == CardList::front && MeleeRow.size() < 6)
+		{
+			return true;
+		}
+		if (row == CardList::back && RangeRow.size() < 6)
+		{
+			return true;
+		}
 		return false;
 	}
 	return false;
@@ -324,15 +350,47 @@ std::vector<Card> PlayerInfo::ReturnCardUsed()
 {
 	return CardUsed;
 }
+//Dodaje kartê do cmentarza
+//--------------------------------------------
 void PlayerInfo::AddCardToGraveyard(Card Card)
 {
 	CardUsed.push_back(Card);
+}
+//Zwraca liczbê kart danego rzêdu
+//----------------------------------------------
+int PlayerInfo::ReturnAmountOfCardsByRow(int row)
+{
+	int sum = 0;
+	for (int i = 0; i < CardUsed.size(); i++)
+	{
+		if (CardUsed[i].ReturnRow() == row)
+		{
+			sum += 1;
+		}
+	}
+	return sum;
 }
 //Zwraca liczbê kart zu¿ytych
 //--------------------------------------
 int PlayerInfo::ReturnAmountOfCardUsed()
 {
 	return CardUsed.size();
+}
+//Usuwa kartê z cmentarza
+//-------------------------------------------------
+Card PlayerInfo::RemoveCardFromGraveyard(Card CardToRemove)
+{
+	Card RemovedCard = Card();
+	for (int i = 0; i < CardUsed.size(); i++)
+	{
+		if (CardToRemove == CardUsed[i])
+		{
+			RemovedCard = CardUsed[i];
+			CardUsed.erase(CardUsed.begin() + i);
+			break;
+		}
+	}
+	return RemovedCard;
 }
 //Zwraca liczbê kart na stole
 //-----------------------------------------

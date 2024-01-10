@@ -162,34 +162,100 @@ int Game::GameLoop()
 		if (events.type == ALLEGRO_EVENT_TIMER && !GameStart && skillId == AllSkills::deadEater)
 		{
 			CardPos SelectedCard;												//Zapamiętanie wybranej karty
-			al_clear_to_color(Colors::darkGray);								//tło
-			DrawOtherInfo(mouseX, mouseY);										//Rysowanie reszty informacji
-			SelectedCard = DrawGraveyard(mouseX, mouseY, PlayersGraveyard);		//Rysowanie cmentarza
-			DrawHand(mouseX, mouseY);											//Rysuje karty na ręce
-			if (SelectedCard.card != Card())									//Nakładanie bonusowych punktów
+			if (Player.ReturnAmountOfCardUsed() < 1)							//Jeśli nie ma kart w cmentarzu
+			{
+				skillId = AllSkills::none;
+				GraveyardOn = false;
+				continue;
+			}
+			al_clear_to_color(Colors::darkGray);										//tło
+			DrawOtherInfo(mouseX, mouseY);												//Rysowanie reszty informacji
+			SelectedCard = DrawGraveyard(mouseX, mouseY, PlayersGraveyard,false);		//Rysowanie cmentarza
+			DrawHand(mouseX, mouseY);													//Rysuje karty na ręce
+			if (SelectedCard.card != Card())											//Nakładanie bonusowych punktów
 			{
 				skillId = AllSkills::none;
 				GraveyardOn = false;
 				//Dokończyć Miejsce na nałożenie bonusu karty
+				Player.RemoveCardFromGraveyard(SelectedCard.card);				//Usunięcie karty z cmentarza
 			}
-			std::cout << "R="<< lastUsedCardRow<<"I=" << lastUsedCardIndex << "\n";
+			//std::cout << "R="<< lastUsedCardRow<<"I=" << lastUsedCardIndex << "\n";
 			al_flip_display();
+		}
+		//Umiejętność Medyk
+		if (events.type == ALLEGRO_EVENT_TIMER && !GameStart && (skillId == AllSkills::medic || skillId == AllSkills::goldMedic))
+		{
+			CardPos SelectedCard;	
+			if (Player.ReturnAmountOfCardUsed() < 1)							//Jeśli nie ma kart w cmentarzu
+			{
+				skillId = AllSkills::none;
+				GraveyardOn = false;
+				continue;
+			}
+			int frontCard = Player.ReturnAmountOfCardsByRow(CardList::front);
+			int backCard = Player.ReturnAmountOfCardsByRow(CardList::back);
+			//Brak kart II rzędu i brak miejsca w I rzędzie 
+			if(frontCard > 1 && backCard == 0 && !Player.CanPlay(CardList::front))
+			{
+				skillId = AllSkills::none;
+				GraveyardOn = false;
+				continue;
+			}
+			//Brak kart I rzędu i brak miejsca w II rzędzie 
+			if (backCard > 1 && frontCard == 0 && !Player.CanPlay(CardList::back))
+			{
+				skillId = AllSkills::none;
+				GraveyardOn = false;
+				continue;
+			}
+			//Brak Miejsca w obu rzędach
+			if (!Player.CanPlay(CardList::front) && !Player.CanPlay(CardList::back))
+			{
+				skillId = AllSkills::none;
+				GraveyardOn = false;
+				continue;
+			}
+			//Zapamiętanie wybranej karty
+			al_clear_to_color(Colors::darkGray);										//tło
+			DrawOtherInfo(mouseX, mouseY);												//Rysowanie reszty informacji
+			if (skillId == AllSkills::medic)
+			{
+				SelectedCard = DrawGraveyard(mouseX, mouseY, PlayersGraveyard,false);		//Rysowanie cmentarza
+			}
+			if (skillId == AllSkills::goldMedic)
+			{
+				SelectedCard = DrawGraveyard(mouseX, mouseY, PlayersGraveyard, true);		//Rysowanie cmentarza
+			}
+			DrawHand(mouseX, mouseY);													//Rysuje karty na ręce
+			if (SelectedCard.card != Card())	//Nakładanie bonusowych punktów
+			{
+				skillId = AllSkills::none;
+				GraveyardOn = false;
+				//Zagranie karty
+				Player.PlayCard(SelectedCard.card);
+				Player.RemoveCardFromGraveyard(SelectedCard.card);
+				while (SelectedCard.card != Card())
+				{
+					SelectedCard.card = AbilityManager(SelectedCard.card);		//Używa umiejętności karty
+				}
+			}
+			al_flip_display();
+			continue;
 		}
 		//Partia 
 		if (events.type == ALLEGRO_EVENT_TIMER && !GameStart && !GraveyardOn)
 		{
-			Enemy.SetRoundFinished(true);							//Dokończyć usunąć (do testów)
-
-			al_clear_to_color(Colors::darkGray);					//tło
-			DrawOtherInfo(mouseX, mouseY);							//Rysowanie reszty informacji 
-			LastPlayedCard = DrawPlayersCards(mouseX, mouseY);		//Rysowanie kart gracza i zagranie karty
+			Enemy.SetRoundFinished(true);									//Dokończyć usunąć (do testów)
+			al_clear_to_color(Colors::darkGray);							//tło
+			DrawOtherInfo(mouseX, mouseY);									//Rysowanie reszty informacji 
+			LastPlayedCard = DrawPlayersCards(mouseX, mouseY);				//Rysowanie kart gracza i zagranie karty
 			while (LastPlayedCard.card != Card())						
 			{
 				LastPlayedCard.card = AbilityManager(LastPlayedCard.card);	//Używa umiejętności karty
 			}
-			RoundInfo(mouseX, mouseY);								//Przycisk końca rundy
-			RoundResult();											//Koniec rundy
-			al_flip_display();										//Wrzucenie na ekran
+			RoundInfo(mouseX, mouseY);										//Przycisk końca rundy
+			RoundResult();													//Koniec rundy
+			al_flip_display();												//Wrzucenie na ekran
 			continue;
 		}
 		//Cmentarz
@@ -197,7 +263,7 @@ int Game::GameLoop()
 		{
 			al_clear_to_color(Colors::darkGray);								//tło
 			DrawOtherInfo(mouseX, mouseY);										//Rysowanie reszty informacji
-			DrawGraveyard(mouseX, mouseY, PlayersGraveyard);					//Rysowanie cmentarza
+			DrawGraveyard(mouseX, mouseY, PlayersGraveyard,true);				//Rysowanie cmentarza
 			DrawHand(mouseX, mouseY);											//Rysuje karty na ręce
 			al_flip_display();													//Wrzucenie na ekran
 		}
@@ -398,6 +464,18 @@ Card Game::AbilityManager(Card UsedCard)
 				Player.SetMultiplayerOfCard(UsedCard.ReturnRow(), i, multiplayer);
 			}
 		}
+	}
+	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Medic)	//Medyk
+	{
+		GraveyardOn = true;
+		PlayersGraveyard = true;
+		skillId = AllSkills::medic;
+	}
+	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::GoldMedic)	//Medyk
+	{
+		GraveyardOn = true;
+		PlayersGraveyard = true;
+		skillId = AllSkills::goldMedic;
 	}
 	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Horde)	//Horda
 	{
@@ -634,7 +712,7 @@ void Game::ClearButtons()
 
 }
 //Rysuje karty w cmentarzu
-CardPos Game::DrawGraveyard(float mouseX, float mouseY,bool IsPlayerGraveyard)
+CardPos Game::DrawGraveyard(float mouseX, float mouseY,bool IsPlayerGraveyard,bool CanHero)
 {
 	CardPos CardClicked = {Card(),-1};
 	//Przycisk startu gry
@@ -700,10 +778,10 @@ CardPos Game::DrawGraveyard(float mouseX, float mouseY,bool IsPlayerGraveyard)
 			}
 			HandButtons[i] = Button(CurrentCard.ReturnVertexesPosition());
 			
-			if (HandButtons[i].MouseOn(mouseX, mouseY))	//Rysowanie dużej karty
+			if (HandButtons[i].MouseOn(mouseX, mouseY))		//Rysowanie dużej karty
 			{
 				CurrentCard.DrawBigCardDescr(0.02f, 0.1f);
-				if (mouseButton == 1)					//Zwrócenie narysowanej karty
+				if (mouseButton == 1)						//Zwrócenie narysowanej karty
 				{
 					CardClicked.card = CurrentCard;
 					CardClicked.index = i + GraveyardFirstCard;
@@ -730,6 +808,11 @@ CardPos Game::DrawGraveyard(float mouseX, float mouseY,bool IsPlayerGraveyard)
 		NextCard.DrawText(Fonts::NameFont, settings::PosY(0.004f));
 		PrevCard.DrawImage();
 		PrevCard.DrawText(Fonts::NameFont, settings::PosY(0.004f));
+	}
+	//Sprawdzenie czy zwrócono złotą kartę
+	if (CardClicked.card.ReturnIsHero() && !CanHero)
+	{
+		CardClicked.card = Card();
 	}
 	return CardClicked;
 }

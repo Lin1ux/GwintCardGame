@@ -264,5 +264,14 @@
     <Image Include="images\UI\ReverseCard.png">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="images\Skills\BanishSkillG.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Skills\DeadEaterSkillG.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Skills\MedicSkillG.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
 </Project>

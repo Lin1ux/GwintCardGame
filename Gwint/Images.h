@@ -49,6 +49,7 @@ public:
 	static ALLEGRO_BITMAP* None;
 	static ALLEGRO_BITMAP* Brotherhood;
 	static ALLEGRO_BITMAP* Medic;
+	static ALLEGRO_BITMAP* GoldenMedic;
 	static ALLEGRO_BITMAP* Spy;
 	static ALLEGRO_BITMAP* Executioner;
 	static ALLEGRO_BITMAP* Archer;
@@ -57,6 +58,7 @@ public:
 	static ALLEGRO_BITMAP* Transport;
 	static ALLEGRO_BITMAP* SummonerMortar;
 	static ALLEGRO_BITMAP* DeadEater;
+	static ALLEGRO_BITMAP* GoldenDeadEater;
 	static ALLEGRO_BITMAP* Conflagration;
 	static ALLEGRO_BITMAP* Banish;
 	 
