@@ -479,18 +479,21 @@ Card Game::AbilityManager(Card UsedCard)
 	}
 	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Horde)	//Horda
 	{
-		NewCard = Player.UseCard(UsedCard);	
+		/*NewCard = Player.UseCard(UsedCard);
 		if (NewCard != Card())
 		{
 			Player.PlayCard(NewCard);
 			return NewCard;
-		}
-		NewCard = Player.UseStackCard(UsedCard);
-		std::cout << NewCard.ReturnName()<<":"<<NewCard.ReturnCost() << "\n";
-		if (NewCard != Card())
+		}*/
+		if (Player.CanPlay(UsedCard))
 		{
-			Player.PlayCard(NewCard);
-			return NewCard;
+			NewCard = Player.UseStackCard(UsedCard);
+			std::cout << NewCard.ReturnName()<<":"<<NewCard.ReturnCost() << "\n";
+			if (NewCard != Card())
+			{
+				Player.PlayCard(NewCard);
+				return NewCard;
+			}
 		}
 	}
 	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Thief)	//Złodziej

@@ -36,20 +36,23 @@ CardsToSelect::CardsToSelect(std::vector<Card> Cards)
 }
 //Ustawia nowe karty
 //--------------------------------------------------
-void CardsToSelect::SetCard(std::vector<Card> Cards)
+void CardsToSelect::SetCard(std::vector<Card> Cards, int DeckSize)
 {
-	CardsLeft.clear();
-	AvaliableCards.clear();
-	for (int i = 0; i < Cards.size(); i++)
+	if (DeckSize == 0)
 	{
-		AvaliableCards.push_back(Cards[i]);
-		if (AvaliableCards[i].ReturnIsHero())
+		CardsLeft.clear();
+		AvaliableCards.clear();
+		for (int i = 0; i < Cards.size(); i++)
 		{
-			CardsLeft.push_back(1);
-		}
-		else
-		{
-			CardsLeft.push_back(3);
+			AvaliableCards.push_back(Cards[i]);
+			if (AvaliableCards[i].ReturnIsHero())
+			{
+				CardsLeft.push_back(1);
+			}
+			else
+			{
+				CardsLeft.push_back(3);
+			}
 		}
 	}
 }

@@ -11,7 +11,7 @@ private:
 public:
 	CardsToSelect();
 	CardsToSelect(std::vector<Card> Cards);
-	void SetCard(std::vector<Card> Cards);
+	void SetCard(std::vector<Card> Cards, int DeckSize);
 	Card SelectCardById(int Id);
 	int CardsLeftById(int Id);
 	Card TakeCard(int Id, int value);

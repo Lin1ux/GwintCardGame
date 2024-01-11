@@ -163,8 +163,12 @@ void PlayerInfo::PutToStack(Card NewCard)
 }
 Card PlayerInfo::TakeCardFromStack()
 {
-	Card Card = CardStack.back();
-	CardStack.pop_back();
+	Card Card;
+	if (CardStack.size() > 0)
+	{
+		Card = CardStack.back();
+		CardStack.pop_back();
+	}
 	return Card;
 }
 Card PlayerInfo::UseStackCard(Card CardToRemove)

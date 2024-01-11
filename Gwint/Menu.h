@@ -22,6 +22,7 @@ private:
 		Button UpDeck;
 		Button DownDeck;
 		Button StartGame;
+		Button InfoButton;
 		Button DeckButtons[13];
 		Button CardButtons[10];
 		void Pages(float mouseX, float mouseY, int* firstCard);									//Zmienia stronę kart
