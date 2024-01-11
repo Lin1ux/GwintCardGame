@@ -23,6 +23,8 @@ Menu::Menu(ALLEGRO_DISPLAY* Disp, float DisplayWidth,float DisplayHeight)	//Kons
 	ScreenWidth = DisplayWidth;
 	ScreenHeight = DisplayHeight;
 	mouseButton = 0;
+	showInfo = false;
+	infoButtonId = -1;
 	
 	//Ustawianie Statycznych obiektów
 	Images::SetImages();
@@ -155,6 +157,10 @@ int Menu::MenuLoop()
 			al_clear_to_color(Colors::darkGray); //tło
 			DrawCartToSelect(mouseX, mouseY, firstCard);				//Rysowanie kart do wyboru
 			DrawDeck(AmountOfShowCard, firstDeckCard, mouseX, mouseY);  //Rysowanie talii
+			if (showInfo)
+			{
+				DrawInfo(infoPosition.x, infoPosition.y);
+			}
 			//Rysowanie Przycisków
 			NextCards.DrawImage();
 			NextCards.DrawText(Fonts::BigFont, settings::PosY(0.014f));
@@ -242,6 +248,7 @@ void Menu::StartCardGame(float mouseX, float mouseY, bool* ChangeMenu, bool* Sta
 	}
 }
 //Dodaje kartę do tali gracza
+//------------------------------------------------------------------
 void Menu::AddCard(float mouseX, float mouseY, int *firstCard,int i)
 {
 	if (CardButtons[i].MouseOn(mouseX, mouseY) && mouseButton == 3)
@@ -254,6 +261,39 @@ void Menu::AddCard(float mouseX, float mouseY, int *firstCard,int i)
 		}
 		mouseButton = 0;
 	}
+}
+//Wyświetlanie informacji o karcie
+//-------------------------------------------------------------------
+void Menu::InfoCard(float mouseX, float mouseY, int* firstCard, int i)
+{
+	if (CardButtons[i].MouseOn(mouseX, mouseY))
+	{
+		if (mouseButton == 4)
+		{
+			infoPosition = { mouseX/ settings::ScrWidth() ,mouseY/ settings::ScrHeight() };
+			showInfo = true;
+			infoButtonId = *firstCard + i;
+			mouseButton = 0;
+		}
+	}
+	//Dokończyć znikanie okienka
+	if (!CardButtons[infoButtonId].MouseOn(mouseX, mouseY) && showInfo && infoButtonId == i)
+	{
+		infoPosition = { 0 ,0 };
+		showInfo = false;
+		infoButtonId = -1;
+	}
+
+}
+//Rysuje informacje o karcie
+//-------------------------------------------------------------------
+void Menu::DrawInfo(float x, float y)
+{
+	//al_draw_scaled_bitmap(Images::Crocolisk, 0, 0, 300, 300, settings::PosX(x), settings::PosY(y), settings::PosX(0.5), settings::PosY(0.5), NULL);
+	Skills cardSkill = MenuCards.SelectCardById(infoButtonId).ReturnSkill();
+	float ImgSizeX = (settings::PosX(x + 0.12) - settings::PosX(x)) / settings::ScrWidth();															//Dolna krawędź karty (współrzędna y)
+	al_draw_scaled_bitmap(Images::DescrFrame, 0, 0, 330, 400, settings::PosX(x), settings::PosY(y), settings::PosX(ImgSizeX * 1.1), settings::PosY(ImgSizeX * 1.21f * settings::ProportionScreenWH()), NULL); //ALLEGRO_ALIGN_CENTER
+	 al_draw_multiline_text(Fonts::NameFont, Colors::white, (settings::PosX(x) + settings::PosX(ImgSizeX * 1.1 + x)) / 2, settings::PosY(y+0.01), settings::PosX(ImgSizeX), settings::PosY(ImgSizeX * 0.1f * settings::ProportionScreenWH()), ALLEGRO_ALIGN_CENTER, (cardSkill.ReturnName() + ":\n" + cardSkill.ReturnDescr()).c_str());
 }
 //Rysuje karty do wyboru oraz dodaje wskazaną kartę do talii
 //------------------------------------------------------------------
@@ -287,6 +327,7 @@ void Menu::DrawCartToSelect(float mouseX, float mouseY,int firstCard)
 			//Przyciski do wybierania kart
 			CardButtons[i] = Button(CurrentCard.ReturnVertexesPosition());
 			AddCard(mouseX, mouseY, &firstCard, i);				//Dodanie karty
+			InfoCard(mouseX, mouseY, &firstCard, i);			//Włączanie dodatkowych informacji
 		}
 	}
 }
@@ -333,5 +374,6 @@ void Menu::DrawDeck(int AmountOfShowCard,int firstDeckCard,float mouseX,float mo
 		}
 	}
 }
+
 
 

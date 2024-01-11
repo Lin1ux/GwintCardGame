@@ -11,7 +11,10 @@ class Menu
 {
 private:
 		ALLEGRO_DISPLAY* Display;
+		bool showInfo;
 		int mouseButton;
+		int infoButtonId;
+		Point infoPosition;
 		CardsToSelect MenuCards;
 		DeckManager Deck;
 		Button PrevCards;
@@ -26,6 +29,8 @@ private:
 		void StartCardGame(float mouseX, float mouseY, bool* ChangeMenu, bool* StartNewGame);	//Rozpoczęcie partii
 		void DrawCartToSelect(float mouseX, float mouseY, int firstCard);						//Rysuje karty do wyboru oraz dodaje wskazaną kartę do talii
 		void DrawDeck(int AmountOfShowCard, int firstDeckCard, float mouseX, float mouseY);		//Rysuje talię gracza
+		void DrawInfo(float mouseX, float mouseY);												//Rysuje informacje o karcie
+		void InfoCard(float mouseX, float mouseY, int* firstCard, int i);						//Aktywuje informacje o karcie
 		void AddCard(float mouseX, float mouseY, int* firstCard, int i);						//Dodanie kart
 public:
 	int MenuLoop();
