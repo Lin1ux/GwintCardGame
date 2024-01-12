@@ -9,6 +9,8 @@ PlayerInfo::PlayerInfo()
 	RoundFinished = false;
 	Points = 0;
 	RoundsWon = 0;
+	MCardsValues = std::vector<CardValues>();
+	RCardsValues = std::vector<CardValues>();
 	MeleeRow = std::vector<Card>();
 	RangeRow = std::vector<Card>();
 	PlayerHand = std::vector<Card>();
@@ -25,6 +27,8 @@ PlayerInfo::PlayerInfo(std::vector<Card> DeckCards)
 	RoundsWon = 0;						//Wygrane rundy
 	MeleeRow = std::vector<Card>();		//Karty w 1 rzêdzie (walka wrêcz)
 	RangeRow = std::vector<Card>();		//Karty w 2 rzêdzie (dystansowy)
+	MCardsValues = std::vector<CardValues>();
+	RCardsValues = std::vector<CardValues>();
 
 	//Dokoñczyæ Odkomentowaæ linijkê pod tym komentarzem (Do testów lepiej nie tasowaæ tali)
 	//std::random_shuffle(DeckCards.begin(), DeckCards.end());		//Przetasowanie kart w tali gracza
@@ -59,10 +63,15 @@ int PlayerInfo::ReturnMeleePoints()
 {
 	int MeleePoints = 0;
 	//Zliczanie wartoœci z 1 rzêdu
-	for (int i = 0; i<MeleeRow.size(); i++)
+	/*for (int i = 0; i<MeleeRow.size(); i++)
 	{
 		MeleePoints += MeleeRow[i].ReturnValue();
+	}*/
+	for (int i = 0; i < MCardsValues.size(); i++)
+	{
+		MeleePoints += MCardsValues[i].ReturnCurrentValue();
 	}
+	
 	return MeleePoints;
 }
 //Zlicza punkty z 2 rzêdu
@@ -71,9 +80,10 @@ int PlayerInfo::ReturnRangePoints()
 {
 	int RangePoints = 0;
 	//Zliczanie wartoœci z 1 rzêdu
-	for (int i = 0; i<RangeRow.size(); i++)
+	for (int i = 0; i<RCardsValues.size(); i++)
 	{
-		RangePoints += RangeRow[i].ReturnValue();
+		//RangePoints += RangeRow[i].ReturnValue();
+		RangePoints += RCardsValues[i].ReturnCurrentValue();
 	}
 	return RangePoints;
 }
@@ -113,6 +123,7 @@ void PlayerInfo::EndRound()
 	{
 		Card RemovedCard = MeleeRow.back();
 		MeleeRow.pop_back();
+		MCardsValues.pop_back();
 		CardUsed.push_back(RemovedCard);
 	}
 	//Czyszczenie 2 rzêdu
@@ -120,6 +131,7 @@ void PlayerInfo::EndRound()
 	{
 		Card RemovedCard = RangeRow.back();
 		RangeRow.pop_back();
+		RCardsValues.pop_back();
 		CardUsed.push_back(RemovedCard);
 	}
 	//Dobieranie kart
@@ -161,6 +173,8 @@ void PlayerInfo::PutToStack(Card NewCard)
 {
 	CardStack.insert(CardStack.begin(), NewCard);
 }
+//Dobiera kartê z kart nie dobranych
+//----------------------------------
 Card PlayerInfo::TakeCardFromStack()
 {
 	Card Card;
@@ -171,6 +185,8 @@ Card PlayerInfo::TakeCardFromStack()
 	}
 	return Card;
 }
+//U¿ywa wybran¹ kartê z tali kart nie dobranych i usuwa oraz zwraca j¹ jeœli znajdzie
+//----------------------------------------------------------------------------------
 Card PlayerInfo::UseStackCard(Card CardToRemove)
 {
 	for (int i = 0; i < CardStack.size(); i++)
@@ -227,10 +243,12 @@ void PlayerInfo::PlayCard(Card NewCard)
 	if (NewCard.ReturnRow() == 1 && MeleeRow.size()<6)
 	{
 		MeleeRow.push_back(NewCard);
+		MCardsValues.push_back(CardValues(NewCard));
 	}
 	else if(NewCard.ReturnRow() == 2 && RangeRow.size() <6)
 	{
 		RangeRow.push_back(NewCard);
+		RCardsValues.push_back(CardValues(NewCard));
 	}
 }
 //Rysuje karty z rêki gracza
@@ -283,6 +301,7 @@ Card PlayerInfo::RemoveCardFromTable(Card CardToRemove)
 			{
 				RemovedCard = MeleeRow[i];
 				MeleeRow.erase(MeleeRow.begin() + i);
+				MCardsValues.erase(MCardsValues.begin() + i);
 				break;
 			}
 		}	
@@ -295,6 +314,7 @@ Card PlayerInfo::RemoveCardFromTable(Card CardToRemove)
 			{
 				RemovedCard = MeleeRow[i];
 				RangeRow.erase(RangeRow.begin() + i);
+				RCardsValues.erase(RCardsValues.begin() + i);
 				break;
 			}
 		}
@@ -306,15 +326,17 @@ Card PlayerInfo::RemoveCardFromTable(Card CardToRemove)
 Card PlayerInfo::RemoveCardFromTable(int row, int index)
 {
 	Card RemovedCard = Card();
-	if (row == CardList::front)
+	if (row == CardList::front && index < MeleeRow.size())
 	{
 		RemovedCard = MeleeRow[index];
 		MeleeRow.erase(MeleeRow.begin() + index);
+		MCardsValues.erase(MCardsValues.begin() + index);
 	}
-	if (row == CardList::back)
+	if (row == CardList::back && index < RangeRow.size())
 	{
 		RemovedCard = RangeRow[index];
 		RangeRow.erase(MeleeRow.begin() + index);
+		RCardsValues.erase(RCardsValues.begin() + index);
 	}
 	return RemovedCard;
 }
@@ -460,15 +482,43 @@ int PlayerInfo::NumberOfSpecificCards(Card CardToFind)
 //Ustawia mno¿nik karty o podanym indeksie i rzêdzie
 void PlayerInfo::SetMultiplayerOfCard(int row, int index, int value)
 {
-	Card test;
-	if (row == CardList::front)
+	if (row == CardList::front && index < MeleeRow.size())
 	{
 		MeleeRow[index].ChangeMultiplayer(value);
+		MCardsValues[index].SetMultiplayer(value);
 	}
-	if (row == CardList::back)
+	if (row == CardList::back && index < RangeRow.size())
 	{
 		RangeRow[index].ChangeMultiplayer(value);
+		RCardsValues[index].SetMultiplayer(value);
 	}
+}
+//Ustawia modyfikator karty o podanym indeksie i rzêdzie
+//----------------------------------------------------------------
+void PlayerInfo::SetDiffrenceOfCard(int row, int index, int value)
+{
+	if (row == CardList::front && index < MeleeRow.size())
+	{
+		MCardsValues[index].SetDiffrence(value);
+	}
+	if (row == CardList::back && index < RangeRow.size())
+	{
+		RCardsValues[index].SetDiffrence(value);
+	}
+}
+//Zwraca aktualn¹ wartoœæ karty
+//--------------------------------------------------------
+int PlayerInfo::ReturnCurrentValueOfCard(int row,int index)
+{
+	if (row == CardList::front && index < MCardsValues.size())
+	{
+		 return MCardsValues[index].ReturnCurrentValue();
+	}
+	if (row == CardList::back && index < RCardsValues.size())
+	{
+		return RCardsValues[index].ReturnCurrentValue();
+	}
+	return -1;	//Nie poprawny rz¹d lub index
 }
 
 

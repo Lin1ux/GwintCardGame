@@ -17,6 +17,7 @@
 #include "Card.h"
 #include "Fonts.h"
 #include "Button.h"
+#include "CardValues.h"
 
 //Konstruktor
 Game::Game(ALLEGRO_DISPLAY* Disp,std::vector<Card> PlayerDeck, std::vector<Card> EnemyDeck)
@@ -32,8 +33,9 @@ Game::Game(ALLEGRO_DISPLAY* Disp,std::vector<Card> PlayerDeck, std::vector<Card>
 	ClearButtons();
 }
 
-//Główna część gry 
-int Game::GameLoop()
+//Pętla gry gracz vs gracz
+//-------------------------------
+int Game::GameLoopPvP()
 {
 	if (!al_init())
 	{
@@ -159,7 +161,7 @@ int Game::GameLoop()
 			continue;
 		}
 		//Umiejętność Trupojad
-		if (events.type == ALLEGRO_EVENT_TIMER && !GameStart && skillId == AllSkills::deadEater)
+		if (events.type == ALLEGRO_EVENT_TIMER && !GameStart && (skillId == AllSkills::deadEater || skillId == AllSkills::goldDeadEater))
 		{
 			CardPos SelectedCard;												//Zapamiętanie wybranej karty
 			if (Player.ReturnAmountOfCardUsed() < 1)							//Jeśli nie ma kart w cmentarzu
@@ -170,16 +172,24 @@ int Game::GameLoop()
 			}
 			al_clear_to_color(Colors::darkGray);										//tło
 			DrawOtherInfo(mouseX, mouseY);												//Rysowanie reszty informacji
-			SelectedCard = DrawGraveyard(mouseX, mouseY, PlayersGraveyard,false);		//Rysowanie cmentarza
+			if (skillId == AllSkills::deadEater)
+			{
+				SelectedCard = DrawGraveyard(mouseX, mouseY, PlayersGraveyard,false);		//Rysowanie cmentarza
+			}
+			if (skillId == AllSkills::goldDeadEater)
+			{
+				SelectedCard = DrawGraveyard(mouseX, mouseY, PlayersGraveyard, true);		//Rysowanie cmentarza
+			}
 			DrawHand(mouseX, mouseY);													//Rysuje karty na ręce
 			if (SelectedCard.card != Card())											//Nakładanie bonusowych punktów
 			{
 				skillId = AllSkills::none;
 				GraveyardOn = false;
+				Player.SetDiffrenceOfCard(lastUsedCardRow, lastUsedCardIndex, SelectedCard.card.ReturnValue());			//Nakładanie bonusowych wartości
 				//Dokończyć Miejsce na nałożenie bonusu karty
 				Player.RemoveCardFromGraveyard(SelectedCard.card);				//Usunięcie karty z cmentarza
 			}
-			//std::cout << "R="<< lastUsedCardRow<<"I=" << lastUsedCardIndex << "\n";
+			std::cout << "R="<< lastUsedCardRow<<"I=" << lastUsedCardIndex << "\n";
 			al_flip_display();
 		}
 		//Umiejętność Medyk
@@ -338,8 +348,9 @@ CardPos Game::DrawPlayersCards(float mouseX,float mouseY)
 
 	std::vector<Card> BrotherHoodCards = std::vector<Card>();
 	//Umiejętności specjalne (Nwm czemu funkcja nie widzi zmian)
+	//std::cout << "val 2 " << Player.ReturnCurrentValueOfCard(1, 0) << "\n";
 	//Szukanie specjalnych kart I Rząd
-	for (int i = 0; i < PFirst.size(); i++)
+	/*for (int i = 0; i < PFirst.size(); i++)
 	{
 		if (PFirst[i].ReturnSkill() == AllSkills::Brotherhood && !CardInVector(BrotherHoodCards, PFirst[i]))
 		{
@@ -378,14 +389,14 @@ CardPos Game::DrawPlayersCards(float mouseX,float mouseY)
 				PSecond[j].ChangeMultiplayer(multiplayer);
 			}
 		}
-	}
+	}*/
 	//Rysowanie 1 rzędu gracza
 	StartDrawPointX = OtherFunctions::AlignCenter(0.2f, 0.86f, +PFirst.size() * 0.08f);
 	for (int i = 0; i < PFirst.size(); i++)
 	{
 		MeleeButtons[i] = Button(PFirst[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.4f));
 		//PFirst[i].ChangeMultiplayer(2);
-		PFirst[i].DrawCard(StartDrawPointX + i * 0.08f, 0.4f);
+		PFirst[i].DrawCard(StartDrawPointX + i * 0.08f, 0.4f,Player.ReturnCurrentValueOfCard(CardList::front, i));
 		if (MeleeButtons[i].MouseOn(mouseX, mouseY))
 		{
 			if (skillId != 0)
@@ -401,7 +412,7 @@ CardPos Game::DrawPlayersCards(float mouseX,float mouseY)
 	for (int i = 0; i < PSecond.size(); i++)
 	{
 		RangeButtons[i] = Button(PSecond[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.6f));
-		PSecond[i].DrawCard(StartDrawPointX + i * 0.08f, 0.6f);
+		PSecond[i].DrawCard(StartDrawPointX + i * 0.08f, 0.6f,Player.ReturnCurrentValueOfCard(CardList::back, i));
 		if (RangeButtons[i].MouseOn(mouseX, mouseY))
 		{
 			if (skillId != 0)
@@ -464,6 +475,7 @@ Card Game::AbilityManager(Card UsedCard)
 				Player.SetMultiplayerOfCard(UsedCard.ReturnRow(), i, multiplayer);
 			}
 		}
+		std::cout << "val 1" << Player.ReturnCurrentValueOfCard(1,0)<<"\n";
 	}
 	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Medic)	//Medyk
 	{
@@ -517,11 +529,18 @@ Card Game::AbilityManager(Card UsedCard)
 			Player.PlayCard(NewCard);
 		}
 	}
-	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::DeadEater)	//Trupojad
+	if (PlayerTurn && (UsedCard.ReturnSkill() == AllSkills::DeadEater || UsedCard.ReturnSkill() == AllSkills::GoldDeadEater))	//Trupojad
 	{
 		GraveyardOn = true;
 		PlayersGraveyard = true;
-		skillId = AllSkills::deadEater;
+		if (UsedCard.ReturnSkill() == AllSkills::DeadEater)
+		{
+			skillId = AllSkills::deadEater;
+		}
+		if (UsedCard.ReturnSkill() == AllSkills::GoldDeadEater)
+		{
+			skillId = AllSkills::goldDeadEater;
+		}
 		lastUsedCardIndex = Player.ReturnAmountOfCardOnTable(UsedCard.ReturnRow())-1;
 		lastUsedCardRow = UsedCard.ReturnRow();
 	}

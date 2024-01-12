@@ -187,7 +187,7 @@ int Menu::MenuLoop()
 	{
 		Game NewGame(Display, Deck.ReturnDeck(), std::vector<Card>());
 		std::cout << "Rozpoczęto partię gry\n";
-		return NewGame.GameLoop();
+		return NewGame.GameLoopPvP();
 	}
 	else
 	{

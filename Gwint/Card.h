@@ -42,6 +42,7 @@ public:
 	void ChangeMultiplayer(int x);										//Zmienia mno¿nik wartoœci
 	void CountValue();													//Oblicza wartoœæ karty
 	void DrawCard(float x1, float y1);									//Rysuje kartê z podstawowymi danymi
+	void DrawCard(float x1, float y1, int cardValue);						//Rysuje kartê z podstawowymi danymi i podan¹ wartoœci¹
 	void DrawBigCard(float x1, float y1);								//Rysuje kartê z wszystkimi danymi
 	void DrawBigCardDescr(float x1, float y1);							//Rysuje kartê z wszystkimi danymi oraz opisem umiejêtnoœci
 	void DrawSmallCard(float x1, float y1);								//Rysuje kartê z nazw¹ 

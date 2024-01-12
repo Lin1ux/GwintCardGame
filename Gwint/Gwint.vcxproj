@@ -170,6 +170,7 @@
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="CardList.cpp" />
     <ClCompile Include="CardsToSelect.cpp" />
+    <ClCompile Include="CardValues.cpp" />
     <ClCompile Include="Colors.cpp" />
     <ClCompile Include="DeckManager.cpp" />
     <ClCompile Include="Fonts.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardList.h" />
     <ClInclude Include="CardsToSelect.h" />
+    <ClInclude Include="CardValues.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="DeckManager.h" />
     <ClInclude Include="Fonts.h" />

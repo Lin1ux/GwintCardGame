@@ -2,8 +2,10 @@
 #include"Card.h"
 #include"PlayerInfo.h"
 #include"Button.h"
+#include"CardValues.h"
 
 #pragma once
+
 class Game
 {
 private:
@@ -34,6 +36,6 @@ private:
 	bool IsEnemyGraveyardLocked();															//Sprawdza czy w³¹czona jest umiejêtnoœæ blokuj¹ca cmentarz
 public:
 	Game(ALLEGRO_DISPLAY* Disp,std::vector<Card> PlayerDeck, std::vector<Card> EnemyDeck);
-	int GameLoop();			//Pêtla gry
+	int GameLoopPvP();			//Pêtla gry
 };
 

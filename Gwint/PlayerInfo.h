@@ -1,5 +1,6 @@
 #include <vector>
 #include "Card.h"
+#include "CardValues.h"
 
 typedef struct CardPos
 {
@@ -11,14 +12,16 @@ typedef struct CardPos
 class PlayerInfo
 {
 private:
-	bool RoundFinished;				//Czy skoñczono runde
-	int Points;						//Punkty
-	int RoundsWon;					//Wygrane rundy
-	std::vector<Card> MeleeRow;		//Karty w 1 rzêdzie (walka wrêcz)
-	std::vector<Card> RangeRow;		//Karty w 2 rzêdzie (dystansowy
-	std::vector<Card> PlayerHand;	//Karty w rêce gracza
-	std::vector<Card> CardStack;	//Nie dobrane karty
-	std::vector<Card> CardUsed;		//Karty odrzcuone
+	bool RoundFinished;						//Czy skoñczono runde
+	int Points;								//Punkty
+	int RoundsWon;							//Wygrane rundy
+	std::vector<CardValues> MCardsValues;	//Wartoœci kart I rzêdu
+	std::vector<CardValues> RCardsValues;	//Wartoœci kart II rzêdu
+	std::vector<Card> MeleeRow;				//Karty w 1 rzêdzie (walka wrêcz)
+	std::vector<Card> RangeRow;				//Karty w 2 rzêdzie (dystansowy
+	std::vector<Card> PlayerHand;			//Karty w rêce gracza
+	std::vector<Card> CardStack;			//Nie dobrane karty
+	std::vector<Card> CardUsed;				//Karty odrzcuone
 
 public:
 	//Konstruktory
@@ -59,7 +62,10 @@ public:
 	int ReturnAmountOfCardOnTable(int row);								//Zwraca liczbê kart w wybranym rzêdzie
 	int NumberOfCardsWithSkill(Skills Skill);							//Zwraca liczbê kart na stole posiadaj¹ce dan¹ umiejêtnoœæ
 	int NumberOfSpecificCards(Card CardToFind);							//Zwraca liczbê podanych kart
+	//Watoœci kart na stole
 	void SetMultiplayerOfCard(int row, int index, int value);			//Ustawia mno¿nik karty o podanym indeksie i rzêdzie							
+	void SetDiffrenceOfCard(int row, int index, int value);				//Ustawia modyfikator karty o podanym indeksie i rzêdzie
+	int ReturnCurrentValueOfCard(int row, int index);					//Zwraca aktualn¹ wartoœæ karty
 	//Cmentarz (U¿yte karty)
 	void AddCardToGraveyard(Card Card);									//Dodaje kartê do cmentarza
 	int ReturnAmountOfCardsByRow(int row);								//Zwraca liczbê kart danego rzêdu

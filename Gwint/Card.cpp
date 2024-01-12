@@ -110,6 +110,53 @@ void Card::DrawCard(float x1, float y1)
 	vertexes = NormalCardVertexesPosition(x1, y1);
 	//OtherFunctions::DrawRectangle(vertexes, Colors::red, 5);
 }
+//Rysuje kartę z podstawowymi danymi i podaną wartością
+//------------------------------------------------
+void Card::DrawCard(float x1, float y1, int cardValue)
+{
+	float ImgSizeX = (PosX(x1 + 0.07) - PosX(x1)) / settings::ScrWidth();
+	float DownEdgePos = y1 + (ImgSizeX * 1.1 * settings::ProportionScreenWH());;
+
+	//Portret postaci
+	al_draw_scaled_bitmap(Card::CardImage, 0, 0, 300, 300, PosX(x1 + 0.003), PosY(y1 + 0.003), PosX(ImgSizeX), PosY(ImgSizeX * settings::ProportionScreenWH()), NULL);
+	if (heroCard)
+	{
+		al_draw_scaled_bitmap(Images::HeroCharacterFrame, 0, 0, 330, 330, PosX(x1), PosY(y1), PosX(ImgSizeX * 1.1), PosY(ImgSizeX * 1.1 * settings::ProportionScreenWH()), NULL);
+	}
+	else
+	{
+		al_draw_scaled_bitmap(Images::CharacterFrame, 0, 0, 330, 330, PosX(x1), PosY(y1), PosX(ImgSizeX * 1.1), PosY(ImgSizeX * 1.1 * settings::ProportionScreenWH()), NULL);
+	}
+	//Dane karty
+	al_draw_scaled_bitmap(Images::StatFrame, 0, 0, 330, 100, PosX(x1), PosY(DownEdgePos), PosX(ImgSizeX * 1.1), PosY(ImgSizeX * 0.3 * settings::ProportionScreenWH()), NULL);
+	if (row == 1)
+	{
+		al_draw_scaled_bitmap(Images::MeleeCircle, 0, 0, 100, 100, PosX(x1 + 0.005), PosY(DownEdgePos + 0.002), PosX(ImgSizeX * 0.25), PosY(ImgSizeX * 0.25 * settings::ProportionScreenWH()), NULL);
+	}
+	else
+	{
+		al_draw_scaled_bitmap(Images::RangeCircle, 0, 0, 100, 100, PosX(x1 + 0.005), PosY(DownEdgePos + 0.002), PosX(ImgSizeX * 0.25), PosY(ImgSizeX * 0.25 * settings::ProportionScreenWH()), NULL);
+	}
+	al_draw_scaled_bitmap(Images::StatCircle, 0, 0, 100, 100, PosX(x1 + 0.029), PosY(DownEdgePos + 0.002), PosX(ImgSizeX * 0.25), PosY(ImgSizeX * 0.25 * settings::ProportionScreenWH()), NULL);
+	al_draw_scaled_bitmap(skill.ReturnIcon(), 0, 0, 100, 100, PosX(x1 + 0.0525), PosY(DownEdgePos + 0.002), PosX(ImgSizeX * 0.25), PosY(ImgSizeX * 0.25 * settings::ProportionScreenWH()), NULL);
+	if (heroCard)
+	{
+		al_draw_text(Fonts::SmallValueFont, Colors::lightGold, PosX(x1 + 0.038), PosY(DownEdgePos - 0.0005), ALLEGRO_ALIGN_CENTER, std::to_string(cardValue).c_str());
+	}
+	else if (cardValue == value)
+	{
+		al_draw_text(Fonts::SmallValueFont, Colors::white, PosX(x1 + 0.038), PosY(DownEdgePos - 0.0005), ALLEGRO_ALIGN_CENTER, std::to_string(cardValue).c_str());
+	}
+	else if (cardValue > value)
+	{
+		al_draw_text(Fonts::SmallValueFont, Colors::lightGreen, PosX(x1 + 0.038), PosY(DownEdgePos - 0.0005), ALLEGRO_ALIGN_CENTER, std::to_string(cardValue).c_str());
+	}
+	else if (cardValue < value)
+	{
+		al_draw_text(Fonts::SmallValueFont, Colors::lightRed, PosX(x1 + 0.038), PosY(DownEdgePos - 0.0005), ALLEGRO_ALIGN_CENTER, std::to_string(cardValue).c_str());
+	}
+	vertexes = NormalCardVertexesPosition(x1, y1);
+}
 //Rysuje dokładniejszą kartę
 //---------------------------------------
 void Card::DrawBigCard(float x1, float y1)
