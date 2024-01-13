@@ -64,7 +64,7 @@ void AllSkills::SetSkills()
 	SummonerMortar = Skills(summonerMortar, "Przywoływacz", "Przywołuje Moździerz", Images::SummonerMortar);
 	DeadEater = Skills(deadEater, "Trupojad", "Pożera kartę z cmentarza i dodaje wartość pożartej karty do siebie (nie działa  na złote karty)", Images::DeadEater);
 	Conflagration = Skills(conflagration, "Pożoga", "Niszczy najsilniejsze karty na stole (karta nie niszczy siebie samej)", Images::Conflagration);
-	Banish = Skills(banish, "Wygnanie", "Przenosi wszystkie karty z rąk graczy do cmentarza i dobiera tyle samo kart ile zostało przeniesionych", Images::Banish);
+	Banish = Skills(banish, "Wygnanie", "Przenosi wszystkie karty z ręki gracza do cmentarza i dobiera tyle samo kart ile zostało przeniesionych", Images::Banish);
 	GoldDeadEater = Skills(goldDeadEater, "Trupojad", "Pożera kartę z cmentarza i dodaje wartość pożartej karty do siebie (działa również na złote karty)", Images::GoldenDeadEater);
 	GoldMedic = Skills(goldMedic, "Medyk", "Wskrzesza wybraną kartę z cmentarza (działa również na złote karty)", Images::GoldenMedic);
 }

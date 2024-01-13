@@ -4,10 +4,10 @@
 class CardValues
 {
 private:
-	int DefaultValue;
-	int ValueDiffrence;
-	int Multiplayer;
-	int CurrentValue;
+	int DefaultValue;				//Domyœlna wartoœæ karty
+	int ValueDiffrence;				//Modyfikator karty
+	int Multiplayer;				//Mno¿nik karty
+	int CurrentValue;				//Obecna wartoœæ
 public:
 	CardValues();					//Pusty Konstruktor
 	CardValues(int Value);			//Konstruktor wartoœci

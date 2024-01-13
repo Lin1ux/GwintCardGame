@@ -30,6 +30,7 @@ Game::Game(ALLEGRO_DISPLAY* Disp,std::vector<Card> PlayerDeck, std::vector<Card>
 	mouseButton = 0;
 	lastUsedCardIndex = -1;
 	lastUsedCardRow = -1;
+	TurnBegin = true;
 	ClearButtons();
 }
 
@@ -71,10 +72,11 @@ int Game::GameLoopPvP()
 	bool GameOver = false;			//Pętla
 	bool GameStart = true;			//Początek gry
 	int CardsChanged = 0;			//Liczba odrzuconych kart
-	//int LastUsedCardIndex = -1;	//Indeks ostatnio użytej karty
-	//int skillId = 0;				//Do kontrolowania interfejsu dla specjalnych umiejętności
+
+	bool timerEvent = false;
 	while (!GameOver)
 	{
+
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);	//Czeka do wciśnięcia przycisku
 
@@ -127,18 +129,26 @@ int Game::GameLoopPvP()
 			mouseY = events.mouse.y;
 			mouseButton = 0;
 		}
-		if (events.type == ALLEGRO_EVENT_TIMER && GameStart)		//Początek gry
+		timerEvent = events.type == ALLEGRO_EVENT_TIMER;
+		al_clear_to_color(Colors::darkGray);						//tło
+		//Wymiana kart na początku gry
+		if (timerEvent && GameStart && !TurnBegin)
 		{
-			al_clear_to_color(Colors::darkGray);					//tło
 			GameStart = GameBegin(mouseX, mouseY,&CardsChanged);	//Wymiana kart 
 			al_flip_display();										//Wrzucenie na ekran
 			continue;
 		}
+		//Ukrycie kart do wymiany
+		if (timerEvent && GameStart && TurnBegin)
+		{
+			HiddenGameBegin(mouseX, mouseY);						//Początek wymiany kart kart 
+			al_flip_display();										//Wrzucenie na ekran
+			continue;
+		}
 		//Umiejętność transport
-		if (events.type == ALLEGRO_EVENT_TIMER && !GameStart && skillId == AllSkills::transport)
+		if (timerEvent && !GameStart && skillId == AllSkills::transport)
 		{
 			CardPos CardToTake;
-			al_clear_to_color(Colors::darkGray);												//tło
 			DrawOtherInfo(mouseX, mouseY);														//Rysowanie reszty informacji 
 			CardToTake = DrawPlayersCards(mouseX, mouseY);										//Rysowanie kart gracza i zagranie karty
 			if (Player.ReturnAmountOfCardOnTable() - Player.NumberOfCardsWithSkill(AllSkills::Transport) < 1)
@@ -161,7 +171,7 @@ int Game::GameLoopPvP()
 			continue;
 		}
 		//Umiejętność Trupojad
-		if (events.type == ALLEGRO_EVENT_TIMER && !GameStart && (skillId == AllSkills::deadEater || skillId == AllSkills::goldDeadEater))
+		if (timerEvent && !GameStart && (skillId == AllSkills::deadEater || skillId == AllSkills::goldDeadEater))
 		{
 			CardPos SelectedCard;												//Zapamiętanie wybranej karty
 			if (Player.ReturnAmountOfCardUsed() < 1)							//Jeśli nie ma kart w cmentarzu
@@ -170,7 +180,6 @@ int Game::GameLoopPvP()
 				GraveyardOn = false;
 				continue;
 			}
-			al_clear_to_color(Colors::darkGray);										//tło
 			DrawOtherInfo(mouseX, mouseY);												//Rysowanie reszty informacji
 			if (skillId == AllSkills::deadEater)
 			{
@@ -193,7 +202,7 @@ int Game::GameLoopPvP()
 			al_flip_display();
 		}
 		//Umiejętność Medyk
-		if (events.type == ALLEGRO_EVENT_TIMER && !GameStart && (skillId == AllSkills::medic || skillId == AllSkills::goldMedic))
+		if (timerEvent && !GameStart && (skillId == AllSkills::medic || skillId == AllSkills::goldMedic))
 		{
 			CardPos SelectedCard;	
 			if (Player.ReturnAmountOfCardUsed() < 1)							//Jeśli nie ma kart w cmentarzu
@@ -226,7 +235,6 @@ int Game::GameLoopPvP()
 				continue;
 			}
 			//Zapamiętanie wybranej karty
-			al_clear_to_color(Colors::darkGray);										//tło
 			DrawOtherInfo(mouseX, mouseY);												//Rysowanie reszty informacji
 			if (skillId == AllSkills::medic)
 			{
@@ -252,30 +260,39 @@ int Game::GameLoopPvP()
 			al_flip_display();
 			continue;
 		}
+		//Początek tury gracza
+		if (timerEvent && !GameStart && !GraveyardOn && TurnBegin)
+		{
+			TurnBegin = true;
+			DrawOtherInfo(mouseX, mouseY);									//Rysowanie reszty informacji 
+			DrawHiddenHand(mouseX, mouseY);									//Rysowanie ukrytej ręki
+			EndRoundButton(mouseX, mouseY);									//Przycisk końca rundy
+			RoundResult();													//Koniec rundy
+			al_flip_display();												//Wrzucenie na ekran
+			continue;
+		}
 		//Partia 
-		if (events.type == ALLEGRO_EVENT_TIMER && !GameStart && !GraveyardOn)
+		if (timerEvent && !GameStart && !GraveyardOn && !TurnBegin)
 		{
 			Enemy.SetRoundFinished(true);									//Dokończyć usunąć (do testów)
-			al_clear_to_color(Colors::darkGray);							//tło
 			DrawOtherInfo(mouseX, mouseY);									//Rysowanie reszty informacji 
 			LastPlayedCard = DrawPlayersCards(mouseX, mouseY);				//Rysowanie kart gracza i zagranie karty
 			while (LastPlayedCard.card != Card())						
 			{
 				LastPlayedCard.card = AbilityManager(LastPlayedCard.card);	//Używa umiejętności karty
 			}
-			RoundInfo(mouseX, mouseY);										//Przycisk końca rundy
+			EndRoundButton(mouseX, mouseY);									//Przycisk końca rundy
 			RoundResult();													//Koniec rundy
 			al_flip_display();												//Wrzucenie na ekran
 			continue;
 		}
 		//Cmentarz
-		if (events.type == ALLEGRO_EVENT_TIMER && !GameStart && GraveyardOn)		
+		if (timerEvent && !GameStart && GraveyardOn)
 		{
-			al_clear_to_color(Colors::darkGray);								//tło
-			DrawOtherInfo(mouseX, mouseY);										//Rysowanie reszty informacji
-			DrawGraveyard(mouseX, mouseY, PlayersGraveyard,true);				//Rysowanie cmentarza
-			DrawHand(mouseX, mouseY);											//Rysuje karty na ręce
-			al_flip_display();													//Wrzucenie na ekran
+			DrawOtherInfo(mouseX, mouseY);									//Rysowanie reszty informacji
+			DrawGraveyard(mouseX, mouseY, PlayersGraveyard,true);			//Rysowanie cmentarza
+			DrawHand(mouseX, mouseY);										//Rysuje karty na ręce
+			al_flip_display();												//Wrzucenie na ekran
 		}
 	}
 	return 0;
@@ -314,6 +331,7 @@ bool Game::GameBegin(float mouseX,float mouseY,int *CardsChanged)
 	//Przyciski
 	if (StartGame.MouseOn(mouseX, mouseY) && mouseButton == 1)	//Rozpoczęcie gracza nie wykorzystując wszystkich przelosowań
 	{
+		TurnBegin = true;
 		return false;
 	}
 	for (int i = 0; i < PlayerHand.size(); i++)
@@ -328,12 +346,42 @@ bool Game::GameBegin(float mouseX,float mouseY,int *CardsChanged)
 	}
 	if (*CardsChanged >= 2)	//Osiągnięcie limitu przelosowań kart
 	{
+		TurnBegin = true;
 		return false;
 	}
 	StartGame.DrawImage();
 	StartGame.DrawText(Fonts::NameFont, settings::PosY(0.005f));
 	//StartGame.DrawHitbox();
 	return true;
+}
+//Zasłonięte karty do wymiany
+//----------------------------------------------------
+void Game::HiddenGameBegin(float mouseX, float mouseY)
+{
+	std::vector<Card> PlayerHand = Player.ReturnPlayerHand();
+	float ReverseCardSizeX = 0.077f;
+	//Rysowanie instrukcji
+	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.24f), ALLEGRO_ALIGN_CENTER, "Gracz 1");
+	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.29f), ALLEGRO_ALIGN_CENTER, "Kliknij na dowolną kartę aby odkryć pozostałe");
+	//Rysowanie ręki gracza
+	for (int i = 0; i < PlayerHand.size(); i++)
+	{
+		if (i < 5)
+		{
+			HandButtons[i] = Button(PlayerHand[i].NormalCardVertexesPosition(0.25f + i * 0.08f, 0.36f));
+			al_draw_scaled_bitmap(Images::ReverseCard, 0, 0, 330, 430, settings::PosX(0.25f + i * 0.08f), settings::PosY(0.36f), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
+		}
+		else
+		{
+			HandButtons[i] = Button(PlayerHand[i].NormalCardVertexesPosition(0.25f + (i % (5)) * 0.08f, 0.56f));
+			al_draw_scaled_bitmap(Images::ReverseCard, 0, 0, 330, 430, settings::PosX(0.25f + (i % (5)) * 0.08f), settings::PosY(0.56f), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
+		}
+		if (HandButtons[i].MouseOn(mouseX, mouseY) && mouseButton == 1)	//Rysowanie dużej karty
+		{
+			TurnBegin = false;
+			mouseButton = 0;
+		}
+	}
 }
 //Rysuje karty należące do gracza oraz sprawdza przyciski
 //----------------------------------------------------
@@ -491,12 +539,6 @@ Card Game::AbilityManager(Card UsedCard)
 	}
 	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Horde)	//Horda
 	{
-		/*NewCard = Player.UseCard(UsedCard);
-		if (NewCard != Card())
-		{
-			Player.PlayCard(NewCard);
-			return NewCard;
-		}*/
 		if (Player.CanPlay(UsedCard))
 		{
 			NewCard = Player.UseStackCard(UsedCard);
@@ -558,7 +600,7 @@ Card Game::AbilityManager(Card UsedCard)
 		{
 			Player.TakeCard();
 		}
-		PlayerHandCard = Enemy.AmountOfCardsInHand();
+		/*PlayerHandCard = Enemy.AmountOfCardsInHand();
 		//Usunięcie kart z ręki i wrzucenie ich do cmentarza
 		for (int i = PlayerHandCard - 1; i >= 0; i--)
 		{
@@ -569,7 +611,7 @@ Card Game::AbilityManager(Card UsedCard)
 		for (int i = 0; i < PlayerHandCard; i++)
 		{
 			Enemy.TakeCard();
-		}
+		}*/
 	}
 	//Umiejętność kart przeciwnika
 	return NewCard;
@@ -579,6 +621,15 @@ Card Game::AbilityManager(Card UsedCard)
 void Game::DrawOtherInfo(float mouseX, float mouseY)
 {
 	Button GraveyardButton;
+	//Tura gracza
+	if (PlayerTurn)
+	{
+		al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.01f), settings::PosY(0.01f), ALLEGRO_ALIGN_LEFT, "Tura gracza 1");
+	}
+	else
+	{
+		al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.01f), settings::PosY(0.01f), ALLEGRO_ALIGN_LEFT, "Tura gracza 2");
+	}
 	//Wygrane gracza
 	ALLEGRO_BITMAP* FirstCrystal;
 	ALLEGRO_BITMAP* SecondCrystal;
@@ -598,7 +649,7 @@ void Game::DrawOtherInfo(float mouseX, float mouseY)
 		FirstCrystal = Images::EmptyCrystal;
 		SecondCrystal = Images::EmptyCrystal;
 	}
-	//Kryształy gracz
+	//Kryształy graczy
 	al_draw_scaled_bitmap(FirstCrystal, 0, 0, 100, 100, settings::PosX(0.17), settings::PosY(0.39), settings::PosX(0.015), settings::PosY(0.015 * settings::ProportionScreenWH()), NULL);
 	al_draw_scaled_bitmap(SecondCrystal, 0, 0, 100, 100, settings::PosX(0.19), settings::PosY(0.39), settings::PosX(0.015), settings::PosY(0.015 * settings::ProportionScreenWH()), NULL);
 	//Kryształy przeciwnika
@@ -670,22 +721,27 @@ void Game::DrawOtherInfo(float mouseX, float mouseY)
 	}
 	GraveyardButton.DrawHitbox();
 }
-//Odpowiada za koniec rundy
+//Przycisk Końca tury
 //--------------------------------------------
-void Game::RoundInfo(float mouseX,float mouseY)
+void Game::EndRoundButton(float mouseX,float mouseY)
 {
-	Button EndRound(settings::PosX(0.865f), settings::PosY(0.47f), settings::PosX(0.945f), settings::PosY(0.515f));
-	EndRound.SetColor(Colors::white, Colors::lightGray);
-	EndRound.SetText("Koniec tury");
-
-	if (EndRound.MouseOn(mouseX,mouseY) && mouseButton == 1)
+	if (!TurnBegin)
 	{
-		Player.SetRoundFinished(true);
-		mouseButton = 0;	
+		//Przycisk końca tury
+		Button EndRound(settings::PosX(0.865f), settings::PosY(0.47f), settings::PosX(0.945f), settings::PosY(0.515f));
+		EndRound.SetColor(Colors::white, Colors::lightGray);
+		EndRound.SetText("Koniec tury");
+		//Kliknięcie przycisku
+		if (EndRound.MouseOn(mouseX,mouseY) && mouseButton == 1 && !TurnBegin)
+		{
+			Player.SetRoundFinished(true);
+			TurnBegin = true;
+			mouseButton = 0;	
+		}
+		//Rysowanie przycisku
+		EndRound.DrawImage();
+		EndRound.DrawText(Fonts::SmallValueFont,settings::PosY(0.004) );
 	}
-	EndRound.DrawImage();
-	//EndRound.DrawHitbox();
-	EndRound.DrawText(Fonts::SmallValueFont,settings::PosY(0.004) );
 }
 //Oblicza wynik rundy i czyści stół, zwraca true jeśli runda się zakończyła
 //-------------------------------------------------------------------------
@@ -853,6 +909,28 @@ void Game::DrawHand(float mouseX, float mouseY)
 		if (HandButtons[i].MouseOn(mouseX, mouseY))
 		{
 			PlayerHand[i].DrawBigCardDescr(0.02, 0.1f);
+		}
+	}
+}
+//Rysuje ręke z odwróconymi kartami
+//---------------------------------------------------
+void Game::DrawHiddenHand(float mouseX, float mouseY)
+{
+	std::vector<Card> PlayerHand = Player.ReturnPlayerHand();
+	//Rysowanie podpowiedzi
+	al_draw_text(Fonts::NameFont, Colors::white, settings::PosX(0.01f), settings::PosY(0.06f), ALLEGRO_ALIGN_LEFT, "Kliknij na kartę w ręce");
+	//Rysowanie ręki gracza
+	float StartDrawPointX = OtherFunctions::AlignCenter(0.01f, 0.86f, +PlayerHand.size() * 0.08f);
+	float ReverseCardSizeX = 0.077f;
+	for (int i = 0; i < PlayerHand.size(); i++)
+	{
+		HandButtons[i] = Button(PlayerHand[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.8f));
+		al_draw_scaled_bitmap(Images::ReverseCard, 0, 0, 330, 430, settings::PosX(StartDrawPointX + i * 0.08f), settings::PosY(0.8f), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
+		//Kliknięcie na kartę (przycisk)
+		if (HandButtons[i].MouseOn(mouseX, mouseY) && mouseButton == 1)
+		{
+			mouseButton = 0;
+			TurnBegin = false;
 		}
 	}
 }
