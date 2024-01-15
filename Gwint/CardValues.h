@@ -17,6 +17,8 @@ public:
 	void Clear();					//Zeruje wartoœci klasy
 	int CountCurrentValue();		//Liczy obecn¹ wartoœæ i zwraca obecn¹ wartoœæ
 	int ReturnCurrentValue();		//Zwraca obecn¹ wartoœæ
+	int ReturnDiffrence();			//Zwraca modyfikator
+	int ReturnMultiplayer();		//Zwraca mno¿nik
 	
 };
 

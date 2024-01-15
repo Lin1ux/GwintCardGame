@@ -31,6 +31,8 @@ Game::Game(ALLEGRO_DISPLAY* Disp,std::vector<Card> PlayerDeck, std::vector<Card>
 	lastUsedCardIndex = -1;
 	lastUsedCardRow = -1;
 	TurnBegin = true;
+	Player1 = &Player;
+	Player2 = &Enemy;
 	ClearButtons();
 }
 
@@ -74,6 +76,15 @@ int Game::GameLoopPvP()
 	int CardsChanged = 0;			//Liczba odrzuconych kart
 
 	bool timerEvent = false;
+	/*Player1->test();
+	std::cout << "Wskaźnik -" << Player1->ReturnTest() << "\n";
+	std::cout<<"Orginalny -" << Player.ReturnTest() << "\n";
+	Player.test();
+	std::cout << "Wskaźnik2 -" << Player1->ReturnTest() << "\n";
+	std::cout << "Orginalny2 -" << Player.ReturnTest() << "\n";
+	Player1->test();
+	std::cout << "Wskaźnik3 -" << Player1->ReturnTest() << "\n";
+	std::cout << "Orginalny3 -" << Player.ReturnTest() << "\n";*/
 	while (!GameOver)
 	{
 
@@ -149,6 +160,7 @@ int Game::GameLoopPvP()
 		if (timerEvent && !GameStart && skillId == AllSkills::transport)
 		{
 			CardPos CardToTake;
+			DrawTip("Kliknij na swoją kartę na stole");											//Rysuje wskazówkę
 			DrawOtherInfo(mouseX, mouseY);														//Rysowanie reszty informacji 
 			CardToTake = DrawPlayersCards(mouseX, mouseY);										//Rysowanie kart gracza i zagranie karty
 			if (Player.ReturnAmountOfCardOnTable() - Player.NumberOfCardsWithSkill(AllSkills::Transport) < 1)
@@ -156,7 +168,7 @@ int Game::GameLoopPvP()
 				skillId = 0;
 				continue;
 			}
-			if (CardToTake.card.ReturnSkill() != AllSkills::Transport && CardToTake.card != Card() && mouseButton == 1)		
+			if (CardToTake.card.ReturnSkill() != AllSkills::Transport && CardToTake.card != Card() && mouseButton == 1 && CardToTake.isPlayerCard)
 			{
 				Player.TakeCard(CardToTake.card);											//Dodanie karty do ręki
 				Player.RemoveCardFromTable(CardToTake.card.ReturnRow(), CardToTake.index);	//Usunięcie wskazanej karty z stołu
@@ -164,6 +176,30 @@ int Game::GameLoopPvP()
 				{
 					AbilityManager(CardToTake.card);										//Używa umiejętności karty
 				}
+				skillId = 0;
+				mouseButton = 0;
+			}
+			al_flip_display();
+			continue;
+		}
+		//Umiejętność Strzelec
+		if (timerEvent && !GameStart && skillId == AllSkills::archer)
+		{
+			CardPos TargetCard;
+			DrawTip("Kliknij na kartę przeciwnika");											//Rysuje wskazówkę
+			DrawOtherInfo(mouseX, mouseY);														//Rysowanie reszty informacji 
+			TargetCard = DrawPlayersCards(mouseX, mouseY);										//Rysowanie kart gracza i zagranie karty
+			std::cout << "enemy\n";
+			if (Enemy.ReturnAmountOfCardOnTable(true) <= 0)
+			{
+				skillId = 0;
+				continue;
+			}
+			std::cout << "Damage\n";
+			if (mouseButton == 1 && TargetCard.card != Card() && !TargetCard.isPlayerCard)
+			{
+				//Miejsce na zadanie obrażeń
+				Enemy.AddDiffrenceOfCard(TargetCard.card.ReturnRow(), TargetCard.index, -3);
 				skillId = 0;
 				mouseButton = 0;
 			}
@@ -390,60 +426,18 @@ CardPos Game::DrawPlayersCards(float mouseX,float mouseY)
 	std::vector<Card> PlayerHand = Player.ReturnPlayerHand();
 	std::vector<Card> PFirst = Player.ReturnMeleeRow();
 	std::vector<Card> PSecond = Player.ReturnRangeRow();
+	std::vector<Card> EFirst = Enemy.ReturnMeleeRow();
+	std::vector<Card> ESecond = Enemy.ReturnRangeRow();
 	CardPos PlayedCard = { Card(),-1 };
 	ClearButtons();
 	float StartDrawPointX;
 
 	std::vector<Card> BrotherHoodCards = std::vector<Card>();
-	//Umiejętności specjalne (Nwm czemu funkcja nie widzi zmian)
-	//std::cout << "val 2 " << Player.ReturnCurrentValueOfCard(1, 0) << "\n";
-	//Szukanie specjalnych kart I Rząd
-	/*for (int i = 0; i < PFirst.size(); i++)
-	{
-		if (PFirst[i].ReturnSkill() == AllSkills::Brotherhood && !CardInVector(BrotherHoodCards, PFirst[i]))
-		{
-			BrotherHoodCards.push_back(PFirst[i]);
-		}
-	}
-	//Nakładanie zmian
-	for (int i = 0; i < BrotherHoodCards.size(); i++)
-	{
-		int multiplayer = Player.NumberOfSpecificCards(BrotherHoodCards[i]);
-		for (int j = 0; j<PFirst.size(); j++)
-		{
-			if (PFirst[j] == BrotherHoodCards[i])
-			{
-				PFirst[j].ChangeMultiplayer(multiplayer);
-			}
-		}
-	}
-	BrotherHoodCards = std::vector<Card>();	//Czyszczenie vectora
-	//Szukanie specjalnych kart II rząd
-	for (int i = 0; i < PSecond.size(); i++)
-	{
-		if (PSecond[i].ReturnSkill() == AllSkills::Brotherhood && !CardInVector(BrotherHoodCards, PSecond[i]))
-		{
-			BrotherHoodCards.push_back(PSecond[i]);
-		}
-	}
-	//Nakładanie zmian
-	for (int i = 0; i < BrotherHoodCards.size(); i++)
-	{
-		int multiplayer = Player.NumberOfSpecificCards(BrotherHoodCards[i]);
-		for (int j = 0; j < PSecond.size(); j++)
-		{
-			if (PSecond[j] == BrotherHoodCards[i])
-			{
-				PSecond[j].ChangeMultiplayer(multiplayer);
-			}
-		}
-	}*/
 	//Rysowanie 1 rzędu gracza
 	StartDrawPointX = OtherFunctions::AlignCenter(0.2f, 0.86f, +PFirst.size() * 0.08f);
 	for (int i = 0; i < PFirst.size(); i++)
 	{
-		MeleeButtons[i] = Button(PFirst[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.4f));
-		//PFirst[i].ChangeMultiplayer(2);
+		MeleeButtons[i] = Button(PFirst[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.41f));
 		PFirst[i].DrawCard(StartDrawPointX + i * 0.08f, 0.4f,Player.ReturnCurrentValueOfCard(CardList::front, i));
 		if (MeleeButtons[i].MouseOn(mouseX, mouseY))
 		{
@@ -451,15 +445,33 @@ CardPos Game::DrawPlayersCards(float mouseX,float mouseY)
 			{
 				PlayedCard.card = PFirst[i];
 				PlayedCard.index = i;
+				PlayedCard.isPlayerCard = true;
 			}
 			PFirst[i].DrawBigCardDescr(0.02, 0.1f);
+		}
+	}
+	//Rysowanie 1 rzędu przeciwnika
+	StartDrawPointX = OtherFunctions::AlignCenter(0.2f, 0.86f, +EFirst.size() * 0.08f);
+	for (int i = 0; i < EFirst.size(); i++)
+	{
+		EMeleeButtons[i] = Button(EFirst[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.21f));
+		EFirst[i].DrawCard(StartDrawPointX + i * 0.08f, 0.2f, Enemy.ReturnCurrentValueOfCard(CardList::front, i));
+		if (EMeleeButtons[i].MouseOn(mouseX, mouseY))
+		{
+			if (skillId != 0)
+			{
+				PlayedCard.card = EFirst[i];
+				PlayedCard.index = i;
+				PlayedCard.isPlayerCard = false;
+			}
+			EFirst[i].DrawBigCardDescr(0.02, 0.1f);
 		}
 	}
 	//Rysowanie 2 rzędu gracza
 	StartDrawPointX = OtherFunctions::AlignCenter(0.2f, 0.86f, +PSecond.size() * 0.08f);
 	for (int i = 0; i < PSecond.size(); i++)
 	{
-		RangeButtons[i] = Button(PSecond[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.6f));
+		RangeButtons[i] = Button(PSecond[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.61f));
 		PSecond[i].DrawCard(StartDrawPointX + i * 0.08f, 0.6f,Player.ReturnCurrentValueOfCard(CardList::back, i));
 		if (RangeButtons[i].MouseOn(mouseX, mouseY))
 		{
@@ -467,8 +479,26 @@ CardPos Game::DrawPlayersCards(float mouseX,float mouseY)
 			{
 				PlayedCard.card = PSecond[i];
 				PlayedCard.index = i;
+				PlayedCard.isPlayerCard = true;
 			}
 			PSecond[i].DrawBigCardDescr(0.02, 0.1f);
+		}
+	}
+	//Rysowanie 2 rzędu przeciwnika
+	StartDrawPointX = OtherFunctions::AlignCenter(0.2f, 0.86f, +ESecond.size() * 0.08f);
+	for (int i = 0; i < ESecond.size(); i++)
+	{
+		ERangeButtons[i] = Button(ESecond[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.01f));
+		ESecond[i].DrawCard(StartDrawPointX + i * 0.08f, 0.6f, Enemy.ReturnCurrentValueOfCard(CardList::back, i));
+		if (ERangeButtons[i].MouseOn(mouseX, mouseY))
+		{
+			if (skillId != 0)
+			{
+				PlayedCard.card = ESecond[i];
+				PlayedCard.index = i;
+				PlayedCard.isPlayerCard = false;
+			}
+			ESecond[i].DrawBigCardDescr(0.02, 0.1f);
 		}
 	}
 
@@ -486,7 +516,16 @@ CardPos Game::DrawPlayersCards(float mouseX,float mouseY)
 			{
 				PlayedCard.card = PlayerHand[i];
 				PlayedCard.index = i;
-				Player.PlayCard(Player.UseCard(i));		//Zagranie karty i usunięcie jej z ręki
+				PlayedCard.isPlayerCard = true;
+				Card NewCard = Player.UseCard(i);
+				if (NewCard.ReturnSkill() == AllSkills::Spy)
+				{
+					Enemy.PlayCard(NewCard);		//Zagranie karty i usunięcie jej z ręki
+				}
+				else
+				{
+					Player.PlayCard(NewCard);		//Zagranie karty i usunięcie jej z ręki
+				}
 				mouseButton = 0;
 			}
 		}
@@ -531,11 +570,19 @@ Card Game::AbilityManager(Card UsedCard)
 		PlayersGraveyard = true;
 		skillId = AllSkills::medic;
 	}
-	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::GoldMedic)	//Medyk
+	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::GoldMedic)	//Złoty Medyk
 	{
 		GraveyardOn = true;
 		PlayersGraveyard = true;
 		skillId = AllSkills::goldMedic;
+	}
+	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Spy)		//Szpieg
+	{
+		Player.TakeCard();
+	}
+	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Archer)	//Strzelec
+	{
+		skillId = AllSkills::archer;
 	}
 	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Horde)	//Horda
 	{
@@ -586,6 +633,38 @@ Card Game::AbilityManager(Card UsedCard)
 		lastUsedCardIndex = Player.ReturnAmountOfCardOnTable(UsedCard.ReturnRow())-1;
 		lastUsedCardRow = UsedCard.ReturnRow();
 	}
+	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Slayer) //Pogromca
+	{
+		int CardIndex = Player.ReturnAmountOfCardOnTable(UsedCard.ReturnRow()) - 1;	//Indeks zagranej karty
+		int CardRow = UsedCard.ReturnRow();											
+		//Maksymalna wartość karty
+		std::cout << "start\n";
+		int pMax = Player.MaxValue(CardRow, CardIndex);
+		std::cout << "Pmax=="<<pMax<<"\n";
+		int eMax = Enemy.MaxValue();
+		std::cout << "Emax\n";
+		
+		int Max;
+		if (pMax >= eMax)
+		{
+			Max = pMax;
+			//Usuwanie kart
+			std::cout << "PmaxPlayer\n";
+			Player.RemoveAllCardsWithValue(CardRow, CardIndex, Max);
+			std::cout << "PmaxPlayer\n";
+			Enemy.RemoveAllCardsWithValue(Max);
+		}
+		if (pMax < eMax);
+		{
+			Max = eMax;
+			//Usuwanie kart
+			std::cout << "EmaxPlayer\n";
+			Player.RemoveAllCardsWithValue(Max);
+			std::cout << "EmaxPlayer\n";
+			Enemy.RemoveAllCardsWithValue(Max);
+		}
+		std::cout << "Done\n";
+	}
 	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Banish)	//Wygnanie
 	{
 		int PlayerHandCard = Player.AmountOfCardsInHand();
@@ -600,18 +679,6 @@ Card Game::AbilityManager(Card UsedCard)
 		{
 			Player.TakeCard();
 		}
-		/*PlayerHandCard = Enemy.AmountOfCardsInHand();
-		//Usunięcie kart z ręki i wrzucenie ich do cmentarza
-		for (int i = PlayerHandCard - 1; i >= 0; i--)
-		{
-			Card Card = Enemy.UseCard(i);
-			Enemy.AddCardToGraveyard(Card);
-		}
-		//Dobranie nowych kart
-		for (int i = 0; i < PlayerHandCard; i++)
-		{
-			Enemy.TakeCard();
-		}*/
 	}
 	//Umiejętność kart przeciwnika
 	return NewCard;
@@ -698,14 +765,14 @@ void Game::DrawOtherInfo(float mouseX, float mouseY)
 	al_draw_scaled_bitmap(Images::ReverseCard, 0, 0, 330, 430, settings::PosX(0.865), settings::PosY(0.56), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
 	//Przycisk cmentarzu
 	GraveyardButton = Button(settings::PosX(0.865), settings::PosY(0.56), settings::PosX(ReverseCardSizeX) + settings::PosX(0.865), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()) + settings::PosY(0.56));
-	if (GraveyardButton.MouseOn(mouseX, mouseY) && mouseButton == 1)
+	if (GraveyardButton.MouseOn(mouseX, mouseY) && mouseButton == 1 && !IsGraveyardLocked())
 	{
 		mouseButton == 0;
 		GraveyardOn = true;
 		PlayersGraveyard = true;
 		GraveyardFirstCard = 0;
 	}
-	GraveyardButton.DrawHitbox();
+	//GraveyardButton.DrawHitbox();
 	//Cmentarz przeciwnika
 	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.32) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Enemy.ReturnAmountOfCardUsed()).c_str());
@@ -719,7 +786,7 @@ void Game::DrawOtherInfo(float mouseX, float mouseY)
 		PlayersGraveyard = false;
 		GraveyardFirstCard = 0;
 	}
-	GraveyardButton.DrawHitbox();
+	//GraveyardButton.DrawHitbox();
 }
 //Przycisk Końca tury
 //--------------------------------------------
@@ -918,7 +985,7 @@ void Game::DrawHiddenHand(float mouseX, float mouseY)
 {
 	std::vector<Card> PlayerHand = Player.ReturnPlayerHand();
 	//Rysowanie podpowiedzi
-	al_draw_text(Fonts::NameFont, Colors::white, settings::PosX(0.01f), settings::PosY(0.06f), ALLEGRO_ALIGN_LEFT, "Kliknij na kartę w ręce");
+	DrawTip("Kliknij na kartę w ręce");
 	//Rysowanie ręki gracza
 	float StartDrawPointX = OtherFunctions::AlignCenter(0.01f, 0.86f, +PlayerHand.size() * 0.08f);
 	float ReverseCardSizeX = 0.077f;
@@ -933,6 +1000,13 @@ void Game::DrawHiddenHand(float mouseX, float mouseY)
 			TurnBegin = false;
 		}
 	}
+}
+//Rysuje poradę w lewym głównym rogu
+//----------------------------------
+void Game::DrawTip(std::string text)
+{
+	//Rysowanie podpowiedzi
+	al_draw_text(Fonts::NameFont, Colors::white, settings::PosX(0.01f), settings::PosY(0.06f), ALLEGRO_ALIGN_LEFT, text.c_str());
 }
 //Sprawdza czy karta jest w vectorze
 //--------------------------------------------------------------------
@@ -952,7 +1026,17 @@ bool Game::CardInVector(std::vector<Card> CardVector ,Card CardToFind)
 //---------------------------------
 bool Game::IsEnemyGraveyardLocked()
 {
-	if (skillId == AllSkills::deadEater || skillId == AllSkills::medic)
+	if (skillId == AllSkills::deadEater || skillId == AllSkills::medic || skillId == AllSkills::archer)
+	{
+		return true;
+	}
+	return false;
+}
+//Sprawdza czy włączona jest umiejętność blokująca cmentarz gracza
+//----------------------------
+bool Game::IsGraveyardLocked()
+{
+	if (skillId == AllSkills::transport || skillId == AllSkills::archer)
 	{
 		return true;
 	}

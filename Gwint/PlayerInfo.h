@@ -4,8 +4,9 @@
 
 typedef struct CardPos
 {
-	Card card;  //Karta
-	int index;  //Returned Index
+	Card card;			//Karta
+	int index;			//Index
+	bool isPlayerCard;	//Czy nale¿y do gracza (gracza 1)
 }CardPos;
 
 #pragma once
@@ -22,6 +23,7 @@ private:
 	std::vector<Card> PlayerHand;			//Karty w rêce gracza
 	std::vector<Card> CardStack;			//Nie dobrane karty
 	std::vector<Card> CardUsed;				//Karty odrzcuone
+	int testInt;							
 
 public:
 	//Konstruktory
@@ -58,15 +60,22 @@ public:
 	//Stó³
 	Card RemoveCardFromTable(Card CardToRemove);						//Usuwa pierwsz¹ znalezion¹ kartê 
 	Card RemoveCardFromTable(int row, int index);						//Usuwa kartê z sto³u o podanym indeksie
+	void RemoveAllCardsWithValue(int value);							//Usuwa wszystkie karty o podanej wartoœci (umieszcza je w cmentarzu)
+	void RemoveAllCardsWithValue(int row, int index, int value);		//Usuwa wszystkie karty o podanej wartoœci pomijaj¹c kartê o podanym rzêdzie i indeksie (umieszcza je w cmentarzu)
 	int ReturnAmountOfCardOnTable();									//Zwraca liczbê kart na stole
+	int ReturnAmountOfCardOnTable(bool IgnoreGoldCard);					//Zwraca liczbê zwyk³ych kart na stole  ignoruj¹c z³ote karty
 	int ReturnAmountOfCardOnTable(int row);								//Zwraca liczbê kart w wybranym rzêdzie
 	int NumberOfCardsWithSkill(Skills Skill);							//Zwraca liczbê kart na stole posiadaj¹ce dan¹ umiejêtnoœæ
 	int NumberOfSpecificCards(Card CardToFind);							//Zwraca liczbê podanych kart
+	int MaxValue();														//Zwraca najwiêksz¹ wartoœæ karty na stole nale¿¹ce do gracza
+	int MaxValue(int row, int IgnoredCard);								//Zwraca najwiêksz¹ wartoœæ karty na stole nale¿ace do gracza ignoruj¹c podan¹ kartê
 	//Watoœci kart na stole
 	void SetMultiplayerOfCard(int row, int index, int value);			//Ustawia mno¿nik karty o podanym indeksie i rzêdzie							
 	void SetDiffrenceOfCard(int row, int index, int value);				//Ustawia modyfikator karty o podanym indeksie i rzêdzie
+	void AddDiffrenceOfCard(int row, int index, int value);				//Dodaje wartoœæ do modyfikatora karty o podanym indeksie i rzêdzie
 	int ReturnCurrentValueOfCard(int row, int index);					//Zwraca aktualn¹ wartoœæ karty
-	//Cmentarz (U¿yte karty)
+	
+//Cmentarz (U¿yte karty)
 	void AddCardToGraveyard(Card Card);									//Dodaje kartê do cmentarza
 	int ReturnAmountOfCardsByRow(int row);								//Zwraca liczbê kart danego rzêdu
 	int ReturnAmountOfCardUsed();										//Zwraca liczbê kart zu¿ytych
@@ -78,5 +87,7 @@ public:
 	std::vector<Card> ReturnCardStack();								//Zwraca nie u¿yte karty
 	std::vector<Card> ReturnCardUsed();									//Zwraca odrzucone karty
 	//Testowe
+	void test();
+	int ReturnTest();
 };
 

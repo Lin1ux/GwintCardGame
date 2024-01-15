@@ -54,7 +54,7 @@ ALLEGRO_BITMAP* Images::Transport;
 ALLEGRO_BITMAP* Images::SummonerMortar;
 ALLEGRO_BITMAP* Images::DeadEater;
 ALLEGRO_BITMAP* Images::GoldenDeadEater;
-ALLEGRO_BITMAP* Images::Conflagration;
+ALLEGRO_BITMAP* Images::Slayer;
 ALLEGRO_BITMAP* Images::Banish;
 
 //Za³adowuje obrazki
@@ -113,7 +113,7 @@ void Images::SetImages()
 	Images::SummonerMortar = al_load_bitmap("images/Skills/MortarSkill.png");
 	Images::DeadEater = al_load_bitmap("images/Skills/DeadEaterSkill.png");
 	Images::GoldenDeadEater = al_load_bitmap("images/Skills/DeadEaterSkillG.png");
-	Images::Conflagration = al_load_bitmap("images/Skills/DeadSkill.png");
+	Images::Slayer = al_load_bitmap("images/Skills/DeadSkill.png");
 	Images::Banish = al_load_bitmap("images/Skills/BanishSkill.png");
 }
 

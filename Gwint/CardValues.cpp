@@ -63,3 +63,15 @@ int CardValues::ReturnCurrentValue()
 {
 	return CurrentValue;
 }
+//Zwraca modyfikator
+//-------------------------------
+int CardValues::ReturnDiffrence()
+{
+	return ValueDiffrence;
+}
+//Zwraca mno¿nik
+//---------------------------------
+int CardValues::ReturnMultiplayer()
+{
+	return Multiplayer;
+}

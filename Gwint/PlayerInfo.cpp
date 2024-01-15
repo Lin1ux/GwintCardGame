@@ -16,6 +16,7 @@ PlayerInfo::PlayerInfo()
 	PlayerHand = std::vector<Card>();
 	CardStack = std::vector<Card>();
 	CardUsed = std::vector<Card>();
+	testInt = 0;
 }
 
 //Konstruktor, Dobiera karty do rêki i nie dobrane karty
@@ -29,6 +30,7 @@ PlayerInfo::PlayerInfo(std::vector<Card> DeckCards)
 	RangeRow = std::vector<Card>();		//Karty w 2 rzêdzie (dystansowy)
 	MCardsValues = std::vector<CardValues>();
 	RCardsValues = std::vector<CardValues>();
+	testInt = 0;
 
 	//Dokoñczyæ Odkomentowaæ linijkê pod tym komentarzem (Do testów lepiej nie tasowaæ tali)
 	//std::random_shuffle(DeckCards.begin(), DeckCards.end());		//Przetasowanie kart w tali gracza
@@ -335,10 +337,60 @@ Card PlayerInfo::RemoveCardFromTable(int row, int index)
 	if (row == CardList::back && index < RangeRow.size())
 	{
 		RemovedCard = RangeRow[index];
-		RangeRow.erase(MeleeRow.begin() + index);
+		RangeRow.erase(RangeRow.begin() + index);
 		RCardsValues.erase(RCardsValues.begin() + index);
 	}
 	return RemovedCard;
+}
+//Usuwa wszystkie karty o podanej wartoœci i umieszcza je w cmentarzu
+//-----------------------------------------------------------------
+void PlayerInfo::RemoveAllCardsWithValue(int value)
+{
+	for (int i = 0; i < MeleeRow.size(); i++)
+	{
+		if (MCardsValues[i].ReturnCurrentValue() == value)
+		{
+			AddCardToGraveyard(RemoveCardFromTable(CardList::front, i));
+		}
+	}
+	for (int i = 0; i < RangeRow.size(); i++)
+	{
+		if (RCardsValues[i].ReturnCurrentValue() == value)
+		{
+			AddCardToGraveyard(RemoveCardFromTable(CardList::back, i));
+		}
+	}
+}
+//Usuwa wszystkie karty o podanej wartoœci i pomijaj¹c kartê o podanym rzêdzie i indeksie (umieszcza je w cmentarzu)
+//------------------------------------------------------------------------------------------------------------------
+void PlayerInfo::RemoveAllCardsWithValue(int row, int index, int value)
+{
+	for (int i = 0; i < MeleeRow.size(); i++)
+	{
+		if (row == CardList::front && index == i)
+		{
+			continue;
+		}
+		if (MCardsValues[i].ReturnCurrentValue() == value)
+		{
+			AddCardToGraveyard(RemoveCardFromTable(CardList::front, i));
+			i -= 1;
+			index -= 1;
+		}
+	}
+	for (int i = 0; i < RangeRow.size(); i++)
+	{
+		if (row == CardList::back && index == i)
+		{
+			continue;
+		}
+		if (RCardsValues[i].ReturnCurrentValue() == value)
+		{
+			AddCardToGraveyard(RemoveCardFromTable(CardList::back, i));
+			i -= 1;
+			index -= 1;
+		}
+	}
 }
 //Zwraca karty w 1 rzêdzie
 //--------------------------------------------
@@ -376,6 +428,7 @@ std::vector<Card> PlayerInfo::ReturnCardUsed()
 {
 	return CardUsed;
 }
+
 //Dodaje kartê do cmentarza
 //--------------------------------------------
 void PlayerInfo::AddCardToGraveyard(Card Card)
@@ -423,6 +476,31 @@ Card PlayerInfo::RemoveCardFromGraveyard(Card CardToRemove)
 int PlayerInfo::ReturnAmountOfCardOnTable()
 {
 	return  MeleeRow.size() + RangeRow.size();
+}
+//Zwraca liczbê kart na stole ignoruj¹c z³ote karty
+//------------------------------------------------------------
+int PlayerInfo::ReturnAmountOfCardOnTable(bool IgnoreGoldCard)
+{
+	if (IgnoreGoldCard)
+	{
+		int num = 0;
+		for (int i = 0; i < MeleeRow.size(); i++)
+		{
+			if (!MeleeRow[i].ReturnIsHero())
+			{
+				num += 1;
+			}
+		}
+		for (int i = 0; i < RangeRow.size(); i++)
+		{
+			if (!RangeRow[i].ReturnIsHero())
+			{
+				num += 1;
+			}
+		}
+		return num;
+	}
+	return ReturnAmountOfCardOnTable();
 }
 //Zwraca liczbê kart w wybranym rzêdzie
 //------------------------------------------------
@@ -479,6 +557,56 @@ int PlayerInfo::NumberOfSpecificCards(Card CardToFind)
 	}
 	return sum;
 }
+//Zwraca najwiêksz¹ wartoœæ karty na stole nale¿¹ce do gracza
+//-----------------------------------------------------------
+int PlayerInfo::MaxValue()
+{
+	int max = -1;
+	for (int i = 0; i < MeleeRow.size(); i++)
+	{
+		if (max < MCardsValues[i].ReturnCurrentValue())
+		{
+			max = MCardsValues[i].ReturnCurrentValue();
+		}
+	}
+	for (int i = 0; i < RangeRow.size(); i++)
+	{
+		if (max < RCardsValues[i].ReturnCurrentValue())
+		{
+			max = RCardsValues[i].ReturnCurrentValue();
+		}
+	}
+	return max;
+}
+//Zwraca najwiêksz¹ wartoœæ karty na stole nale¿ace do gracza ignoruj¹c podan¹ kartê
+//----------------------------------------------------------------------------------
+int PlayerInfo::MaxValue(int row, int IgnoredCard)
+{
+	int max = -1;
+	for (int i = 0; i < MeleeRow.size(); i++)
+	{
+		if (i == IgnoredCard && row == CardList::front)
+		{
+			continue;
+		}
+		if (max < MCardsValues[i].ReturnCurrentValue())
+		{
+			max = MCardsValues[i].ReturnCurrentValue();
+		}
+	}
+	for (int i = 0; i < RangeRow.size(); i++)
+	{
+		if (i == IgnoredCard && row == CardList::back)
+		{
+			continue;
+		}
+		if (max < RCardsValues[i].ReturnCurrentValue())
+		{
+			max = RCardsValues[i].ReturnCurrentValue();
+		}
+	}
+	return max;
+}
 //Ustawia mno¿nik karty o podanym indeksie i rzêdzie
 void PlayerInfo::SetMultiplayerOfCard(int row, int index, int value)
 {
@@ -506,6 +634,28 @@ void PlayerInfo::SetDiffrenceOfCard(int row, int index, int value)
 		RCardsValues[index].SetDiffrence(value);
 	}
 }
+//Dodaje wartoœæ do modyfikatora karty o podanym indeksie i rzêdzie
+//-----------------------------------------------------------------
+void PlayerInfo::AddDiffrenceOfCard(int row, int index, int value)
+{
+	if (row == CardList::front && index < MeleeRow.size())
+	{
+		MCardsValues[index].SetDiffrence(MCardsValues[index].ReturnDiffrence() + value);
+		//Usuniêcie karty jeœli ma wartoœæ mniejsz¹ lub równ¹ 0
+		if (MCardsValues[index].ReturnCurrentValue() <= 0)
+		{
+			AddCardToGraveyard(RemoveCardFromTable(row, index));
+		}
+	}
+	if (row == CardList::back && index < RangeRow.size())
+	{
+		RCardsValues[index].SetDiffrence(RCardsValues[index].ReturnDiffrence() + value);
+		if (RCardsValues[index].ReturnCurrentValue() <= 0)
+		{
+			AddCardToGraveyard(RemoveCardFromTable(row, index));
+		}
+	}
+}
 //Zwraca aktualn¹ wartoœæ karty
 //--------------------------------------------------------
 int PlayerInfo::ReturnCurrentValueOfCard(int row,int index)
@@ -520,6 +670,14 @@ int PlayerInfo::ReturnCurrentValueOfCard(int row,int index)
 	}
 	return -1;	//Nie poprawny rz¹d lub index
 }
-
+void PlayerInfo::test()
+{
+	testInt += 2;
+	std::cout << testInt << "\n";
+}
+int PlayerInfo::ReturnTest()
+{
+	return testInt;
+}
 
 

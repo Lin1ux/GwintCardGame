@@ -19,6 +19,7 @@ Card CardList::Golem;
 Card CardList::Guts;
 Card CardList::Juggernaut;
 Card CardList::Liniux;
+Card CardList::MasterOfIllusion;
 Card CardList::Mimic;
 Card CardList::Mortar;
 Card CardList::Omobamidele;
@@ -28,7 +29,9 @@ Card CardList::Reptile;
 Card CardList::Sarco;
 Card CardList::Seraphin;
 Card CardList::Shielder;
+Card CardList::Sting;
 Card CardList::Terizino;
+Card CardList::Terryffier;
 Card CardList::Tytus;
 Card CardList::Zenon;
 
@@ -50,6 +53,7 @@ void CardList::SetCards()
 	Guts = Card(true, front, 6, 45, AllSkills::GoldDeadEater, "Jelito", Images::Guts);
 	Juggernaut = Card(false, front, 10, 45, AllSkills::Executioner, "Moloch", Images::Juggernaut);
 	Liniux = Card(true, front, 8, 50, AllSkills::Banish, "Liniux", Images::Liniux);
+	MasterOfIllusion = Card(false, front, 8, 45, AllSkills::Spy, "Mistrz Iluzji", Images::Liniux);
 	Mimic = Card(false, front, 2, 45, AllSkills::Thief, "Mimik", Images::Mimic);
 	Mortar = Card(false, back, 4, 15, AllSkills::Archer, "Moździerz", Images::Mortar);
 	Omobamidele = Card(true, back, 7, 35, AllSkills::Archer, "Omobamidele", Images::Omobamidele);
@@ -59,7 +63,9 @@ void CardList::SetCards()
 	Sarco = Card(false, front, 4, 10, AllSkills::None, "Sarcozuch", Images::Sarco);
 	Seraphin = Card(false, front, 8, 45, AllSkills::Medic, "Serafin", Images::Seraphin);
 	Shielder = Card(false, front, 3, 25, AllSkills::Brotherhood, "Tarczownik", Images::Shielder);
+	Sting = Card(false, back, 5,30,AllSkills::Archer,"Żądło",Images::Bert);
 	Terizino = Card(false, front, 10, 35, AllSkills::None, "Terizinozaur", Images::Terizino);
+	Terryffier = Card(false, front, 10, 45, AllSkills::Slayer, "Przeraza", Images::FrozenDog);
 	Tytus = Card(true, back, 6, 30, AllSkills::SummonerMortar, "Tytus", Images::Tytus);
 	Zenon = Card(true, back, 4, 40, AllSkills::GoldMedic, "Zenon", Images::Zenon);
 }
@@ -93,6 +99,9 @@ std::vector<Card> CardList::ReturnAllCards()
 	AllCards.push_back(Terizino);
 	AllCards.push_back(Tytus);
 	AllCards.push_back(Zenon);
+	AllCards.push_back(Sting);
+	AllCards.push_back(Terryffier);
+	AllCards.push_back(MasterOfIllusion);
 
 	sort(AllCards.begin(), AllCards.end(), [](Card& a, Card& b) { return (a.ReturnCost() < b.ReturnCost()); });
 

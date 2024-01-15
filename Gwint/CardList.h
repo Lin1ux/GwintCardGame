@@ -23,6 +23,7 @@ public:
 	static Card Guts;
 	static Card Juggernaut;
 	static Card Liniux;
+	static Card MasterOfIllusion;
 	static Card Mimic;
 	static Card Mortar;
 	static Card Omobamidele;
@@ -32,7 +33,9 @@ public:
 	static Card Sarco;
 	static Card Seraphin;
 	static Card Shielder;
+	static Card Sting;	
 	static Card Terizino;
+	static Card Terryffier;
 	static Card Tytus;
 	static Card Zenon;
 	static void SetCards();

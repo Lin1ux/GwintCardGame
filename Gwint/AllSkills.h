@@ -14,7 +14,7 @@ public:
 	static int transport;
 	static int summonerMortar;
 	static int deadEater;
-	static int conflagration;
+	static int slayer;
 	static int banish;
 	static int goldDeadEater;
 	static int goldMedic;
@@ -30,7 +30,7 @@ public:
 	static Skills Transport;
 	static Skills SummonerMortar;
 	static Skills DeadEater;
-	static Skills Conflagration;
+	static Skills Slayer;
 	static Skills Banish;
 	static Skills GoldDeadEater;
 	static Skills GoldMedic;

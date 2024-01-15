@@ -59,7 +59,7 @@ public:
 	static ALLEGRO_BITMAP* SummonerMortar;
 	static ALLEGRO_BITMAP* DeadEater;
 	static ALLEGRO_BITMAP* GoldenDeadEater;
-	static ALLEGRO_BITMAP* Conflagration;
+	static ALLEGRO_BITMAP* Slayer;
 	static ALLEGRO_BITMAP* Banish;
 	 
 	//static ALLEGRO_BITMAP* CharacterFrame;
