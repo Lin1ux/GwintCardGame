@@ -78,15 +78,6 @@ int Game::GameLoopPvP()
 	int CardsChanged = 0;			//Liczba odrzuconych kart
 
 	bool timerEvent = false;
-	/*Player1->test();
-	std::cout << "Wskaźnik -" << Player1->ReturnTest() << "\n";
-	std::cout<<"Orginalny -" << Player.ReturnTest() << "\n";
-	Player.test();
-	std::cout << "Wskaźnik2 -" << Player1->ReturnTest() << "\n";
-	std::cout << "Orginalny2 -" << Player.ReturnTest() << "\n";
-	Player1->test();
-	std::cout << "Wskaźnik3 -" << Player1->ReturnTest() << "\n";
-	std::cout << "Orginalny3 -" << Player.ReturnTest() << "\n";*/
 	while (!GameOver)
 	{
 
@@ -206,7 +197,7 @@ int Game::GameLoopPvP()
 			al_flip_display();
 			continue;
 		}
-		//Umiejętność Trupojad dokończyć (glicthuje się)
+		//Umiejętność Trupojad
 		if (timerEvent && !GameStart && (skillId == AllSkills::deadEater || skillId == AllSkills::goldDeadEater))
 		{
 			CardPos SelectedCard;												//Zapamiętanie wybranej karty
@@ -230,12 +221,12 @@ int Game::GameLoopPvP()
 			{
 				skillId = AllSkills::none;
 				GraveyardOn = false;
-				Player1->SetDiffrenceOfCard(lastUsedCardRow, lastUsedCardIndex, SelectedCard.card.ReturnValue());			//Nakładanie bonusowych wartości
-				Player1->RemoveCardFromGraveyard(SelectedCard.card);				//Usunięcie karty z cmentarza
+				Player1->SetDiffrenceOfCard(lastUsedCardRow, lastUsedCardIndex, SelectedCard.card.ReturnValue());	//Nakładanie bonusowych wartości
+				Player1->RemoveCardFromGraveyard(SelectedCard.card);												//Usunięcie karty z cmentarza
 			}
-			std::cout << "R="<< lastUsedCardRow<<"I=" << lastUsedCardIndex << "\n";
-			//continue;
+			//std::cout << "R="<< lastUsedCardRow<<"I=" << lastUsedCardIndex << "\n";
 			al_flip_display();
+			continue;
 		}
 		//Umiejętność Medyk
 		if (timerEvent && !GameStart && (skillId == AllSkills::medic || skillId == AllSkills::goldMedic))
@@ -299,6 +290,12 @@ int Game::GameLoopPvP()
 		//Początek tury gracza
 		if (timerEvent && !GameStart && !GraveyardOn && TurnBegin)
 		{
+			if (Player1->IsFinishedRound())
+			{
+				NextPlayer();
+				TurnBegin = false;
+				continue;
+			}
 			TurnBegin = true;
 			DrawOtherInfo(mouseX, mouseY);									//Rysowanie reszty informacji 
 			DrawHiddenHand(mouseX, mouseY);									//Rysowanie ukrytej ręki
@@ -310,7 +307,6 @@ int Game::GameLoopPvP()
 		//Partia 
 		if (timerEvent && !GameStart && !GraveyardOn && !TurnBegin)
 		{
-			//Player2->SetRoundFinished(true);								//Dokończyć usunąć (do testów)
 			DrawOtherInfo(mouseX, mouseY);									//Rysowanie reszty informacji 
 			LastPlayedCard = DrawPlayersCards(mouseX, mouseY);				//Rysowanie kart gracza i zagranie karty
 			while (LastPlayedCard.card != Card())						
@@ -676,6 +672,7 @@ Card Game::AbilityManager(Card UsedCard)
 		if (pMax >= eMax)
 		{
 			Max = pMax;
+			std::cout << "PMax\n";
 			//Usuwanie kart
 			Player1->RemoveAllCardsWithValue(CardRow, CardIndex, Max);
 			Player2->RemoveAllCardsWithValue(Max);
@@ -683,8 +680,9 @@ Card Game::AbilityManager(Card UsedCard)
 		if (pMax < eMax);
 		{
 			Max = eMax;
+			std::cout << "EMax\n";
 			//Usuwanie kart
-			Player1->RemoveAllCardsWithValue(Max);
+			Player1->RemoveAllCardsWithValue(CardRow, CardIndex,Max);
 			Player2->RemoveAllCardsWithValue(Max);
 		}
 	}
@@ -857,6 +855,11 @@ bool Game::RoundResult()
 	{
 		Player1->RoundWon();
 		Player2->RoundWon();
+	}
+	if (Player1->ReturnRoundsWon() >= 2 || Player2->ReturnRoundsWon() >= 2)
+	{
+		//Dokończyć koniec gry po wygranej gracza
+		return true;
 	}
 	//Przygotowanie do następnej rundy
 	Player1->SetRoundFinished(false);
