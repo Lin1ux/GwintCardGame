@@ -17,6 +17,7 @@ public:
 	static Card BrotherOfBlood;
 	static Card Carnotaur;
 	static Card Crocolisk;
+	static Card Fang;	
 	static Card FrozenChempion;
 	static Card FrozenDog;
 	static Card Golem;
@@ -33,7 +34,6 @@ public:
 	static Card Sarco;
 	static Card Seraphin;
 	static Card Shielder;
-	static Card Sting;	
 	static Card Terizino;
 	static Card Terryffier;
 	static Card Tytus;

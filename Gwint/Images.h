@@ -19,6 +19,7 @@ public:
 	static ALLEGRO_BITMAP* Liniux;
 	static ALLEGRO_BITMAP* Mimic;
 	static ALLEGRO_BITMAP* Mortar;
+	static ALLEGRO_BITMAP* Fang;
 	static ALLEGRO_BITMAP* FrozenDog;
 	static ALLEGRO_BITMAP* Omobamidele;
 	static ALLEGRO_BITMAP* Parasaurus;
@@ -28,6 +29,7 @@ public:
 	static ALLEGRO_BITMAP* Seraphin;
 	static ALLEGRO_BITMAP* Shielder;
 	static ALLEGRO_BITMAP* Terizino;
+	static ALLEGRO_BITMAP* Terryfier;
 	static ALLEGRO_BITMAP* Tytus;
 	static ALLEGRO_BITMAP* Zenon;
 

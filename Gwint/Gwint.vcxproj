@@ -220,6 +220,7 @@
     <Image Include="images\Characters\Golem.png" />
     <Image Include="images\Characters\Jelito.png" />
     <Image Include="images\Characters\Karnotaur.png" />
+    <Image Include="images\Characters\Kiel.png" />
     <Image Include="images\Characters\Krokoliszek.png" />
     <Image Include="images\Characters\Liniux.png" />
     <Image Include="images\Characters\Mimik.png" />
@@ -228,6 +229,7 @@
     <Image Include="images\Characters\Ogar Mrozu.png" />
     <Image Include="images\Characters\Omobamidele.png" />
     <Image Include="images\Characters\Parazaur.png" />
+    <Image Include="images\Characters\Przeraza.png" />
     <Image Include="images\Characters\Raptor.png" />
     <Image Include="images\Characters\Reptilian.png" />
     <Image Include="images\Characters\Sarkozuch.png" />

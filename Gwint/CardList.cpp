@@ -13,6 +13,7 @@ Card CardList::Bert;
 Card CardList::BrotherOfBlood;
 Card CardList::Carnotaur;
 Card CardList::Crocolisk;
+Card CardList::Fang;
 Card CardList::FrozenChempion;
 Card CardList::FrozenDog;
 Card CardList::Golem;
@@ -29,7 +30,6 @@ Card CardList::Reptile;
 Card CardList::Sarco;
 Card CardList::Seraphin;
 Card CardList::Shielder;
-Card CardList::Sting;
 Card CardList::Terizino;
 Card CardList::Terryffier;
 Card CardList::Tytus;
@@ -63,9 +63,9 @@ void CardList::SetCards()
 	Sarco = Card(false, front, 4, 10, AllSkills::None, "Sarcozuch", Images::Sarco);
 	Seraphin = Card(false, front, 8, 45, AllSkills::Medic, "Serafin", Images::Seraphin);
 	Shielder = Card(false, front, 3, 25, AllSkills::Brotherhood, "Tarczownik", Images::Shielder);
-	Sting = Card(false, back, 5,30,AllSkills::Archer,"Żądło",Images::Bert);
+	Fang = Card(false, back, 5,30,AllSkills::Archer,"Kieł",Images::Fang);
 	Terizino = Card(false, front, 10, 35, AllSkills::None, "Terizinozaur", Images::Terizino);
-	Terryffier = Card(false, front, 10, 45, AllSkills::Slayer, "Przeraza", Images::FrozenDog);
+	Terryffier = Card(false, front, 10, 45, AllSkills::Slayer, "Przeraza", Images::Terryfier);
 	Tytus = Card(true, back, 6, 30, AllSkills::SummonerMortar, "Tytus", Images::Tytus);
 	Zenon = Card(true, back, 4, 40, AllSkills::GoldMedic, "Zenon", Images::Zenon);
 }
@@ -99,7 +99,7 @@ std::vector<Card> CardList::ReturnAllCards()
 	AllCards.push_back(Terizino);
 	AllCards.push_back(Tytus);
 	AllCards.push_back(Zenon);
-	AllCards.push_back(Sting);
+	AllCards.push_back(Fang);
 	AllCards.push_back(Terryffier);
 	AllCards.push_back(MasterOfIllusion);
 

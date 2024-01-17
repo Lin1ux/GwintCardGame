@@ -279,5 +279,11 @@
     <Image Include="images\Skills\MedicSkillG.png">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="images\Characters\Kiel.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Przeraza.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
 </Project>

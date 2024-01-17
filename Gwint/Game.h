@@ -15,7 +15,9 @@ private:
 	int lastUsedCardIndex;			//Id ostatniej użytej karty (do zapamiętywania wybranej karty)
 	int lastUsedCardRow;			//rząd ostatniej użytej karty
 	int GraveyardFirstCard;			//Pierwsza wyświetlana karta w cmentarzu
-	bool PlayerTurn;				//Tura 1 gracza
+	bool PlayerTurn;				//Tura 1 gracza dokończyć Prawdopodobnie nie potrzebne
+	bool player1Turn;				//Tura 1 gracza
+	bool cardPlayed;				//Czy karta zostałą zagrana
 	bool GraveyardOn;				//Czy cmentarz jest włączony
 	bool PlayersGraveyard;			//Czy wyświetlany jest cmentarz gracza 1 gracza
 	bool TurnBegin;					//Początek tury gracza (ukrywanie kart)
@@ -40,10 +42,12 @@ private:
 	CardPos DrawGraveyard(float mouseX, float mouseY, bool IsPlayerGraveyard,bool CanHero);	//Rysuje karty w cmentarzu
 	void DrawHand(float mouseX, float mouseY);												//Rysuje rękę gracza (bez animacji)
 	void DrawHiddenHand(float mouseX, float mouseY);										//Rysuje ręke z odwróconymi kartami
+	void DrawTable(float mouseX, float mouseY);												//Rysuje stół
 	void DrawTip(std::string text);															//Rysuje poradę w lewym głównym rogu
 	bool CardInVector(std::vector<Card> CardVector,Card CardToFind);						//Sprawdza czy karta jest w vectorze
 	bool IsEnemyGraveyardLocked();															//Sprawdza czy włączona jest umiejętność blokująca cmentarz przeciwnika
 	bool IsGraveyardLocked();																//Sprawdza czy włączona jest umiejętność blokująca cmentarz gracza
+	void NextPlayer();																		//Odpowiada za zmianę gracza
 public:
 	Game(ALLEGRO_DISPLAY* Disp,std::vector<Card> PlayerDeck, std::vector<Card> EnemyDeck);
 	int GameLoopPvP();																		//Pętla gry

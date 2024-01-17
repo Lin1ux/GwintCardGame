@@ -15,6 +15,7 @@ ALLEGRO_BITMAP* Images::Juggernaut;
 ALLEGRO_BITMAP* Images::Liniux;
 ALLEGRO_BITMAP* Images::Mimic;
 ALLEGRO_BITMAP* Images::Mortar;
+ALLEGRO_BITMAP* Images::Fang;
 ALLEGRO_BITMAP* Images::FrozenDog;
 ALLEGRO_BITMAP* Images::Omobamidele;
 ALLEGRO_BITMAP* Images::Parasaurus;
@@ -24,6 +25,7 @@ ALLEGRO_BITMAP* Images::Sarco;
 ALLEGRO_BITMAP* Images::Seraphin;
 ALLEGRO_BITMAP* Images::Shielder;
 ALLEGRO_BITMAP* Images::Terizino;
+ALLEGRO_BITMAP* Images::Terryfier;
 ALLEGRO_BITMAP* Images::Tytus;
 ALLEGRO_BITMAP* Images::Zenon;
 //Deklaracja czêœci kart
@@ -74,6 +76,7 @@ void Images::SetImages()
 	Images::Liniux = al_load_bitmap("images/Characters/Liniux.png");
 	Images::Mimic = al_load_bitmap("images/Characters/Mimik.png");
 	Images::Mortar = al_load_bitmap("images/Characters/Mozdzierz.png");
+	Images::Fang = al_load_bitmap("images/Characters/Kiel.png");
 	Images::FrozenDog = al_load_bitmap("images/Characters/Ogar Mrozu.png");
 	Images::Omobamidele = al_load_bitmap("images/Characters/Omobamidele.png");
 	Images::Parasaurus = al_load_bitmap("images/Characters/Parazaur.png");
@@ -84,6 +87,7 @@ void Images::SetImages()
 	Images::Shielder = al_load_bitmap("images/Characters/Tarczownik.png");
 	Images::Terizino = al_load_bitmap("images/Characters/Terizino.png");
 	Images::Tytus = al_load_bitmap("images/Characters/Tytus.png");
+	Images::Terryfier = al_load_bitmap("images/Characters/Przeraza.png");
 	Images::Zenon = al_load_bitmap("images/Characters/Zenon.png");
 	//Deklaracja czêœci kart
 	Images::CharacterFrame = al_load_bitmap("images/UI/CharacterFrame.png");

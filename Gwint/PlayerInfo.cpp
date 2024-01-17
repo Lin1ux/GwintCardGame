@@ -351,6 +351,7 @@ void PlayerInfo::RemoveAllCardsWithValue(int value)
 		if (MCardsValues[i].ReturnCurrentValue() == value)
 		{
 			AddCardToGraveyard(RemoveCardFromTable(CardList::front, i));
+			i -= 1;
 		}
 	}
 	for (int i = 0; i < RangeRow.size(); i++)
@@ -358,6 +359,7 @@ void PlayerInfo::RemoveAllCardsWithValue(int value)
 		if (RCardsValues[i].ReturnCurrentValue() == value)
 		{
 			AddCardToGraveyard(RemoveCardFromTable(CardList::back, i));
+			i -= 1;
 		}
 	}
 }
