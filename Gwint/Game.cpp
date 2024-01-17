@@ -32,6 +32,7 @@ Game::Game(ALLEGRO_DISPLAY* Disp,std::vector<Card> PlayerDeck, std::vector<Card>
 	lastUsedCardIndex = -1;
 	lastUsedCardRow = -1;
 	cardPlayed = false;
+	gameEnd = false;
 	TurnBegin = true;
 	Player1 = &Player;
 	Player2 = &Enemy;
@@ -76,6 +77,7 @@ int Game::GameLoopPvP()
 	bool GameOver = false;			//Pętla
 	bool GameStart = true;			//Początek gry
 	int CardsChanged = 0;			//Liczba odrzuconych kart
+	int RoundNumber = 0;			//Numer rundy
 
 	bool timerEvent = false;
 	while (!GameOver)
@@ -149,6 +151,13 @@ int Game::GameLoopPvP()
 			al_flip_display();										//Wrzucenie na ekran
 			continue;
 		}
+		//Podsumowanie gry
+		if (gameEnd)
+		{
+			GameOver = DrawSummary(mouseX, mouseY);
+			al_flip_display();
+			continue;
+		}
 		//Umiejętność transport
 		if (timerEvent && !GameStart && skillId == AllSkills::transport)
 		{
@@ -187,7 +196,7 @@ int Game::GameLoopPvP()
 				skillId = 0;
 				continue;
 			}
-			if (mouseButton == 1 && TargetCard.card != Card() && !TargetCard.isPlayerCard)
+			if (mouseButton == 1 && TargetCard.card != Card() && !TargetCard.isPlayerCard && !TargetCard.card.ReturnIsHero())
 			{
 				//Miejsce na zadanie obrażeń
 				Player2->AddDiffrenceOfCard(TargetCard.card.ReturnRow(), TargetCard.index, -3);
@@ -300,7 +309,7 @@ int Game::GameLoopPvP()
 			DrawOtherInfo(mouseX, mouseY);									//Rysowanie reszty informacji 
 			DrawHiddenHand(mouseX, mouseY);									//Rysowanie ukrytej ręki
 			EndRoundButton(mouseX, mouseY);									//Przycisk końca rundy
-			RoundResult();													//Koniec rundy
+			RoundResult(&RoundNumber);										//Koniec rundy
 			al_flip_display();												//Wrzucenie na ekran
 			continue;
 		}
@@ -321,7 +330,7 @@ int Game::GameLoopPvP()
 				cardPlayed = false;
 			}
 			EndRoundButton(mouseX, mouseY);									//Przycisk końca rundy
-			RoundResult();													//Koniec rundy
+			RoundResult(&RoundNumber);										//Koniec rundy
 			al_flip_display();												//Wrzucenie na ekran
 			continue;
 		}
@@ -832,9 +841,9 @@ void Game::EndRoundButton(float mouseX,float mouseY)
 		EndRound.DrawText(Fonts::SmallValueFont,settings::PosY(0.004) );
 	}
 }
-//Oblicza wynik rundy i czyści stół, zwraca true jeśli runda się zakończyła
-//-------------------------------------------------------------------------
-bool Game::RoundResult()
+//Oblicza wynik rundy i czyści stół, zwraca true jeśli runda się zakończyła oraz zwiększa wartość argumentu o 1
+//--------------------------------------
+bool Game::RoundResult(int* RoundNumber)
 {
 	if (!Player1->IsFinishedRound() || !Player2->IsFinishedRound())
 	{
@@ -842,6 +851,9 @@ bool Game::RoundResult()
 	}
 	int playerPoints = Player1->CountPoints();
 	int enemyPoints = Player2->CountPoints();
+	//Zapisanie wyniku rundy
+	Player.SetRound(*RoundNumber);
+	Enemy.SetRound(*RoundNumber);
 	//Sprawdzanie kto wygrał rundę
 	if (playerPoints > enemyPoints)
 	{
@@ -856,9 +868,10 @@ bool Game::RoundResult()
 		Player1->RoundWon();
 		Player2->RoundWon();
 	}
+	*RoundNumber += 1; //Następna runda
 	if (Player1->ReturnRoundsWon() >= 2 || Player2->ReturnRoundsWon() >= 2)
 	{
-		//Dokończyć koniec gry po wygranej gracza
+		gameEnd = true;
 		return true;
 	}
 	//Przygotowanie do następnej rundy
@@ -867,6 +880,44 @@ bool Game::RoundResult()
 	Player1->EndRound();
 	Player2->EndRound();
 	return true;
+}
+//Rysuje podsumowanie gry zwraca true jeśli naciśnięto przycisk
+//------------------------------------------------
+bool Game::DrawSummary(float mouseX, float mouseY)
+{
+	Button NextButton(settings::PosX(0.45), settings::PosY(0.65), settings::PosX(0.55), settings::PosY(0.75));
+	NextButton.SetText("Dalej");
+	NextButton.SetColor(Colors::white, Colors::lightGray);
+	//Rysowanie instrukcji
+	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.5f), settings::PosY(0.09f), ALLEGRO_ALIGN_CENTER, "Podsumowanie");
+	if (Player.ReturnRoundsWon() == 2 && Enemy.ReturnRoundsWon() == 2)
+	{
+		al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.5f), settings::PosY(0.14f), ALLEGRO_ALIGN_CENTER, "Remis!");
+	}
+	else if (Player.ReturnRoundsWon() == 2)
+	{
+		al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.5f), settings::PosY(0.14f), ALLEGRO_ALIGN_CENTER, "Gracz 1 zwycięża!");
+	}
+	else if (Enemy.ReturnRoundsWon() == 2)
+	{
+		al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.5f), settings::PosY(0.14f), ALLEGRO_ALIGN_CENTER, "Gracz 2 zwycięża!");
+	}
+	//Wyniki rund
+	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.5f), settings::PosY(0.29f), ALLEGRO_ALIGN_CENTER, "Runda 1");
+	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.5f), settings::PosY(0.34f), ALLEGRO_ALIGN_CENTER, (std::to_string(Player.ReturnRoundPoints(0))+ " vs " + std::to_string(Enemy.ReturnRoundPoints(0))).c_str());
+	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.5f), settings::PosY(0.39f), ALLEGRO_ALIGN_CENTER, "Runda 2");
+	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.5f), settings::PosY(0.44f), ALLEGRO_ALIGN_CENTER, (std::to_string(Player.ReturnRoundPoints(1)) + " vs " + std::to_string(Enemy.ReturnRoundPoints(1))).c_str());
+	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.5f), settings::PosY(0.49f), ALLEGRO_ALIGN_CENTER, "Runda 3");
+	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.5f), settings::PosY(0.54f), ALLEGRO_ALIGN_CENTER, (std::to_string(Player.ReturnRoundPoints(2)) + " vs " + std::to_string(Enemy.ReturnRoundPoints(2))).c_str());
+	if (NextButton.MouseOn(mouseX,mouseY) && mouseButton == 1)
+	{
+		mouseButton = 0;
+		return true;
+	}
+	NextButton.DrawImage();
+	NextButton.DrawText(Fonts::ValueFont, settings::PosY(0.025));
+	
+	return false;
 }
 //Czyści zawartość przycisków
 //---------------------------

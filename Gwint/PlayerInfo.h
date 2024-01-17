@@ -16,14 +16,14 @@ private:
 	bool RoundFinished;						//Czy skoñczono runde
 	int Points;								//Punkty
 	int RoundsWon;							//Wygrane rundy
+	int RoundPoints[3];						//Zapisanie wszystkich punktów rund
 	std::vector<CardValues> MCardsValues;	//Wartoœci kart I rzêdu
 	std::vector<CardValues> RCardsValues;	//Wartoœci kart II rzêdu
 	std::vector<Card> MeleeRow;				//Karty w 1 rzêdzie (walka wrêcz)
 	std::vector<Card> RangeRow;				//Karty w 2 rzêdzie (dystansowy
 	std::vector<Card> PlayerHand;			//Karty w rêce gracza
 	std::vector<Card> CardStack;			//Nie dobrane karty
-	std::vector<Card> CardUsed;				//Karty odrzcuone
-	int testInt;							
+	std::vector<Card> CardUsed;				//Karty odrzcuone							
 
 public:
 	//Konstruktory
@@ -41,6 +41,8 @@ public:
 	int ReturnRoundsWon();												//Zwraca liczbê wygranych rund
 	void RoundWon();													//Zwiêksza liczbê wygranych rund o 1
 	void EndRound();													//Czyœci stó³ i wrzuca usuniête karty do stosu odrzuconych
+	void SetRound(int index);											//Zapisuje wartoœæ obecnej rundy
+	int ReturnRoundPoints(int index);									//Zwraca wartoœæ rundy (indeksy liczone s¹ od 0)
 	//Rêka gracza
 	void TakeCard();													//Jeœli jest miejsce dobiera kartê do rêki
 	void TakeCard(Card NewCard);										//Jeœli jest miejsce dodaje podan¹ kartê do rêki
@@ -86,8 +88,5 @@ public:
 	std::vector<Card> ReturnPlayerHand();								//Zwraca karty z rêki gracza
 	std::vector<Card> ReturnCardStack();								//Zwraca nie u¿yte karty
 	std::vector<Card> ReturnCardUsed();									//Zwraca odrzucone karty
-	//Testowe
-	void test();
-	int ReturnTest();
 };
 

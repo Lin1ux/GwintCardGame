@@ -9,6 +9,10 @@ PlayerInfo::PlayerInfo()
 	RoundFinished = false;
 	Points = 0;
 	RoundsWon = 0;
+	for (int i = 0; i < 3; i++)
+	{
+		RoundPoints[i] = 0;
+	}
 	MCardsValues = std::vector<CardValues>();
 	RCardsValues = std::vector<CardValues>();
 	MeleeRow = std::vector<Card>();
@@ -16,7 +20,6 @@ PlayerInfo::PlayerInfo()
 	PlayerHand = std::vector<Card>();
 	CardStack = std::vector<Card>();
 	CardUsed = std::vector<Card>();
-	testInt = 0;
 }
 
 //Konstruktor, Dobiera karty do rêki i nie dobrane karty
@@ -26,11 +29,14 @@ PlayerInfo::PlayerInfo(std::vector<Card> DeckCards)
 	RoundFinished = false;				//Koniec Rundy
 	Points = 0;							//Punkty
 	RoundsWon = 0;						//Wygrane rundy
+	for (int i = 0; i < 3; i++)
+	{
+		RoundPoints[i] = 0;				//Zapisanie wszystkich punktów rund
+	}
 	MeleeRow = std::vector<Card>();		//Karty w 1 rzêdzie (walka wrêcz)
 	RangeRow = std::vector<Card>();		//Karty w 2 rzêdzie (dystansowy)
 	MCardsValues = std::vector<CardValues>();
 	RCardsValues = std::vector<CardValues>();
-	testInt = 0;
 
 	//Dokoñczyæ Odkomentowaæ linijkê pod tym komentarzem (Do testów lepiej nie tasowaæ tali)
 	//std::random_shuffle(DeckCards.begin(), DeckCards.end());		//Przetasowanie kart w tali gracza
@@ -145,6 +151,18 @@ void PlayerInfo::EndRound()
 		}
 	}
 	CountPoints();
+}
+//Zapisuje wartoœæ obecnej rundy
+//---------------------------------
+void PlayerInfo::SetRound(int index)
+{
+	RoundPoints[index] = CountPoints();
+}
+//Zwraca wartoœæ rundy (indeksy liczone s¹ od 0)
+//----------------------------------------------
+int PlayerInfo::ReturnRoundPoints(int index)
+{
+	return RoundPoints[index];
 }
 //Jeœli jest miejsce dobiera kartê do rêki
 //----------------------------------------
@@ -671,15 +689,6 @@ int PlayerInfo::ReturnCurrentValueOfCard(int row,int index)
 		return RCardsValues[index].ReturnCurrentValue();
 	}
 	return -1;	//Nie poprawny rz¹d lub index
-}
-void PlayerInfo::test()
-{
-	testInt += 2;
-	std::cout << testInt << "\n";
-}
-int PlayerInfo::ReturnTest()
-{
-	return testInt;
 }
 
 

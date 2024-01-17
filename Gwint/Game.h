@@ -17,6 +17,7 @@ private:
 	int GraveyardFirstCard;			//Pierwsza wyświetlana karta w cmentarzu
 	bool PlayerTurn;				//Tura 1 gracza dokończyć Prawdopodobnie nie potrzebne
 	bool player1Turn;				//Tura 1 gracza
+	bool gameEnd;					//Koniec gry
 	bool cardPlayed;				//Czy karta zostałą zagrana
 	bool GraveyardOn;				//Czy cmentarz jest włączony
 	bool PlayersGraveyard;			//Czy wyświetlany jest cmentarz gracza 1 gracza
@@ -37,7 +38,8 @@ private:
 	Card AbilityManager(Card UsedCard);														//Sprawdza i używa odpowiedniej umiejętności i zwraca nowo zagraną kartę jeśli umiejętność zagrywa dodatkowe karty
 	void DrawOtherInfo(float mouseX, float mouseY);											//Rysuje inne informacje takie jak ilość kart i liczba wygranych rund
 	void EndRoundButton(float mouseX, float mouseY);										//Przycisk Końca tury
-	bool RoundResult();																		//Oblicza wynik rundy i czyści stół, zwraca true jeśli runda się zakończyła
+	bool RoundResult(int *RoundNumber);														//Oblicza wynik rundy i czyści stół, zwraca true jeśli runda się zakończyła oraz zwiększa wartość argumentu o 1
+	bool DrawSummary(float mouseX, float mouseY);											//Rysuje podsumowanie gry zwraca true jeśli naciśnięto przycisk
 	void ClearButtons();																	//Czyści zawartość przycisków
 	CardPos DrawGraveyard(float mouseX, float mouseY, bool IsPlayerGraveyard,bool CanHero);	//Rysuje karty w cmentarzu
 	void DrawHand(float mouseX, float mouseY);												//Rysuje rękę gracza (bez animacji)
