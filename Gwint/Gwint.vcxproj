@@ -260,10 +260,12 @@
     <Image Include="images\Skills\StatCircle.png" />
     <Image Include="images\Skills\ThiefSkill.png" />
     <Image Include="images\Skills\TransportSkill.png" />
+    <Image Include="images\UI\BlueReverseCard.png" />
     <Image Include="images\UI\CharacterFrame.png" />
     <Image Include="images\UI\CharacterFrameGold.png" />
     <Image Include="images\UI\Empty Crystal.png" />
     <Image Include="images\UI\PurpleCrystal.png" />
+    <Image Include="images\UI\RedReverseCard.png" />
     <Image Include="images\UI\ReverseCard.png" />
     <Image Include="images\UI\SkillDescr.png" />
     <Image Include="images\UI\StatFrame.png" />

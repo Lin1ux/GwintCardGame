@@ -297,5 +297,11 @@
     <Image Include="images\Characters\Przeraza.png">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="images\UI\BlueReverseCard.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\RedReverseCard.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
 </Project>

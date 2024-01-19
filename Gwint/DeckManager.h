@@ -14,16 +14,17 @@ private:
 	int minAmountOfCards;
 	std::vector<Card> Deck;
 public:
-	DeckManager();
-	DeckManager(int MaxGold, int MaxCard);
-	bool CanAddCard(Card Card);
-	bool CanStartGame();
-	void AddCard(Card newCard);
-	Card RemoveCard(int CardId);
-	std::vector<Card> ReturnDeck();
-	Card ReturnCardById(int Id);
-	std::string GoldText();
-	int ReturnAmountOfCards();
+	DeckManager();							//Konstruktor
+	DeckManager(int MaxGold, int MaxCard);	//Konstruktor
+	bool CanAddCard(Card Card);				//Czy mo¿na dodaæ kartê
+	bool CanStartGame();					//Czy kart w talii jest wystarczaj¹co aby zacz¹æ gre
+	void AddCard(Card newCard);				//Dodaje kartê do tali
+	Card RemoveCard(int CardId);			//Usuwa wybran¹ kartê z tali
+	Card PopCard();							//Usuwa i zwraca ostatni¹ kartê w talii
+	std::vector<Card> ReturnDeck();			//Zwraca taliê kart
+	Card ReturnCardById(int Id);			//Zwraca kartê o podanym id
+	std::string GoldText();					//Zwraca zformatowane dane o dostêpnym z³ocie
+	int ReturnAmountOfCards();				//Zwraca liczbê kart w talii
 
 };
 

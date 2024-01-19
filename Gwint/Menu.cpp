@@ -164,6 +164,8 @@ int Menu::MenuLoopPVP()
 			DrawCartToSelect(mouseX, mouseY, firstCard);				//Rysowanie kart do wyboru
 			DrawDeck(AmountOfShowCard, firstDeckCard, mouseX, mouseY);  //Rysowanie talii
 			//Rysowanie Przycisków
+			PreviousButton(mouseX, mouseY,&ChangeMenu);					//Rysowanie przycisku cofania
+			ClearDeckButton(mouseX, mouseY, &firstDeckCard);			//Rysowanie przycisku usuwania talii
 			NextCards.DrawImage();
 			NextCards.DrawText(Fonts::BigFont, settings::PosY(0.014f));
 			PrevCards.DrawImage();
@@ -291,6 +293,55 @@ void Menu::AddCard(float mouseX, float mouseY, int *firstCard,int i)
 		mouseButton = 0;
 	}
 }
+//Przycisk cofania
+void Menu::PreviousButton(float mouseX, float mouseY, bool* changeMenu)
+{
+	Button BackButton(settings::PosX(0.005), settings::PosY(0.005), settings::PosX(0.04), settings::PosY(0.04 * settings::ProportionScreenWH()));
+	BackButton.SetColor(Colors::white, Colors::lightGray);
+	BackButton.SetText("X");
+	//Wciśnięcie przycisku
+	if (BackButton.MouseOn(mouseX, mouseY) && mouseButton == 1)
+	{
+		mouseButton = 0;
+		if (IsPlayer1Selecting)
+		{
+			*changeMenu = true;
+		}
+		else
+		{
+			ChangePlayer();
+		}
+	}
+	BackButton.DrawImage();
+	BackButton.DrawText(Fonts::ValueFont, settings::PosY(0.01f));
+}
+//Przycisk usuwania talii	
+void Menu::ClearDeckButton(float mouseX, float mouseY,int* firstDeckCard)
+{
+	Button ClearButton(settings::PosX(0.67f), settings::PosY(0.85f), settings::PosX(0.77f), settings::PosY(0.95f));
+	ClearButton.SetColor(Colors::white, Colors::lightGray);
+	ClearButton.SetText("Usuń talię");
+	//Wciśnięcie przycisku
+	if (ClearButton.MouseOn(mouseX, mouseY) && mouseButton == 1)
+	{
+		mouseButton = 0;
+		DeleteDeck(firstDeckCard);
+	}
+	ClearButton.DrawImage();
+	ClearButton.DrawText(Fonts::ValueFont, settings::PosY(0.029f));
+}
+//Usuwa wszystkie karty z talii
+//---------------------------------------
+void Menu::DeleteDeck(int* firstDeckCard)
+{
+	while (Deck->ReturnAmountOfCards() > 0)
+	{
+		Card RemovedCard = Deck->PopCard();								//Usunięcie karty z talii
+		MenuCards->TakeCard(MenuCards->ReturnIdOfCard(RemovedCard), 1);	//Oddawanie karty
+	}
+	mouseButton = 0;
+	*firstDeckCard = 0;
+}
 //Zmiana gracza
 //-----------------------
 void Menu::ChangePlayer()
@@ -341,7 +392,7 @@ void Menu::InfoCard(float mouseX, float mouseY, int* firstCard, int i)
 			mouseButton = 0;
 		}
 	}
-	//Dokończyć znikanie okienka
+	//Znikanie okienka
 	if (!InfoButton.MouseOn(mouseX,mouseY) && !CardButtons[i].MouseOn(mouseX, mouseY) && showInfo && infoButtonId == i + *firstCard)
 	{
 		InfoButton = Button();
@@ -437,7 +488,6 @@ void Menu::DrawDeck(int AmountOfShowCard,int firstDeckCard,float mouseX,float mo
 			{
 				firstDeckCard = 0;
 			}
-			//CardButtons[i].DrawHitbox();
 		}
 	}
 }

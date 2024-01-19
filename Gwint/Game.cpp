@@ -24,10 +24,11 @@
 Game::Game(ALLEGRO_DISPLAY* Disp,std::vector<Card> PlayerDeck, std::vector<Card> EnemyDeck)
 {
 	Display = Disp;
-	PlayerTurn = true;
 	player1Turn = true;							//Tura 1 gracza
 	Player = PlayerInfo(PlayerDeck);			
 	Enemy = PlayerInfo(EnemyDeck);
+	Player.SetReverse(Images::RedReverseCard);
+	Enemy.SetReverse(Images::BlueReverseCard);
 	mouseButton = 0;
 	lastUsedCardIndex = -1;
 	lastUsedCardRow = -1;
@@ -309,8 +310,10 @@ int Game::GameLoopPvP()
 		//Początek tury gracza
 		if (timerEvent && !GameStart && !GraveyardOn && TurnBegin)
 		{
-			if (Player1->IsFinishedRound())
+			//Automatyczna zmiana gracza
+			if (Player1->IsFinishedRound() || Player1->ReturnAmountOfCardInHand() <= 0)
 			{
+				Player1->SetRoundFinished(true);
 				NextPlayer();
 				TurnBegin = false;
 				continue;
@@ -450,12 +453,12 @@ void Game::HiddenGameBegin(float mouseX, float mouseY)
 		if (i < 5)
 		{
 			HandButtons[i] = Button(PlayerHand[i].NormalCardVertexesPosition(0.25f + i * 0.08f, 0.36f));
-			al_draw_scaled_bitmap(Images::ReverseCard, 0, 0, 330, 430, settings::PosX(0.25f + i * 0.08f), settings::PosY(0.36f), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
+			al_draw_scaled_bitmap(Player1->ReturnReverse(), 0, 0, 330, 430, settings::PosX(0.25f + i * 0.08f), settings::PosY(0.36f), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
 		}
 		else
 		{
 			HandButtons[i] = Button(PlayerHand[i].NormalCardVertexesPosition(0.25f + (i % (5)) * 0.08f, 0.56f));
-			al_draw_scaled_bitmap(Images::ReverseCard, 0, 0, 330, 430, settings::PosX(0.25f + (i % (5)) * 0.08f), settings::PosY(0.56f), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
+			al_draw_scaled_bitmap(Player1->ReturnReverse(), 0, 0, 330, 430, settings::PosX(0.25f + (i % (5)) * 0.08f), settings::PosY(0.56f), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
 		}
 		if (HandButtons[i].MouseOn(mouseX, mouseY) && mouseButton == 1)	//Rysowanie dużej karty
 		{
@@ -556,7 +559,7 @@ CardPos Game::DrawPlayersCards(float mouseX,float mouseY)
 		{
 			PlayerHand[i].DrawBigCardDescr(0.02, 0.1f);
 			PlayerHand[i].DrawCard(StartDrawPointX + i * 0.08f, 0.76f);
-			if (mouseButton == 1 && Player1->CanPlay(PlayerHand[i]) && PlayerTurn && skillId == 0)
+			if (mouseButton == 1 && Player1->CanPlay(PlayerHand[i]) && skillId == 0)
 			{
 				PlayedCard.card = PlayerHand[i];
 				PlayedCard.index = i;
@@ -599,7 +602,7 @@ Card Game::AbilityManager(Card UsedCard)
 	History.AddAction({ PlayerNumber, UsedCard, Card(),UsedCard.ReturnSkill()});
 	Card NewCard = Card();
 	//Umiejętność kart gracza
-	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Brotherhood)	//Braterstwo
+	if (UsedCard.ReturnSkill() == AllSkills::Brotherhood)	//Braterstwo
 	{
 		std::vector<Card> Table;
 		if (UsedCard.ReturnRow() == CardList::front)
@@ -625,28 +628,28 @@ Card Game::AbilityManager(Card UsedCard)
 			History.UpdateTarget(UsedCard);
 		}
 	}
-	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Medic)	//Medyk
+	if (UsedCard.ReturnSkill() == AllSkills::Medic)	//Medyk
 	{
 		GraveyardOn = true;
 		PlayersGraveyard = true;
 		skillId = AllSkills::medic;
 	}
-	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::GoldMedic)	//Złoty Medyk
+	if (UsedCard.ReturnSkill() == AllSkills::GoldMedic)	//Złoty Medyk
 	{
 		GraveyardOn = true;
 		PlayersGraveyard = true;
 		skillId = AllSkills::goldMedic;
 	}
-	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Spy)		//Szpieg
+	if (UsedCard.ReturnSkill() == AllSkills::Spy)		//Szpieg
 	{
 		Player1->TakeCard();
 		History.UpdateTarget(Player1->LastCardInHand());
 	}
-	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Archer)	//Strzelec
+	if (UsedCard.ReturnSkill() == AllSkills::Archer)	//Strzelec
 	{
 		skillId = AllSkills::archer;
 	}
-	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Horde)	//Horda
+	if (UsedCard.ReturnSkill() == AllSkills::Horde)	//Horda
 	{
 		if (Player1->CanPlay(UsedCard))
 		{
@@ -660,7 +663,7 @@ Card Game::AbilityManager(Card UsedCard)
 			}
 		}
 	}
-	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Thief)	//Złodziej
+	if (UsedCard.ReturnSkill() == AllSkills::Thief)	//Złodziej
 	{
 		NewCard = Player2->TakeCardFromStack();
 		if (Player1->CanPlay(NewCard))
@@ -669,11 +672,11 @@ Card Game::AbilityManager(Card UsedCard)
 			History.UpdateTarget(NewCard);
 		}
 	}
-	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Transport)	//Transport
+	if (UsedCard.ReturnSkill() == AllSkills::Transport)	//Transport
 	{
 		skillId = AllSkills::transport;
 	}
-	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::SummonerMortar)	//Przywołanie moździerza
+	if (UsedCard.ReturnSkill() == AllSkills::SummonerMortar)	//Przywołanie moździerza
 	{
 		NewCard = CardList::Mortar;
 		if (Player1->CanPlay(NewCard))
@@ -682,7 +685,7 @@ Card Game::AbilityManager(Card UsedCard)
 			History.UpdateTarget(NewCard);
 		}
 	}
-	if (PlayerTurn && (UsedCard.ReturnSkill() == AllSkills::DeadEater || UsedCard.ReturnSkill() == AllSkills::GoldDeadEater))	//Trupojad
+	if ((UsedCard.ReturnSkill() == AllSkills::DeadEater || UsedCard.ReturnSkill() == AllSkills::GoldDeadEater))	//Trupojad
 	{
 		GraveyardOn = true;
 		PlayersGraveyard = true;
@@ -697,7 +700,7 @@ Card Game::AbilityManager(Card UsedCard)
 		lastUsedCardIndex = Player1->ReturnAmountOfCardOnTable(UsedCard.ReturnRow())-1;
 		lastUsedCardRow = UsedCard.ReturnRow();
 	}
-	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Slayer) //Pogromca
+	if (UsedCard.ReturnSkill() == AllSkills::Slayer) //Pogromca
 	{
 		int CardIndex = Player1->ReturnAmountOfCardOnTable(UsedCard.ReturnRow()) - 1;	//Indeks zagranej karty
 		int CardRow = UsedCard.ReturnRow();											
@@ -721,7 +724,7 @@ Card Game::AbilityManager(Card UsedCard)
 			Player2->RemoveAllCardsWithValue(Max, &History, UsedCard, PlayerNumber);
 		}
 	}
-	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Banish)	//Wygnanie
+	if (UsedCard.ReturnSkill() == AllSkills::Banish)	//Wygnanie
 	{
 		int PlayerHandCard = Player1->AmountOfCardsInHand();
 		//Usunięcie kart z ręki i wrzucenie ich do cmentarza
@@ -811,14 +814,15 @@ void Game::DrawOtherInfo(float mouseX, float mouseY)
 	//Nie dobrane karty
 	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.82) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player1->ReturnAmountOfCardStack()).c_str());
-	al_draw_scaled_bitmap(Images::ReverseCard, 0, 0, 330, 430, settings::PosX(0.865), settings::PosY(0.76), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
+
+	al_draw_scaled_bitmap(Player1->ReturnReverse(), 0, 0, 330, 430, settings::PosX(0.865), settings::PosY(0.76), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
 	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.12) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player2->ReturnAmountOfCardStack()).c_str());
-	al_draw_scaled_bitmap(Images::ReverseCard, 0, 0, 330, 430, settings::PosX(0.865), settings::PosY(0.06), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
+	al_draw_scaled_bitmap(Player2->ReturnReverse(), 0, 0, 330, 430, settings::PosX(0.865), settings::PosY(0.06), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
 	//Cmentarz
 	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.62) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player1->ReturnAmountOfCardUsed()).c_str());
-	al_draw_scaled_bitmap(Images::ReverseCard, 0, 0, 330, 430, settings::PosX(0.865), settings::PosY(0.56), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
+	al_draw_scaled_bitmap(Player1->ReturnReverse(), 0, 0, 330, 430, settings::PosX(0.865), settings::PosY(0.56), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
 	//Przycisk cmentarzu
 	GraveyardButton = Button(settings::PosX(0.865), settings::PosY(0.56), settings::PosX(ReverseCardSizeX) + settings::PosX(0.865), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()) + settings::PosY(0.56));
 	if (GraveyardButton.MouseOn(mouseX, mouseY) && mouseButton == 1 && !IsGraveyardLocked())
@@ -832,7 +836,7 @@ void Game::DrawOtherInfo(float mouseX, float mouseY)
 	//Cmentarz przeciwnika
 	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.32) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player2->ReturnAmountOfCardUsed()).c_str());
-	al_draw_scaled_bitmap(Images::ReverseCard, 0, 0, 330, 430, settings::PosX(0.865), settings::PosY(0.26), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
+	al_draw_scaled_bitmap(Player2->ReturnReverse(), 0, 0, 330, 430, settings::PosX(0.865), settings::PosY(0.26), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
 	//Przycisk cmentarzu
 	GraveyardButton = Button(settings::PosX(0.865), settings::PosY(0.26), settings::PosX(ReverseCardSizeX) + settings::PosX(0.865), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()) + settings::PosY(0.26));
 	if (GraveyardButton.MouseOn(mouseX, mouseY) && mouseButton == 1 && !IsEnemyGraveyardLocked())
@@ -1103,7 +1107,7 @@ void Game::DrawHiddenHand(float mouseX, float mouseY)
 	for (int i = 0; i < PlayerHand.size(); i++)
 	{
 		HandButtons[i] = Button(PlayerHand[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.8f));
-		al_draw_scaled_bitmap(Images::ReverseCard, 0, 0, 330, 430, settings::PosX(StartDrawPointX + i * 0.08f), settings::PosY(0.8f), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
+		al_draw_scaled_bitmap(Player1->ReturnReverse(), 0, 0, 330, 430, settings::PosX(StartDrawPointX + i * 0.08f), settings::PosY(0.8f), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
 		//Kliknięcie na kartę (przycisk)
 		if (HandButtons[i].MouseOn(mouseX, mouseY) && mouseButton == 1)
 		{

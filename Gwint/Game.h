@@ -16,7 +16,6 @@ private:
 	int lastUsedCardIndex;			//Id ostatniej użytej karty (do zapamiętywania wybranej karty)
 	int lastUsedCardRow;			//rząd ostatniej użytej karty
 	int GraveyardFirstCard;			//Pierwsza wyświetlana karta w cmentarzu
-	bool PlayerTurn;				//Tura 1 gracza dokończyć Prawdopodobnie nie potrzebne
 	bool player1Turn;				//Tura 1 gracza
 	bool gameEnd;					//Koniec gry
 	bool cardPlayed;				//Czy karta zostałą zagrana

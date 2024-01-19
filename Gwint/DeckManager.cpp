@@ -66,6 +66,21 @@ Card DeckManager::RemoveCard(int CardId)
 	Deck.erase(Deck.begin() + CardId);
 	return RemovedCard;
 }
+//Usuwa i zwraca ostatnią kartę w talii
+//-------------------------------------
+Card DeckManager::PopCard()
+{
+	Card RemovedCard;
+	if (Deck.size() > 0)
+	{
+		RemovedCard = Deck.back();
+		Deck.pop_back();
+		amountOfCards -= 1;
+		gold += RemovedCard.ReturnCost();
+		CurrentCost -= RemovedCard.ReturnCost();
+	}
+	return RemovedCard;
+}
 //Zwraca całą talię
 //-----------------------------------------
 std::vector<Card> DeckManager::ReturnDeck()

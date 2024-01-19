@@ -40,6 +40,9 @@ private:
 		void DrawInfo(float mouseX, float mouseY);												//Rysuje informacje o karcie
 		void InfoCard(float mouseX, float mouseY, int* firstCard, int i);						//Aktywuje informacje o karcie
 		void AddCard(float mouseX, float mouseY, int* firstCard, int i);						//Dodanie kart
+		void PreviousButton(float mouseX, float mouseY,bool* changeMenu);						//Przycisk cofania
+		void ClearDeckButton(float mouseX, float mouseY,int *firstDeckCard);												//Przycisk usuwania talii			
+		void DeleteDeck(int* firstDeckCard);													//Usuwa wszystkie karty z talii
 		void ChangePlayer();																	//Zmiana gracza
 public:
 	int MenuLoopPVP();																			//Pętla menu wyboru

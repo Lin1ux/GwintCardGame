@@ -40,6 +40,8 @@ public:
 	static ALLEGRO_BITMAP* NameFrame;
 	static ALLEGRO_BITMAP* DescrFrame;
 	static ALLEGRO_BITMAP* ReverseCard;
+	static ALLEGRO_BITMAP* RedReverseCard;
+	static ALLEGRO_BITMAP* BlueReverseCard;
 	static ALLEGRO_BITMAP* StatCircle;
 	static ALLEGRO_BITMAP* MeleeCircle;
 	static ALLEGRO_BITMAP* RangeCircle;

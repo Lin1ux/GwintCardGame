@@ -35,6 +35,8 @@ ALLEGRO_BITMAP* Images::StatFrame;
 ALLEGRO_BITMAP* Images::NameFrame;
 ALLEGRO_BITMAP* Images::DescrFrame;
 ALLEGRO_BITMAP* Images::ReverseCard;
+ALLEGRO_BITMAP* Images::RedReverseCard;
+ALLEGRO_BITMAP* Images::BlueReverseCard;
 ALLEGRO_BITMAP* Images::StatCircle;
 ALLEGRO_BITMAP* Images::MeleeCircle;
 ALLEGRO_BITMAP* Images::RangeCircle;
@@ -96,6 +98,8 @@ void Images::SetImages()
 	Images::NameFrame = al_load_bitmap("images/UI/textFrame.png");
 	Images::DescrFrame = al_load_bitmap("images/UI/SkillDescr.png");
 	Images::ReverseCard = al_load_bitmap("images/UI/ReverseCard.png");
+	Images::RedReverseCard = al_load_bitmap("images/UI/RedReverseCard.png");
+	Images::BlueReverseCard = al_load_bitmap("images/UI/BlueReverseCard.png");
 	Images::StatCircle = al_load_bitmap("images/Skills/StatCircle.png");
 	Images::MeleeCircle = al_load_bitmap("images/Skills/Melee Circle.png");
 	Images::RangeCircle = al_load_bitmap("images/Skills/Range Circle.png");

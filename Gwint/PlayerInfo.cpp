@@ -3,6 +3,7 @@
 #include "CardList.h"
 #include <algorithm>
 #include <random>
+#include "images.h"
 
 PlayerInfo::PlayerInfo()
 {
@@ -20,6 +21,7 @@ PlayerInfo::PlayerInfo()
 	PlayerHand = std::vector<Card>();
 	CardStack = std::vector<Card>();
 	CardUsed = std::vector<Card>();
+	ReverseCard = ::Images::ReverseCard;
 }
 
 //Konstruktor, Dobiera karty do rêki i nie dobrane karty
@@ -37,6 +39,7 @@ PlayerInfo::PlayerInfo(std::vector<Card> DeckCards)
 	RangeRow = std::vector<Card>();		//Karty w 2 rzêdzie (dystansowy)
 	MCardsValues = std::vector<CardValues>();
 	RCardsValues = std::vector<CardValues>();
+	ReverseCard = ::Images::ReverseCard;
 
 	//Dokoñczyæ Odkomentowaæ linijkê pod tym komentarzem (Do testów lepiej nie tasowaæ tali)
 	//std::random_shuffle(DeckCards.begin(), DeckCards.end());		//Przetasowanie kart w tali gracza
@@ -520,6 +523,16 @@ std::vector<Card> PlayerInfo::ReturnCardUsed()
 {
 	return CardUsed;
 }
+//Ustawia rewers karty	
+void PlayerInfo::SetReverse(ALLEGRO_BITMAP* Image)
+{
+	ReverseCard = Image;
+}
+//Zwraca rewers karty
+ALLEGRO_BITMAP* PlayerInfo::ReturnReverse()
+{
+	return ReverseCard;
+}
 
 //Dodaje kartê do cmentarza
 //--------------------------------------------
@@ -641,6 +654,12 @@ int PlayerInfo::ReturnAmountOfCardOnTable(int row)
 		return RangeRow.size();
 	}
 	return 0;
+}
+//Zwrca liczbê kart w rêce
+//----------------------------------------
+int PlayerInfo::ReturnAmountOfCardInHand()
+{
+	return PlayerHand.size();
 }
 //Zwraca liczbê kart na stole posiadaj¹ce dan¹ umiejêtnoœæ
 int PlayerInfo::NumberOfCardsWithSkill(Skills Skill)

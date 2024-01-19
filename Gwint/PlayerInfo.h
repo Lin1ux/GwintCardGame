@@ -24,7 +24,8 @@ private:
 	std::vector<Card> RangeRow;				//Karty w 2 rzêdzie (dystansowy
 	std::vector<Card> PlayerHand;			//Karty w rêce gracza
 	std::vector<Card> CardStack;			//Nie dobrane karty
-	std::vector<Card> CardUsed;				//Karty odrzcuone							
+	std::vector<Card> CardUsed;				//Karty odrzcuone		
+	ALLEGRO_BITMAP* ReverseCard;				//Rewers karty
 
 public:
 	//Konstruktory
@@ -72,6 +73,7 @@ public:
 	int ReturnAmountOfCardOnTable(bool IgnoreGoldCard);					//Zwraca liczbê zwyk³ych kart na stole  ignoruj¹c z³ote karty
 	int ReturnAmountOfGoldCardOnTable();								//Zwraca liczbê z³otych kart na stole
 	int ReturnAmountOfCardOnTable(int row);								//Zwraca liczbê kart w wybranym rzêdzie
+	int ReturnAmountOfCardInHand();										//Zwrca liczbê kart w rêce
 	int NumberOfCardsWithSkill(Skills Skill);							//Zwraca liczbê kart na stole posiadaj¹ce dan¹ umiejêtnoœæ
 	int NumberOfSpecificCards(Card CardToFind);							//Zwraca liczbê podanych kart
 	int MaxValue();														//Zwraca najwiêksz¹ wartoœæ karty na stole nale¿¹ce do gracza
@@ -94,5 +96,8 @@ public:
 	std::vector<Card> ReturnPlayerHand();								//Zwraca karty z rêki gracza
 	std::vector<Card> ReturnCardStack();								//Zwraca nie u¿yte karty
 	std::vector<Card> ReturnCardUsed();									//Zwraca odrzucone karty
+	//Rewers karty
+	void SetReverse(ALLEGRO_BITMAP* Image);								//Ustawia rewers karty				
+	ALLEGRO_BITMAP* ReturnReverse();									//Zwraca rewers karty
 };
 
