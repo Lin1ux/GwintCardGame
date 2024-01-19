@@ -12,12 +12,19 @@ class Menu
 private:
 		ALLEGRO_DISPLAY* Display;
 		bool showInfo;
+		bool IsPlayer1Selecting;	//Czy 1 gracz wybiera
 		int mouseButton;
 		int infoButtonId;
 		Point infoPosition;
-		CardsToSelect MenuCards;
-		DeckManager Deck;
-		Button PrevCards;
+		CardsToSelect MenuCards1;	//Karty do wyboru 1 gracza
+		CardsToSelect MenuCards2;	//Karty do wyboru 2 gracza
+		DeckManager Deck1;			//Talia 1 gracza
+		DeckManager Deck2;			//Talia 2 gracza
+
+		CardsToSelect* MenuCards;
+		DeckManager* Deck;
+
+		Button PrevCards;			
 		Button NextCards;
 		Button UpDeck;
 		Button DownDeck;
@@ -33,9 +40,11 @@ private:
 		void DrawInfo(float mouseX, float mouseY);												//Rysuje informacje o karcie
 		void InfoCard(float mouseX, float mouseY, int* firstCard, int i);						//Aktywuje informacje o karcie
 		void AddCard(float mouseX, float mouseY, int* firstCard, int i);						//Dodanie kart
+		void ChangePlayer();																	//Zmiana gracza
 public:
-	int MenuLoop();
-	float ScreenWidth;
+	int MenuLoopPVP();																			//Pętla menu wyboru
+	void ResetDeck(int mode);																	//Usuwanie tali mode=1 gracz1, mode=2 gracz2, mode=3 obaj gracze
+	float ScreenWidth;		
 	float ScreenHeight;
 	Menu(ALLEGRO_DISPLAY* Disp, float DisplayWidth, float DisplayHeight);
 };

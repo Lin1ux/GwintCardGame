@@ -25,6 +25,7 @@ Menu::Menu(ALLEGRO_DISPLAY* Disp, float DisplayWidth,float DisplayHeight)	//Kons
 	mouseButton = 0;
 	showInfo = false;
 	infoButtonId = -1;
+	IsPlayer1Selecting = true;
 	
 	//Ustawianie Statycznych obiektów
 	Images::SetImages();
@@ -56,12 +57,16 @@ Menu::Menu(ALLEGRO_DISPLAY* Disp, float DisplayWidth,float DisplayHeight)	//Kons
 	//Przycisk startu gry
 	StartGame = Button(settings::PosX(0.91f), settings::PosY(0.93f), settings::PosX(0.98f), settings::PosY(0.98f));
 	StartGame.SetColor(Colors::white, Colors::lightGray);
-	StartGame.SetText("Start");
+	StartGame.SetText("Dalej");
 	StartGame.ChangeState(false);
-	Deck = DeckManager(600, 20);
-	MenuCards = CardsToSelect();
+	Deck1 = DeckManager(600, 20);
+	Deck2 = DeckManager(600, 20);
+	MenuCards1 = CardsToSelect();
+	MenuCards2 = CardsToSelect();
+	Deck = &Deck1;
+	MenuCards = &MenuCards1;
 }
-int Menu::MenuLoop()
+int Menu::MenuLoopPVP()
 {
 	if (!al_init())
 	{
@@ -72,7 +77,9 @@ int Menu::MenuLoop()
 	ALLEGRO_TIMER* timer = al_create_timer(1.0 / settings::FPS());
 
 	//Załadowanie wszystkich kart dostępnych w grze
-	MenuCards.SetCard(CardList::ReturnAllCards(),Deck.ReturnAmountOfCards());
+	//ResetDeck(3);													//Resetowanie talii
+	MenuCards1.SetCard(CardList::ReturnAllCards(),Deck1.ReturnAmountOfCards());
+	MenuCards2.SetCard(CardList::ReturnAllCards(), Deck2.ReturnAmountOfCards());
 
 	ALLEGRO_EVENT_QUEUE* event_queue = al_create_event_queue();
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
@@ -81,13 +88,7 @@ int Menu::MenuLoop()
 	al_register_event_source(event_queue, al_get_mouse_event_source());
 
 	al_start_timer(timer); //inicjalizacja timera | Nie dawać do pętli gry
-		//Obiekty
- 
-	Card test(CardList::FrozenDog);
 	
-	//Talia gracza
-	
-	//test = Images::FrozenDog;
 	float mouseX = 0;												//X myszy
 	float mouseY = 0;												//Y myszy
 	bool ChangeMenu = false;										//Pętla
@@ -95,6 +96,8 @@ int Menu::MenuLoop()
 	int firstCard = 0;												//Pierwsza wyświetlana karta z vectora wszystkich kart
 	int firstDeckCard = 0;											//Pierwsza wyświetlana karta z vectora tali gracza
 	int AmountOfShowCard = sizeof(DeckButtons) / sizeof(Button);	//Liczba kart wyświetlana z talii
+	IsPlayer1Selecting = true;
+	
 	while (!ChangeMenu)
 	{
 		ALLEGRO_EVENT events;
@@ -170,6 +173,15 @@ int Menu::MenuLoop()
 			UpDeck.DrawText(Fonts::NameFont, settings::PosY(0.004f));
 			DownDeck.DrawImage();
 			DownDeck.DrawText(Fonts::NameFont, settings::PosY(0.004f));
+			//Wskazówki
+			if (IsPlayer1Selecting)
+			{
+				al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.05f), settings::PosY(0.87f), ALLEGRO_ALIGN_LEFT, "Wybiera Gracz 1");
+			}
+			if (!IsPlayer1Selecting)
+			{
+				al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.05f), settings::PosY(0.87f), ALLEGRO_ALIGN_LEFT, "Wybiera Gracz 2");
+			}
 			if (StartGame.IsActive())
 			{
 				StartGame.DrawImage();
@@ -185,13 +197,13 @@ int Menu::MenuLoop()
 	}
 	if (StartNewGame)
 	{
-		Game NewGame(Display, Deck.ReturnDeck(), std::vector<Card>());
+		Game NewGame(Display, Deck1.ReturnDeck(), Deck2.ReturnDeck());
 		std::cout << "Rozpoczęto partię gry\n";
 		return NewGame.GameLoopPvP();
 	}
 	else
 	{
-		return 1;
+		return 0;
 	}
 }
 //Zmienia stronę kart
@@ -204,7 +216,7 @@ void Menu::Pages(float mouseX, float mouseY, int* firstCard)
 		*firstCard -= 10;
 		if (*firstCard < 0)
 		{
-			for (int i = 0; i < MenuCards.AmountOfCards(); i += 10)
+			for (int i = 0; i < MenuCards->AmountOfCards(); i += 10)
 			{
 				*firstCard += 10;
 			}
@@ -217,7 +229,7 @@ void Menu::Pages(float mouseX, float mouseY, int* firstCard)
 	if (NextCards.MouseOn(mouseX, mouseY) && mouseButton == 1)
 	{
 		*firstCard += 10;
-		if (*firstCard > MenuCards.AmountOfCards())
+		if (*firstCard > MenuCards->AmountOfCards())
 		{
 			*firstCard = 0;
 		}
@@ -241,20 +253,27 @@ void Menu::MoveDeck(float mouseX, float mouseY,int AmountOfShowCard, int* firstD
 	}
 	if (DownDeck.MouseOn(mouseX, mouseY) && mouseButton == 1)
 	{
-		if (AmountOfShowCard < Deck.ReturnAmountOfCards() && Deck.ReturnAmountOfCards() - AmountOfShowCard > *firstDeckCard)
+		if (AmountOfShowCard < Deck->ReturnAmountOfCards() && Deck->ReturnAmountOfCards() - AmountOfShowCard > *firstDeckCard)
 		{
 			*firstDeckCard += 1;
 		}
 		mouseButton = 0;
 	}
 }
+//Rozpoczęcie partii
+//----------------------------------------------------------------------------------------
 void Menu::StartCardGame(float mouseX, float mouseY, bool* ChangeMenu, bool* StartNewGame)
 {
 	if (StartGame.MouseOn(mouseX, mouseY) && mouseButton == 1)
 	{
+		mouseButton = 0;
+		if (IsPlayer1Selecting)
+		{
+			ChangePlayer();
+			return;
+		}
 		*ChangeMenu = true;
 		*StartNewGame = true;
-		mouseButton = 0;
 	}
 }
 //Dodaje kartę do tali gracza
@@ -264,12 +283,47 @@ void Menu::AddCard(float mouseX, float mouseY, int *firstCard,int i)
 	if (CardButtons[i].MouseOn(mouseX, mouseY) && mouseButton == 3)
 	{
 		//Czy dostępne są jeszcze karty oraz czy można dodać ją do talii
-		if (MenuCards.CardsLeftById(i + *firstCard) > 0 && Deck.CanAddCard(MenuCards.SelectCardById(i + *firstCard)))
+		if (MenuCards->CardsLeftById(i + *firstCard) > 0 && Deck->CanAddCard(MenuCards->SelectCardById(i + *firstCard)))
 		{
-			Deck.AddCard(MenuCards.TakeCard(i + *firstCard, -1)); //Dodawanie karty
-			std::cout << "Wybrano karte o id:" << i + *firstCard << " - " << MenuCards.SelectCardById(i + *firstCard).ReturnName() << std::endl;
+			Deck->AddCard(MenuCards->TakeCard(i + *firstCard, -1)); //Dodawanie karty
+			std::cout << "Wybrano karte o id:" << i + *firstCard << " - " << MenuCards->SelectCardById(i + *firstCard).ReturnName() << std::endl;
 		}
 		mouseButton = 0;
+	}
+}
+//Zmiana gracza
+//-----------------------
+void Menu::ChangePlayer()
+{
+	IsPlayer1Selecting = !IsPlayer1Selecting;
+	if (IsPlayer1Selecting)
+	{
+		Deck = &Deck1;
+		MenuCards = &MenuCards1;
+		StartGame.SetText("Dalej");
+		return;
+	}
+	StartGame.SetText("Start");
+	Deck = &Deck2;
+	MenuCards = &MenuCards2;
+	return;
+}
+//Usuwanie tali mode=1 gracz1, mode=2 gracz2, mode=3 
+//----------------------------
+void Menu::ResetDeck(int mode)
+{
+	if (mode == 1)
+	{
+		Deck1 = DeckManager(600, 20);
+	}
+	if (mode == 2)
+	{
+		Deck2 = DeckManager(600, 20);
+	}
+	if (mode == 3)
+	{
+		Deck1 = DeckManager(600, 20);
+		Deck2 = DeckManager(600, 20);
 	}
 }
 //Wyświetlanie informacji o karcie
@@ -302,7 +356,7 @@ void Menu::InfoCard(float mouseX, float mouseY, int* firstCard, int i)
 void Menu::DrawInfo(float x, float y)
 {
 	//al_draw_scaled_bitmap(Images::Crocolisk, 0, 0, 300, 300, settings::PosX(x), settings::PosY(y), settings::PosX(0.5), settings::PosY(0.5), NULL);
-	Skills cardSkill = MenuCards.SelectCardById(infoButtonId).ReturnSkill();
+	Skills cardSkill = MenuCards->SelectCardById(infoButtonId).ReturnSkill();
 	float ImgSizeX = (settings::PosX(x + 0.12) - settings::PosX(x)) / settings::ScrWidth();															//Dolna krawędź karty (współrzędna y)
 	al_draw_scaled_bitmap(Images::DescrFrame, 0, 0, 330, 400, settings::PosX(x), settings::PosY(y), settings::PosX(ImgSizeX * 1.1), settings::PosY(ImgSizeX * 1.21f * settings::ProportionScreenWH()), NULL); //ALLEGRO_ALIGN_CENTER
 	al_draw_multiline_text(Fonts::NameFont, Colors::white, (settings::PosX(x) + settings::PosX(ImgSizeX * 1.1 + x)) / 2, settings::PosY(y+0.01), settings::PosX(ImgSizeX), settings::PosY(ImgSizeX * 0.1f * settings::ProportionScreenWH()), ALLEGRO_ALIGN_CENTER, (cardSkill.ReturnName() + ":\n" + cardSkill.ReturnDescr()).c_str());
@@ -315,9 +369,9 @@ void Menu::DrawCartToSelect(float mouseX, float mouseY,int firstCard)
 	int NumberOfCards = 10;
 	for (int i = 0; i < NumberOfCards; i++)
 	{
-		if (i + firstCard < MenuCards.AmountOfCards())
+		if (i + firstCard < MenuCards->AmountOfCards())
 		{
-			Card CurrentCard = MenuCards.SelectCardById(i + firstCard);
+			Card CurrentCard = MenuCards->SelectCardById(i + firstCard);
 			if (i < (NumberOfCards) / 2)
 			{
 				CurrentCard.DrawBigCard(0.05f + i * 0.15f, 0.05f);
@@ -326,7 +380,7 @@ void Menu::DrawCartToSelect(float mouseX, float mouseY,int firstCard)
 			{
 				CurrentCard.DrawBigCard(0.05f + (i % (NumberOfCards / 2)) * 0.15f, 0.45f);
 			}
-			std::string Amount = std::to_string(MenuCards.CardsLeftById(i + firstCard));
+			std::string Amount = std::to_string(MenuCards->CardsLeftById(i + firstCard));
 			if (CurrentCard.ReturnIsHero())
 			{
 				Amount += "/1";
@@ -349,23 +403,23 @@ void Menu::DrawCartToSelect(float mouseX, float mouseY,int firstCard)
 void Menu::DrawDeck(int AmountOfShowCard,int firstDeckCard,float mouseX,float mouseY)
 {
 	//Wydane złoto
-	al_draw_text(Fonts::SmallValueFont, Colors::white, settings::PosX(0.83f), settings::PosY(0.05f), ALLEGRO_ALIGN_LEFT, Deck.GoldText().c_str());
+	al_draw_text(Fonts::SmallValueFont, Colors::white, settings::PosX(0.83f), settings::PosY(0.05f), ALLEGRO_ALIGN_LEFT, Deck->GoldText().c_str());
 	//Liczba kart
-	if (Deck.CanStartGame())
+	if (Deck->CanStartGame())
 	{
-		al_draw_text(Fonts::SmallValueFont, Colors::lightGreen, settings::PosX(0.98f), settings::PosY(0.05f), ALLEGRO_ALIGN_RIGHT, std::to_string(Deck.ReturnAmountOfCards()).c_str());
+		al_draw_text(Fonts::SmallValueFont, Colors::lightGreen, settings::PosX(0.98f), settings::PosY(0.05f), ALLEGRO_ALIGN_RIGHT, std::to_string(Deck->ReturnAmountOfCards()).c_str());
 		StartGame.ChangeState(true);
 	}
 	else
 	{
-		al_draw_text(Fonts::SmallValueFont, Colors::lightRed, settings::PosX(0.98f), settings::PosY(0.05f), ALLEGRO_ALIGN_RIGHT, std::to_string(Deck.ReturnAmountOfCards()).c_str());
+		al_draw_text(Fonts::SmallValueFont, Colors::lightRed, settings::PosX(0.98f), settings::PosY(0.05f), ALLEGRO_ALIGN_RIGHT, std::to_string(Deck->ReturnAmountOfCards()).c_str());
 		StartGame.ChangeState(false);
 	}
 	//Karty do wybrania
 	for (int i = 0; i < AmountOfShowCard; i++)
 	{
-		Card CurrentCard = Deck.ReturnCardById(i + firstDeckCard);
-		if (Deck.ReturnAmountOfCards() > i + firstDeckCard)
+		Card CurrentCard = Deck->ReturnCardById(i + firstDeckCard);
+		if (Deck->ReturnAmountOfCards() > i + firstDeckCard)
 		{
 			CurrentCard.DrawSmallCard(0.82f, 0.1f + i * 0.06f);
 		}
@@ -373,9 +427,9 @@ void Menu::DrawDeck(int AmountOfShowCard,int firstDeckCard,float mouseX,float mo
 		DeckButtons[i] = Button(CurrentCard.ReturnVertexesPosition());
 		if (DeckButtons[i].MouseOn(mouseX, mouseY) && mouseButton == 1)
 		{
-			Card RemovedCard(Deck.RemoveCard(i + firstDeckCard));			//Usunięcie karty z talii
+			Card RemovedCard(Deck->RemoveCard(i + firstDeckCard));			//Usunięcie karty z talii
 			std::cout << "Usunieto karte o id: " << i + firstDeckCard << " - " << RemovedCard.ReturnName() << std::endl;
-			MenuCards.TakeCard(MenuCards.ReturnIdOfCard(RemovedCard), 1);	//Oddawanie karty
+			MenuCards->TakeCard(MenuCards->ReturnIdOfCard(RemovedCard), 1);	//Oddawanie karty
 			mouseButton = 0;
 			//Przesunięcie pierwszej wyświetlanej karty z talii
 			firstDeckCard -= 1;

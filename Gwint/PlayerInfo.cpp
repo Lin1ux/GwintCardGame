@@ -285,6 +285,16 @@ int PlayerInfo::AmountOfCardsInHand()
 {
 	return PlayerHand.size();
 }
+//Zwraca ostatni¹ posiadan¹ kartê
+//--------------------------------
+Card PlayerInfo::LastCardInHand()
+{
+	if (PlayerHand.size() < 0)
+	{
+		return Card();
+	}
+	return PlayerHand[PlayerHand.size() - 1];
+}
 //Usuwa kartê z rêki i zwraca j¹
 //---------------------------------
 Card PlayerInfo::UseCard(int index)
@@ -381,6 +391,32 @@ void PlayerInfo::RemoveAllCardsWithValue(int value)
 		}
 	}
 }
+//Usuwa wszystkie karty o podanej wartoœci (umieszcza je w cmentarzu) zapisuje w histori
+//------------------------------------------------------------------------------------------------
+void PlayerInfo::RemoveAllCardsWithValue(int value, HistoryStack* Stack, Card UsedCard, int Owner)
+{
+	Card RemovedCard;
+	for (int i = 0; i < MeleeRow.size(); i++)
+	{
+		if (MCardsValues[i].ReturnCurrentValue() == value)
+		{
+			RemovedCard = RemoveCardFromTable(CardList::front, i);
+			AddCardToGraveyard(RemovedCard);
+			Stack->AddAction({ Owner ,UsedCard,RemovedCard ,UsedCard.ReturnSkill() });
+			i -= 1;
+		}
+	}
+	for (int i = 0; i < RangeRow.size(); i++)
+	{
+		if (RCardsValues[i].ReturnCurrentValue() == value)
+		{
+			RemovedCard = RemoveCardFromTable(CardList::back, i);
+			AddCardToGraveyard(RemovedCard);
+			Stack->AddAction({ Owner ,UsedCard,RemovedCard ,UsedCard.ReturnSkill() });
+			i -= 1;
+		}
+	}
+}
 //Usuwa wszystkie karty o podanej wartoœci i pomijaj¹c kartê o podanym rzêdzie i indeksie (umieszcza je w cmentarzu)
 //------------------------------------------------------------------------------------------------------------------
 void PlayerInfo::RemoveAllCardsWithValue(int row, int index, int value)
@@ -407,6 +443,42 @@ void PlayerInfo::RemoveAllCardsWithValue(int row, int index, int value)
 		if (RCardsValues[i].ReturnCurrentValue() == value)
 		{
 			AddCardToGraveyard(RemoveCardFromTable(CardList::back, i));
+			i -= 1;
+			index -= 1;
+		}
+	}
+}
+//Usuwa wszystkie karty o podanej wartoœci pomijaj¹c kartê o podanym rzêdzie i indeksie (umieszcza je w cmentarzu) zapisuje w histori
+//---------------------------------------------------------------------------------------------------------
+void PlayerInfo::RemoveAllCardsWithValue(int row, int index, int value, HistoryStack* Stack, Card UsedCard,int Owner)
+{
+	Card RemovedCard;
+	for (int i = 0; i < MeleeRow.size(); i++)
+	{
+		if (row == CardList::front && index == i)
+		{
+			continue;
+		}
+		if (MCardsValues[i].ReturnCurrentValue() == value)
+		{
+			RemovedCard = RemoveCardFromTable(CardList::front, i);
+			AddCardToGraveyard(RemovedCard);
+			Stack->AddAction({ Owner ,UsedCard,RemovedCard ,UsedCard.ReturnSkill() });
+			i -= 1;
+			index -= 1;
+		}
+	}
+	for (int i = 0; i < RangeRow.size(); i++)
+	{
+		if (row == CardList::back && index == i)
+		{
+			continue;
+		}
+		if (RCardsValues[i].ReturnCurrentValue() == value)
+		{
+			RemovedCard = RemoveCardFromTable(CardList::back, i);
+			AddCardToGraveyard(RemovedCard);
+			Stack->AddAction({ Owner ,UsedCard,RemovedCard ,UsedCard.ReturnSkill() });
 			i -= 1;
 			index -= 1;
 		}
@@ -469,11 +541,24 @@ int PlayerInfo::ReturnAmountOfCardsByRow(int row)
 	}
 	return sum;
 }
-//Zwraca liczbê kart zu¿ytych
+//Zwraca liczbê kart w cmentarzu
 //--------------------------------------
 int PlayerInfo::ReturnAmountOfCardUsed()
 {
 	return CardUsed.size();
+}
+//Zwraca liczbê z³otych kart w cmentarzu
+int PlayerInfo::ReturnAmountOfGraveyardGoldCard()
+{
+	int sum = 0;
+	for (int i = 0; i < CardUsed.size(); i++)
+	{
+		if (CardUsed[i].ReturnIsHero())
+		{
+			sum += 1;
+		}
+	}
+	return sum;
 }
 //Usuwa kartê z cmentarza
 //-------------------------------------------------
@@ -521,6 +606,27 @@ int PlayerInfo::ReturnAmountOfCardOnTable(bool IgnoreGoldCard)
 		return num;
 	}
 	return ReturnAmountOfCardOnTable();
+}
+//Zwraca liczbê z³otych kart na stole
+//---------------------------------------------
+int PlayerInfo::ReturnAmountOfGoldCardOnTable()
+{
+	int num = 0;
+	for (int i = 0; i < MeleeRow.size(); i++)
+	{
+		if (MeleeRow[i].ReturnIsHero())
+		{
+			num += 1;
+		}
+	}
+	for (int i = 0; i < RangeRow.size(); i++)
+	{
+		if (RangeRow[i].ReturnIsHero())
+		{
+			num += 1;
+		}
+	}
+	return num;
 }
 //Zwraca liczbê kart w wybranym rzêdzie
 //------------------------------------------------

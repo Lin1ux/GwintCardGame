@@ -3,6 +3,7 @@
 #include"PlayerInfo.h"
 #include"Button.h"
 #include"CardValues.h"
+#include"HistoryStack.h"
 
 #pragma once
 
@@ -31,12 +32,14 @@ private:
 	Button RangeButtons[6];			//Przyciski 2 rzędu gracza
 	Button EMeleeButtons[6];		//Przyciski 1 rzędu przeciwnika
 	Button ERangeButtons[6];		//Przyciski 2 rzędu przeciwnika
+	HistoryStack History;			//Historia gry
 
 	bool GameBegin(float mouseX, float mouseY,int *CardsChanged);							//Możliwość wymiany kart w ręce gracza
 	void HiddenGameBegin(float mouseX, float mouseY);										//Zasłonięte karty do wymiany
 	CardPos DrawPlayersCards(float mouseX, float mouseY);									//Rysuje karty należące do gracza oraz sprawdza przyciski pozwala na zagranie karty i zwraca zagraną kartę
 	Card AbilityManager(Card UsedCard);														//Sprawdza i używa odpowiedniej umiejętności i zwraca nowo zagraną kartę jeśli umiejętność zagrywa dodatkowe karty
 	void DrawOtherInfo(float mouseX, float mouseY);											//Rysuje inne informacje takie jak ilość kart i liczba wygranych rund
+	void DrawHistory();																		//Rysuje historię
 	void EndRoundButton(float mouseX, float mouseY);										//Przycisk Końca tury
 	bool RoundResult(int *RoundNumber);														//Oblicza wynik rundy i czyści stół, zwraca true jeśli runda się zakończyła oraz zwiększa wartość argumentu o 1
 	bool DrawSummary(float mouseX, float mouseY);											//Rysuje podsumowanie gry zwraca true jeśli naciśnięto przycisk

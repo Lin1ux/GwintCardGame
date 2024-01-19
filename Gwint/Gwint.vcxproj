@@ -176,7 +176,9 @@
     <ClCompile Include="Fonts.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gwint.cpp" />
+    <ClCompile Include="HistoryStack.cpp" />
     <ClCompile Include="Images.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="OtherFunctions.cpp" />
     <ClCompile Include="PlayerInfo.cpp" />
@@ -197,7 +199,9 @@
     <ClInclude Include="DeckManager.h" />
     <ClInclude Include="Fonts.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="HistoryStack.h" />
     <ClInclude Include="Images.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="OtherFunctions.h" />
     <ClInclude Include="PlayerInfo.h" />

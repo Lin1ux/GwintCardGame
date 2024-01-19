@@ -11,6 +11,7 @@
 #include "settings.h"                       //Ustawienia
 #include "Images.h"                         //Obrazy
 #include "OtherFunctions.h"                 //Inne funkcje
+#include "MainMenu.h"                       //Menu główne
 
 //#define ScreenWidth 1920
 //#define ScreenHeight 1080
@@ -52,20 +53,28 @@ int main()
     al_install_keyboard();		//Inicjalizacja klawiatury
     al_install_mouse();			//Inicjalizacja myszy
 
-    Menu Menu(display, settings::ScrWidth(), settings::ScrHeight());
-    int State = 0;                    //Stan gry
-    while (State == 0)                //Pętla gry
+    Menu GameMenu(display, settings::ScrWidth(), settings::ScrHeight());
+    MainMenu MainMenuWindow(display, settings::ScrWidth(), settings::ScrHeight());    //Obiekt menu głównego
+    int State = 0;              //Stan gry
+    while (true)                //Pętla gry
     {
-        State = Menu.MenuLoop();
-    }
-    if (State == 1)
-    {
-        std::cout << "Gra zostala zamknieta przez uzytkownika\n";
-        return 0;
-    }
-    else    //State == -1
-    {
-        std::cout << "Wystapil blad\n";
-        return -1;
+        if (State == 0)
+        {
+            State = MainMenuWindow.MenuLoop();
+        }
+        if (State == 1)
+        {
+            std::cout << "Gra zostala zamknieta przez uzytkownika\n";
+            return 0;
+        }
+        if (State == 2)
+        {
+            State = GameMenu.MenuLoopPVP();
+        }
+        if (State == -1)
+        {
+            std::cout << "Wystapil blad\n";
+            return -1;
+        }
     }
 }

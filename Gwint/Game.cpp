@@ -18,6 +18,7 @@
 #include "Fonts.h"
 #include "Button.h"
 #include "CardValues.h"
+#include "HistoryStack.h"
 
 //Konstruktor
 Game::Game(ALLEGRO_DISPLAY* Disp,std::vector<Card> PlayerDeck, std::vector<Card> EnemyDeck)
@@ -25,9 +26,8 @@ Game::Game(ALLEGRO_DISPLAY* Disp,std::vector<Card> PlayerDeck, std::vector<Card>
 	Display = Disp;
 	PlayerTurn = true;
 	player1Turn = true;							//Tura 1 gracza
-	Player = PlayerInfo(PlayerDeck);
-	//Enemy = PlayerInfo(EnemyDeck);
-	Enemy = PlayerInfo(PlayerDeck);	//Dokończyć zmienić później na talię przeciwnika 
+	Player = PlayerInfo(PlayerDeck);			
+	Enemy = PlayerInfo(EnemyDeck);
 	mouseButton = 0;
 	lastUsedCardIndex = -1;
 	lastUsedCardRow = -1;
@@ -165,18 +165,26 @@ int Game::GameLoopPvP()
 			DrawTip("Kliknij na swoją kartę na stole");											//Rysuje wskazówkę
 			DrawOtherInfo(mouseX, mouseY);														//Rysowanie reszty informacji 
 			CardToTake = DrawPlayersCards(mouseX, mouseY);										//Rysowanie kart gracza i zagranie karty
+			//Czy występują inne karty oprócz Transportu
 			if (Player1->ReturnAmountOfCardOnTable() - Player1->NumberOfCardsWithSkill(AllSkills::Transport) < 1)
 			{
 				skillId = 0;
 				continue;
 			}
-			if (CardToTake.card.ReturnSkill() != AllSkills::Transport && CardToTake.card != Card() && mouseButton == 1 && CardToTake.isPlayerCard)
+			//Czy są zwykłe karty
+			if (Player1->ReturnAmountOfCardOnTable(true) < 1)
 			{
-				Player1->TakeCard(CardToTake.card);											//Dodanie karty do ręki
+				skillId = 0;
+				continue;
+			}
+			if (CardToTake.card.ReturnSkill() != AllSkills::Transport && CardToTake.card != Card() && !CardToTake.card.ReturnIsHero() && mouseButton == 1 && CardToTake.isPlayerCard)
+			{
+				Player1->TakeCard(CardToTake.card);												//Dodanie karty do ręki
 				Player1->RemoveCardFromTable(CardToTake.card.ReturnRow(), CardToTake.index);	//Usunięcie wskazanej karty z stołu
-				if (CardToTake.card.ReturnSkill() == AllSkills::Brotherhood)				//Zaktualizowanie wartości braterstwa
+				History.UpdateTarget(CardToTake.card);
+				if (CardToTake.card.ReturnSkill() == AllSkills::Brotherhood)					//Zaktualizowanie wartości braterstwa
 				{
-					AbilityManager(CardToTake.card);										//Używa umiejętności karty
+					AbilityManager(CardToTake.card);											//Używa umiejętności karty
 				}
 				skillId = 0;
 				mouseButton = 0;
@@ -199,6 +207,7 @@ int Game::GameLoopPvP()
 			if (mouseButton == 1 && TargetCard.card != Card() && !TargetCard.isPlayerCard && !TargetCard.card.ReturnIsHero())
 			{
 				//Miejsce na zadanie obrażeń
+				History.UpdateTarget(TargetCard.card);
 				Player2->AddDiffrenceOfCard(TargetCard.card.ReturnRow(), TargetCard.index, -3);
 				skillId = 0;
 				mouseButton = 0;
@@ -230,10 +239,10 @@ int Game::GameLoopPvP()
 			{
 				skillId = AllSkills::none;
 				GraveyardOn = false;
+				History.UpdateTarget(SelectedCard.card);
 				Player1->SetDiffrenceOfCard(lastUsedCardRow, lastUsedCardIndex, SelectedCard.card.ReturnValue());	//Nakładanie bonusowych wartości
 				Player1->RemoveCardFromGraveyard(SelectedCard.card);												//Usunięcie karty z cmentarza
 			}
-			//std::cout << "R="<< lastUsedCardRow<<"I=" << lastUsedCardIndex << "\n";
 			al_flip_display();
 			continue;
 		}
@@ -286,6 +295,7 @@ int Game::GameLoopPvP()
 				skillId = AllSkills::none;
 				GraveyardOn = false;
 				//Zagranie karty
+				History.UpdateTarget(SelectedCard.card);
 				Player1->PlayCard(SelectedCard.card);
 				Player1->RemoveCardFromGraveyard(SelectedCard.card);
 				while (SelectedCard.card != Card())
@@ -576,6 +586,17 @@ CardPos Game::DrawPlayersCards(float mouseX,float mouseY)
 //------------------------------------------
 Card Game::AbilityManager(Card UsedCard)
 {
+	int PlayerNumber;
+	//History.AddAction({ UsedCard, Card(),UsedCard.ReturnSkill() });
+	if (player1Turn)
+	{
+		PlayerNumber = 1;
+	}
+	else
+	{
+		PlayerNumber = 2;
+	}
+	History.AddAction({ PlayerNumber, UsedCard, Card(),UsedCard.ReturnSkill()});
 	Card NewCard = Card();
 	//Umiejętność kart gracza
 	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Brotherhood)	//Braterstwo
@@ -598,7 +619,11 @@ Card Game::AbilityManager(Card UsedCard)
 				Player1->SetMultiplayerOfCard(UsedCard.ReturnRow(), i, multiplayer);
 			}
 		}
-		std::cout << "val 1" << Player1->ReturnCurrentValueOfCard(1,0)<<"\n";
+		//Zapisanie w histori efektu braterstwa na drugą taką kartę
+		if (multiplayer > 1)
+		{
+			History.UpdateTarget(UsedCard);
+		}
 	}
 	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Medic)	//Medyk
 	{
@@ -615,6 +640,7 @@ Card Game::AbilityManager(Card UsedCard)
 	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Spy)		//Szpieg
 	{
 		Player1->TakeCard();
+		History.UpdateTarget(Player1->LastCardInHand());
 	}
 	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Archer)	//Strzelec
 	{
@@ -629,6 +655,7 @@ Card Game::AbilityManager(Card UsedCard)
 			if (NewCard != Card())
 			{
 				Player1->PlayCard(NewCard);
+				History.UpdateTarget(NewCard);
 				return NewCard;
 			}
 		}
@@ -639,8 +666,8 @@ Card Game::AbilityManager(Card UsedCard)
 		if (Player1->CanPlay(NewCard))
 		{
 			Player1->PlayCard(NewCard);
+			History.UpdateTarget(NewCard);
 		}
-		//Player.TakeCard(Player2->TakeCardFromStack());
 	}
 	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Transport)	//Transport
 	{
@@ -652,6 +679,7 @@ Card Game::AbilityManager(Card UsedCard)
 		if (Player1->CanPlay(NewCard))
 		{
 			Player1->PlayCard(NewCard);
+			History.UpdateTarget(NewCard);
 		}
 	}
 	if (PlayerTurn && (UsedCard.ReturnSkill() == AllSkills::DeadEater || UsedCard.ReturnSkill() == AllSkills::GoldDeadEater))	//Trupojad
@@ -681,18 +709,16 @@ Card Game::AbilityManager(Card UsedCard)
 		if (pMax >= eMax)
 		{
 			Max = pMax;
-			std::cout << "PMax\n";
 			//Usuwanie kart
-			Player1->RemoveAllCardsWithValue(CardRow, CardIndex, Max);
-			Player2->RemoveAllCardsWithValue(Max);
+			Player1->RemoveAllCardsWithValue(CardRow, CardIndex, Max,&History,UsedCard, PlayerNumber);
+			Player2->RemoveAllCardsWithValue(Max, &History, UsedCard, PlayerNumber);
 		}
 		if (pMax < eMax);
 		{
 			Max = eMax;
-			std::cout << "EMax\n";
 			//Usuwanie kart
-			Player1->RemoveAllCardsWithValue(CardRow, CardIndex,Max);
-			Player2->RemoveAllCardsWithValue(Max);
+			Player1->RemoveAllCardsWithValue(CardRow, CardIndex,Max, &History, UsedCard, PlayerNumber);
+			Player2->RemoveAllCardsWithValue(Max, &History, UsedCard, PlayerNumber);
 		}
 	}
 	if (PlayerTurn && UsedCard.ReturnSkill() == AllSkills::Banish)	//Wygnanie
@@ -816,7 +842,12 @@ void Game::DrawOtherInfo(float mouseX, float mouseY)
 		PlayersGraveyard = false;
 		GraveyardFirstCard = 0;
 	}
+	DrawHistory();
 	//GraveyardButton.DrawHitbox();
+}
+void Game::DrawHistory()
+{
+	History.DrawHistory(0.03,0.12,8);
 }
 //Przycisk Końca tury
 //--------------------------------------------

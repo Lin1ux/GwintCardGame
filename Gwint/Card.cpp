@@ -254,6 +254,23 @@ void Card::DrawBigCardDescr(float x1, float y1)
 	al_draw_scaled_bitmap(Images::DescrFrame, 0, 0, 330, 400, PosX(x1), DownEdgePos, PosX(ImgSizeX*1.1), PosY(ImgSizeX*1.21f * settings::ProportionScreenWH()), NULL); //ALLEGRO_ALIGN_CENTER
 	al_draw_multiline_text(Fonts::NameFont, Colors::white, (vertexes.P1.x+ vertexes.P2.x)/2, DownEdgePos+(DownEdgePos*0.01), PosX(ImgSizeX), PosY(ImgSizeX * 0.1f * settings::ProportionScreenWH()), ALLEGRO_ALIGN_CENTER, (skill.ReturnName() + ":\n" + skill.ReturnDescr()).c_str());
 }
+//Rysuje mały obrazek karty
+//----------------------------------------
+void Card::DrawPicture(float x1, float y1)
+{
+	float ImgSizeX = (PosX(x1 + 0.04) - PosX(x1)) / settings::ScrWidth();
+	//Portret
+	al_draw_scaled_bitmap(Card::CardImage, 0, 0, 300, 300, PosX(x1 + 0.001), PosY(y1 + 0.001), PosX(ImgSizeX), PosY(ImgSizeX * settings::ProportionScreenWH()), NULL);
+	//Ramka Portretu
+	if (heroCard)
+	{
+		al_draw_scaled_bitmap(Images::HeroCharacterFrame, 0, 0, 330, 330, PosX(x1), PosY(y1), PosX(ImgSizeX * 1.1), PosY(ImgSizeX * 1.1 * settings::ProportionScreenWH()), NULL);
+	}
+	else
+	{
+		al_draw_scaled_bitmap(Images::CharacterFrame, 0, 0, 330, 330, PosX(x1), PosY(y1), PosX(ImgSizeX * 1.1), PosY(ImgSizeX * 1.1 * settings::ProportionScreenWH()), NULL);
+	}
+}
 //Zwraca Obecną wartość karty
 //---------------------
 int Card::ReturnValue()

@@ -1,6 +1,7 @@
 #include <vector>
 #include "Card.h"
 #include "CardValues.h"
+#include "HistoryStack.h"
 
 typedef struct CardPos
 {
@@ -48,6 +49,7 @@ public:
 	void TakeCard(Card NewCard);										//Jeœli jest miejsce dodaje podan¹ kartê do rêki
 	void DrawHand();													//Rysuje karty z rêki gracza
 	int AmountOfCardsInHand();											//Zwraca liczbê kart w rêce
+	Card LastCardInHand();												//Zwraca ostatni¹ posiadan¹ kartê
 	//Nie dobrane karty
 	void PutToStack(Card NewCard);										//Wrzuca kartê do tali nie dobranych kart
 	Card TakeCardFromStack();											//Dobiera kartê z nie u¿ytych kart i zwraca j¹
@@ -63,9 +65,12 @@ public:
 	Card RemoveCardFromTable(Card CardToRemove);						//Usuwa pierwsz¹ znalezion¹ kartê 
 	Card RemoveCardFromTable(int row, int index);						//Usuwa kartê z sto³u o podanym indeksie
 	void RemoveAllCardsWithValue(int value);							//Usuwa wszystkie karty o podanej wartoœci (umieszcza je w cmentarzu)
+	void RemoveAllCardsWithValue(int value, HistoryStack* Stack, Card UsedCard, int Owner);							//Usuwa wszystkie karty o podanej wartoœci (umieszcza je w cmentarzu) zapisuje w histori
 	void RemoveAllCardsWithValue(int row, int index, int value);		//Usuwa wszystkie karty o podanej wartoœci pomijaj¹c kartê o podanym rzêdzie i indeksie (umieszcza je w cmentarzu)
+	void RemoveAllCardsWithValue(int row, int index, int value,HistoryStack* Stack,Card UsedCard, int Owner);		//Usuwa wszystkie karty o podanej wartoœci pomijaj¹c kartê o podanym rzêdzie i indeksie (umieszcza je w cmentarzu) zapisuje w histori
 	int ReturnAmountOfCardOnTable();									//Zwraca liczbê kart na stole
 	int ReturnAmountOfCardOnTable(bool IgnoreGoldCard);					//Zwraca liczbê zwyk³ych kart na stole  ignoruj¹c z³ote karty
+	int ReturnAmountOfGoldCardOnTable();								//Zwraca liczbê z³otych kart na stole
 	int ReturnAmountOfCardOnTable(int row);								//Zwraca liczbê kart w wybranym rzêdzie
 	int NumberOfCardsWithSkill(Skills Skill);							//Zwraca liczbê kart na stole posiadaj¹ce dan¹ umiejêtnoœæ
 	int NumberOfSpecificCards(Card CardToFind);							//Zwraca liczbê podanych kart
@@ -80,7 +85,8 @@ public:
 //Cmentarz (U¿yte karty)
 	void AddCardToGraveyard(Card Card);									//Dodaje kartê do cmentarza
 	int ReturnAmountOfCardsByRow(int row);								//Zwraca liczbê kart danego rzêdu
-	int ReturnAmountOfCardUsed();										//Zwraca liczbê kart zu¿ytych
+	int ReturnAmountOfCardUsed();										//Zwraca liczbê kart w cmentarzu
+	int ReturnAmountOfGraveyardGoldCard();								//Zwraca liczbê z³otych kart w cmentarzu
 	Card RemoveCardFromGraveyard(Card Card);							//Usuwa kartê z cmentarza
 	//Zwracanie kart
 	std::vector<Card> ReturnMeleeRow();									//Zwraca karty w 1 rzêdzie
