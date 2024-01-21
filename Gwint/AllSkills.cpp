@@ -56,7 +56,7 @@ void AllSkills::SetSkills()
 	Brotherhood = Skills(brotherhood, "Braterstwo", "Zwiększa dwukrotnie wartość karty jeśli w tym samym rzędzie znajduje się ta sama karta", Images::Brotherhood);
 	Medic = Skills(medic, "Medyk", "Wskrzesza wybraną kartę z cmentarza (nie działa na złote karty)", Images::Medic);
 	Spy = Skills(spy, "Szpieg", "Dobiera 2 karty ale zagrywany jest po stronie przeciwnika", Images::Spy);
-	Executioner = Skills(executioner, "Egzekutor", "Zabija najsilniejszego przeciwnika", Images::Executioner);
+	Executioner = Skills(executioner, "Egzekutor", "Niszczy najsłabsze karty przeciwnika", Images::Executioner);
 	Archer = Skills(archer, "Strzelec", "Zmniejsza maksymalną siłę wrogiej karty o 2", Images::Archer);
 	Horde = Skills(horde, "Wataha", "Przywołuje kartę tego samego typu znajdujące się w talii", Images::Horde);
 	Thief = Skills(thief, "Złodziej", "Zabiera i zagrywa kartę z tali przeciwnika", Images::Thief);

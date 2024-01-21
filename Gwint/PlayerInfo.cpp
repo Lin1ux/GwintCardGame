@@ -374,35 +374,43 @@ Card PlayerInfo::RemoveCardFromTable(int row, int index)
 	return RemovedCard;
 }
 //Usuwa wszystkie karty o podanej wartoœci i umieszcza je w cmentarzu
+//Zwraca liczbê usuniêtych kart
 //-----------------------------------------------------------------
-void PlayerInfo::RemoveAllCardsWithValue(int value)
+int PlayerInfo::RemoveAllCardsWithValue(int value, bool IgnoreGoldenCards)
 {
+	int CardNumber = 0;
 	for (int i = 0; i < MeleeRow.size(); i++)
 	{
-		if (MCardsValues[i].ReturnCurrentValue() == value)
+		if (MCardsValues[i].ReturnCurrentValue() == value && (IgnoreGoldenCards && !MeleeRow[i].ReturnIsHero()))
 		{
 			AddCardToGraveyard(RemoveCardFromTable(CardList::front, i));
+			CardNumber += 1;
 			i -= 1;
 		}
 	}
 	for (int i = 0; i < RangeRow.size(); i++)
 	{
-		if (RCardsValues[i].ReturnCurrentValue() == value)
+		if (RCardsValues[i].ReturnCurrentValue() == value && (IgnoreGoldenCards && !RangeRow[i].ReturnIsHero()))
 		{
+			CardNumber += 1;
 			AddCardToGraveyard(RemoveCardFromTable(CardList::back, i));
 			i -= 1;
 		}
 	}
+	return CardNumber;
 }
 //Usuwa wszystkie karty o podanej wartoœci (umieszcza je w cmentarzu) zapisuje w histori
+//Zwraca liczbê usuniêtych kart
 //------------------------------------------------------------------------------------------------
-void PlayerInfo::RemoveAllCardsWithValue(int value, HistoryStack* Stack, Card UsedCard, int Owner)
+int PlayerInfo::RemoveAllCardsWithValue(int value,bool IgnoreGoldenCards, HistoryStack* Stack, Card UsedCard, int Owner)
 {
+	int CardNumber = 0;
 	Card RemovedCard;
 	for (int i = 0; i < MeleeRow.size(); i++)
 	{
-		if (MCardsValues[i].ReturnCurrentValue() == value)
+		if (MCardsValues[i].ReturnCurrentValue() == value && (IgnoreGoldenCards && !MeleeRow[i].ReturnIsHero()))
 		{
+			CardNumber += 1;
 			RemovedCard = RemoveCardFromTable(CardList::front, i);
 			AddCardToGraveyard(RemovedCard);
 			Stack->AddAction({ Owner ,UsedCard,RemovedCard ,UsedCard.ReturnSkill() });
@@ -411,27 +419,32 @@ void PlayerInfo::RemoveAllCardsWithValue(int value, HistoryStack* Stack, Card Us
 	}
 	for (int i = 0; i < RangeRow.size(); i++)
 	{
-		if (RCardsValues[i].ReturnCurrentValue() == value)
+		if (RCardsValues[i].ReturnCurrentValue() == value && (IgnoreGoldenCards && !RangeRow[i].ReturnIsHero()))
 		{
+			CardNumber += 1;
 			RemovedCard = RemoveCardFromTable(CardList::back, i);
 			AddCardToGraveyard(RemovedCard);
 			Stack->AddAction({ Owner ,UsedCard,RemovedCard ,UsedCard.ReturnSkill() });
 			i -= 1;
 		}
 	}
+	return CardNumber;
 }
 //Usuwa wszystkie karty o podanej wartoœci i pomijaj¹c kartê o podanym rzêdzie i indeksie (umieszcza je w cmentarzu)
+//Zwraca liczbê usuniêtych kart
 //------------------------------------------------------------------------------------------------------------------
-void PlayerInfo::RemoveAllCardsWithValue(int row, int index, int value)
+int PlayerInfo::RemoveAllCardsWithValue(int row, int index, int value, bool IgnoreGoldenCards)
 {
+	int CardNumber = 0;
 	for (int i = 0; i < MeleeRow.size(); i++)
 	{
 		if (row == CardList::front && index == i)
 		{
 			continue;
 		}
-		if (MCardsValues[i].ReturnCurrentValue() == value)
+		if (MCardsValues[i].ReturnCurrentValue() == value && (IgnoreGoldenCards && !MeleeRow[i].ReturnIsHero()))
 		{
+			CardNumber += 1;
 			AddCardToGraveyard(RemoveCardFromTable(CardList::front, i));
 			i -= 1;
 			index -= 1;
@@ -443,18 +456,22 @@ void PlayerInfo::RemoveAllCardsWithValue(int row, int index, int value)
 		{
 			continue;
 		}
-		if (RCardsValues[i].ReturnCurrentValue() == value)
+		if (RCardsValues[i].ReturnCurrentValue() == value && (IgnoreGoldenCards && !RangeRow[i].ReturnIsHero()))
 		{
+			CardNumber += 1;
 			AddCardToGraveyard(RemoveCardFromTable(CardList::back, i));
 			i -= 1;
 			index -= 1;
 		}
 	}
+	return CardNumber;
 }
 //Usuwa wszystkie karty o podanej wartoœci pomijaj¹c kartê o podanym rzêdzie i indeksie (umieszcza je w cmentarzu) zapisuje w histori
+//Zwraca liczbê usuniêtych kart
 //---------------------------------------------------------------------------------------------------------
-void PlayerInfo::RemoveAllCardsWithValue(int row, int index, int value, HistoryStack* Stack, Card UsedCard,int Owner)
+int PlayerInfo::RemoveAllCardsWithValue(int row, int index, int value,bool IgnoreGoldenCards, HistoryStack* Stack, Card UsedCard,int Owner)
 {
+	int CardNumber = 0;
 	Card RemovedCard;
 	for (int i = 0; i < MeleeRow.size(); i++)
 	{
@@ -462,8 +479,9 @@ void PlayerInfo::RemoveAllCardsWithValue(int row, int index, int value, HistoryS
 		{
 			continue;
 		}
-		if (MCardsValues[i].ReturnCurrentValue() == value)
+		if (MCardsValues[i].ReturnCurrentValue() == value && (IgnoreGoldenCards && !MeleeRow[i].ReturnIsHero()))
 		{
+			CardNumber += 1;
 			RemovedCard = RemoveCardFromTable(CardList::front, i);
 			AddCardToGraveyard(RemovedCard);
 			Stack->AddAction({ Owner ,UsedCard,RemovedCard ,UsedCard.ReturnSkill() });
@@ -477,8 +495,9 @@ void PlayerInfo::RemoveAllCardsWithValue(int row, int index, int value, HistoryS
 		{
 			continue;
 		}
-		if (RCardsValues[i].ReturnCurrentValue() == value)
+		if (RCardsValues[i].ReturnCurrentValue() == value && (IgnoreGoldenCards && !RangeRow[i].ReturnIsHero()))
 		{
+			CardNumber += 1;
 			RemovedCard = RemoveCardFromTable(CardList::back, i);
 			AddCardToGraveyard(RemovedCard);
 			Stack->AddAction({ Owner ,UsedCard,RemovedCard ,UsedCard.ReturnSkill() });
@@ -486,6 +505,7 @@ void PlayerInfo::RemoveAllCardsWithValue(int row, int index, int value, HistoryS
 			index -= 1;
 		}
 	}
+	return CardNumber;
 }
 //Zwraca karty w 1 rzêdzie
 //--------------------------------------------
@@ -751,6 +771,25 @@ int PlayerInfo::MaxValue(int row, int IgnoredCard)
 		}
 	}
 	return max;
+}
+int PlayerInfo::MinValue()
+{
+	int min = -1;
+	for (int i = 0; i < MeleeRow.size(); i++)
+	{
+		if (min > MCardsValues[i].ReturnCurrentValue() || min == -1)
+		{
+			min = MCardsValues[i].ReturnCurrentValue();
+		}
+	}
+	for (int i = 0; i < RangeRow.size(); i++)
+	{
+		if (min > RCardsValues[i].ReturnCurrentValue() || min == -1)
+		{
+			min = RCardsValues[i].ReturnCurrentValue();
+		}
+	}
+	return min;
 }
 //Ustawia mno¿nik karty o podanym indeksie i rzêdzie
 void PlayerInfo::SetMultiplayerOfCard(int row, int index, int value)

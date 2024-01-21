@@ -65,10 +65,10 @@ public:
 	//Stó³
 	Card RemoveCardFromTable(Card CardToRemove);						//Usuwa pierwsz¹ znalezion¹ kartê 
 	Card RemoveCardFromTable(int row, int index);						//Usuwa kartê z sto³u o podanym indeksie
-	void RemoveAllCardsWithValue(int value);							//Usuwa wszystkie karty o podanej wartoœci (umieszcza je w cmentarzu)
-	void RemoveAllCardsWithValue(int value, HistoryStack* Stack, Card UsedCard, int Owner);							//Usuwa wszystkie karty o podanej wartoœci (umieszcza je w cmentarzu) zapisuje w histori
-	void RemoveAllCardsWithValue(int row, int index, int value);		//Usuwa wszystkie karty o podanej wartoœci pomijaj¹c kartê o podanym rzêdzie i indeksie (umieszcza je w cmentarzu)
-	void RemoveAllCardsWithValue(int row, int index, int value,HistoryStack* Stack,Card UsedCard, int Owner);		//Usuwa wszystkie karty o podanej wartoœci pomijaj¹c kartê o podanym rzêdzie i indeksie (umieszcza je w cmentarzu) zapisuje w histori
+	int RemoveAllCardsWithValue(int value, bool IgnoreGoldenCards);	//Usuwa wszystkie karty o podanej wartoœci (umieszcza je w cmentarzu)
+	int RemoveAllCardsWithValue(int value, bool IgnoreGoldenCards, HistoryStack* Stack, Card UsedCard, int Owner);							//Usuwa wszystkie karty o podanej wartoœci (umieszcza je w cmentarzu) zapisuje w histori
+	int RemoveAllCardsWithValue(int row, int index, int value, bool IgnoreGoldenCards);													//Usuwa wszystkie karty o podanej wartoœci pomijaj¹c kartê o podanym rzêdzie i indeksie (umieszcza je w cmentarzu)
+	int RemoveAllCardsWithValue(int row, int index, int value, bool IgnoreGoldenCards,HistoryStack* Stack,Card UsedCard, int Owner);		//Usuwa wszystkie karty o podanej wartoœci pomijaj¹c kartê o podanym rzêdzie i indeksie (umieszcza je w cmentarzu) zapisuje w histori
 	int ReturnAmountOfCardOnTable();									//Zwraca liczbê kart na stole
 	int ReturnAmountOfCardOnTable(bool IgnoreGoldCard);					//Zwraca liczbê zwyk³ych kart na stole  ignoruj¹c z³ote karty
 	int ReturnAmountOfGoldCardOnTable();								//Zwraca liczbê z³otych kart na stole
@@ -78,6 +78,7 @@ public:
 	int NumberOfSpecificCards(Card CardToFind);							//Zwraca liczbê podanych kart
 	int MaxValue();														//Zwraca najwiêksz¹ wartoœæ karty na stole nale¿¹ce do gracza
 	int MaxValue(int row, int IgnoredCard);								//Zwraca najwiêksz¹ wartoœæ karty na stole nale¿ace do gracza ignoruj¹c podan¹ kartê
+	int MinValue();														//Zwraca najmniejsz¹ wartoœæ karty na stole nale¿¹ce do gracza
 	//Watoœci kart na stole
 	void SetMultiplayerOfCard(int row, int index, int value);			//Ustawia mno¿nik karty o podanym indeksie i rzêdzie							
 	void SetDiffrenceOfCard(int row, int index, int value);				//Ustawia modyfikator karty o podanym indeksie i rzêdzie

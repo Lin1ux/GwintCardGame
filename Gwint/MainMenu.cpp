@@ -110,12 +110,14 @@ int MainMenu::MenuLoop()
 			//Rysowanie
 			al_clear_to_color(Colors::darkGray); //tło
 			//Rysowanie przycisków
+			al_draw_text(Fonts::TitleFont, Colors::white, settings::PosX(0.5), settings::PosY(0.15), ALLEGRO_ALIGN_CENTER, "Projekt Gwint");
 			PVPGame.DrawImage();
 			PVPGame.DrawText(Fonts::BigFont, settings::PosY(0.04f));
 			HowToPlay.DrawImage();
 			HowToPlay.DrawText(Fonts::BigFont, settings::PosY(0.04f));
 			ExitButton.DrawImage();
 			ExitButton.DrawText(Fonts::BigFont, settings::PosY(0.04f));
+			al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.99), settings::PosY(0.95), ALLEGRO_ALIGN_RIGHT, "Wersja 1.0");
 			//obsługa przycisków
 			ReturnValue = ExitButtonActivation(mouseX,mouseY);
 			if (ReturnValue == 0)

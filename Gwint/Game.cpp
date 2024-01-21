@@ -590,6 +590,7 @@ CardPos Game::DrawPlayersCards(float mouseX,float mouseY)
 Card Game::AbilityManager(Card UsedCard)
 {
 	int PlayerNumber;
+	bool CanAddAction = true;
 	//History.AddAction({ UsedCard, Card(),UsedCard.ReturnSkill() });
 	if (player1Turn)
 	{
@@ -645,6 +646,16 @@ Card Game::AbilityManager(Card UsedCard)
 		Player1->TakeCard();
 		History.UpdateTarget(Player1->LastCardInHand());
 	}
+	if (UsedCard.ReturnSkill() == AllSkills::Executioner)	//Egzekutor
+	{
+		int numRemovedCard = 0;
+		numRemovedCard = Player2->RemoveAllCardsWithValue(Player2->MinValue(),true, &History, UsedCard, PlayerNumber);
+		std::cout << numRemovedCard << "\n";
+		if (numRemovedCard > 0)
+		{
+			History.RemoveActionEnd(numRemovedCard);
+		}
+	}
 	if (UsedCard.ReturnSkill() == AllSkills::Archer)	//Strzelec
 	{
 		skillId = AllSkills::archer;
@@ -654,7 +665,7 @@ Card Game::AbilityManager(Card UsedCard)
 		if (Player1->CanPlay(UsedCard))
 		{
 			NewCard = Player1->UseStackCard(UsedCard);
-			std::cout << NewCard.ReturnName()<<":"<<NewCard.ReturnCost() << "\n";
+			//std::cout << NewCard.ReturnName()<<":"<<NewCard.ReturnCost() << "\n";
 			if (NewCard != Card())
 			{
 				Player1->PlayCard(NewCard);
@@ -702,26 +713,28 @@ Card Game::AbilityManager(Card UsedCard)
 	}
 	if (UsedCard.ReturnSkill() == AllSkills::Slayer) //Pogromca
 	{
+		int AmountOfRemovedCard = 0;
 		int CardIndex = Player1->ReturnAmountOfCardOnTable(UsedCard.ReturnRow()) - 1;	//Indeks zagranej karty
 		int CardRow = UsedCard.ReturnRow();											
-		//Maksymalna wartość karty
-		int pMax = Player1->MaxValue(CardRow, CardIndex);
-		int eMax = Player2->MaxValue();
 		
 		int Max;
-		if (pMax >= eMax)
+		if (Player1->MaxValue(CardRow, CardIndex) >= Player2->MaxValue())
 		{
-			Max = pMax;
+			Max = Player1->MaxValue(CardRow, CardIndex);
 			//Usuwanie kart
-			Player1->RemoveAllCardsWithValue(CardRow, CardIndex, Max,&History,UsedCard, PlayerNumber);
-			Player2->RemoveAllCardsWithValue(Max, &History, UsedCard, PlayerNumber);
+			AmountOfRemovedCard += Player1->RemoveAllCardsWithValue(CardRow, CardIndex, Max,true,&History,UsedCard, PlayerNumber);
+			AmountOfRemovedCard += Player2->RemoveAllCardsWithValue(Max, true, &History, UsedCard, PlayerNumber);
 		}
-		if (pMax < eMax);
+		else if (Player1->MaxValue(CardRow, CardIndex) < Player2->MaxValue());
 		{
-			Max = eMax;
+			Max = Player2->MaxValue();
 			//Usuwanie kart
-			Player1->RemoveAllCardsWithValue(CardRow, CardIndex,Max, &History, UsedCard, PlayerNumber);
-			Player2->RemoveAllCardsWithValue(Max, &History, UsedCard, PlayerNumber);
+			AmountOfRemovedCard += Player1->RemoveAllCardsWithValue(CardRow, CardIndex,Max, true, &History, UsedCard, PlayerNumber);
+			AmountOfRemovedCard += Player2->RemoveAllCardsWithValue(Max, true, &History, UsedCard, PlayerNumber);
+		}
+		if (AmountOfRemovedCard > 0)
+		{
+			History.RemoveActionEnd(AmountOfRemovedCard);
 		}
 	}
 	if (UsedCard.ReturnSkill() == AllSkills::Banish)	//Wygnanie
@@ -739,7 +752,6 @@ Card Game::AbilityManager(Card UsedCard)
 			Player1->TakeCard();
 		}
 	}
-	//Umiejętność kart przeciwnika
 	return NewCard;
 }
 //Rysuje inne informacje takie jak ilość kart i liczba wygranych rund

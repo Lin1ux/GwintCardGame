@@ -6,6 +6,7 @@
 class Fonts
 {
 public:
+	static ALLEGRO_FONT* TitleFont;
 	static ALLEGRO_FONT* BigFont;
 	static ALLEGRO_FONT* NameFont;
 	static ALLEGRO_FONT* ValueFont;

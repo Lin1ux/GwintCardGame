@@ -177,6 +177,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gwint.cpp" />
     <ClCompile Include="HistoryStack.cpp" />
+    <ClCompile Include="HowToPlay.cpp" />
     <ClCompile Include="Images.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Fonts.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="HistoryStack.h" />
+    <ClInclude Include="HowToPlay.h" />
     <ClInclude Include="Images.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Menu.h" />

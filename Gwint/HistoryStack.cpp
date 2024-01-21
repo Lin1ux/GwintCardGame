@@ -13,6 +13,24 @@ void HistoryStack::AddAction(Action NewAction)
 {
 	History.push_back(NewAction);
 }
+//Usuwa ostanio dodan¹ akcje
+void HistoryStack::RemoveAction()
+{
+	if (History.size() > 0)
+	{
+		History.pop_back();
+	}
+}
+//Usuwa akcjê licz¹c od koñca
+void HistoryStack::RemoveActionEnd(int diff)
+{
+	std::cout << "Diff=" << diff << " Hist="<< History.size() << "\n";
+	if (diff+1 < History.size())
+	{
+		std::cout << "Usuwanie\n";
+		History.erase(History.end() - diff-1);
+	}
+}
 //Rysowanie histori
 //-----------------------------------------------------------
 void HistoryStack::DrawHistory(float x1, float y1, int amount)
