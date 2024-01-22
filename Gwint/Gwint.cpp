@@ -26,12 +26,22 @@ int main()
         al_show_native_message_box(NULL, NULL, NULL, "Nie udalo się zaladować biblioteki Allegro", NULL, NULL);
         return -1;
     }
-
+    //ustawienia
+    settings::SetSettings();
     //Ustawia tryb okna
-    al_set_new_display_flags(ALLEGRO_FULLSCREEN); //ALLEGRO_FULLSCREEN - Fullscreen | ALLEGRO_WINDOWED - Tryb okienkowy
+    if (settings::IsWindowed())
+    {
+        al_set_new_display_flags(ALLEGRO_WINDOWED); //tryb okienkowy
+    }
+    else
+    {
+        al_set_new_display_flags(ALLEGRO_FULLSCREEN); //Pełny ekran
+    }
     //Ustawienie rozdzielczości okna
     ALLEGRO_DISPLAY* display;                                                       //Zmienna okna
+    std::cout << "Creat screen\n";
     display = al_create_display(settings::ScrWidth(), settings::ScrHeight());       //Ustawia rozdzielczość okna
+    std::cout << "After sCreat screen\n";
     al_set_window_position(display, 200, 50);                                       //Ustawia pozycje okna
     al_set_window_title(display, "Arok The Card Game");                             //Ustawia tytuł gry
     std::cout << "Gra zostala uruchomiona!\n";
@@ -52,8 +62,9 @@ int main()
 
     al_install_keyboard();		//Inicjalizacja klawiatury
     al_install_mouse();			//Inicjalizacja myszy
-
+    std::cout << "Game menu\n";
     Menu GameMenu(display, settings::ScrWidth(), settings::ScrHeight());
+    std::cout << "Game menu2\n";
     MainMenu MainMenuWindow(display, settings::ScrWidth(), settings::ScrHeight());    //Obiekt menu głównego
     int State = 0;              //Stan gry
     while (true)                //Pętla gry

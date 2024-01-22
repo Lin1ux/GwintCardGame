@@ -24,10 +24,8 @@ void HistoryStack::RemoveAction()
 //Usuwa akcjê licz¹c od koñca
 void HistoryStack::RemoveActionEnd(int diff)
 {
-	std::cout << "Diff=" << diff << " Hist="<< History.size() << "\n";
 	if (diff+1 < History.size())
 	{
-		std::cout << "Usuwanie\n";
 		History.erase(History.end() - diff-1);
 	}
 }

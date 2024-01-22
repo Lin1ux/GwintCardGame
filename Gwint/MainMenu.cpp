@@ -52,6 +52,12 @@ int MainMenu::MenuLoop()
 	{
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events); //Czeka do wciśnięcia przycisku		
+		//Zamykanie okna
+		if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+		{
+			ChangeMenu = true;
+			ReturnValue = 1;
+		}
 		if (events.type == ALLEGRO_EVENT_KEY_UP)
 		{
 			switch (events.keyboard.keycode)

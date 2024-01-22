@@ -203,6 +203,7 @@
     <ClInclude Include="HistoryStack.h" />
     <ClInclude Include="HowToPlay.h" />
     <ClInclude Include="Images.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="OtherFunctions.h" />

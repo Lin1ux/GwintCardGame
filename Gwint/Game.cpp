@@ -79,14 +79,21 @@ int Game::GameLoopPvP()
 	bool GameStart = true;			//Początek gry
 	int CardsChanged = 0;			//Liczba odrzuconych kart
 	int RoundNumber = 0;			//Numer rundy
-
 	bool timerEvent = false;
+	bool Exit = false;				//Wyłaczenie aplikacji
+
 	while (!GameOver)
 	{
 
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);	//Czeka do wciśnięcia przycisku
 
+		//Zamykanie okna
+		if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+		{
+			GameOver = true;
+			Exit = true;
+		}
 		if (events.type == ALLEGRO_EVENT_KEY_UP)	//Puszczenie klawisza klawiatury
 		{
 			switch (events.keyboard.keycode)
@@ -355,6 +362,10 @@ int Game::GameLoopPvP()
 			DrawHand(mouseX, mouseY);										//Rysuje karty na ręce
 			al_flip_display();												//Wrzucenie na ekran
 		}
+	}
+	if (Exit)
+	{
+		return 1;
 	}
 	return 0;
 }

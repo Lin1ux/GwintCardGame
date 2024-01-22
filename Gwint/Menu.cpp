@@ -96,12 +96,19 @@ int Menu::MenuLoopPVP()
 	int firstCard = 0;												//Pierwsza wyświetlana karta z vectora wszystkich kart
 	int firstDeckCard = 0;											//Pierwsza wyświetlana karta z vectora tali gracza
 	int AmountOfShowCard = sizeof(DeckButtons) / sizeof(Button);	//Liczba kart wyświetlana z talii
+	bool Exit = false;												//Wyłączenie aplikacji
 	IsPlayer1Selecting = true;
 	
 	while (!ChangeMenu)
 	{
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events); //Czeka do wciśnięcia przycisku		
+		//Zamykanie okna
+		if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+		{
+			ChangeMenu = true;
+			Exit = true;
+		}
 		if (events.type == ALLEGRO_EVENT_KEY_UP)
 		{
 			switch (events.keyboard.keycode)
@@ -202,6 +209,10 @@ int Menu::MenuLoopPVP()
 		Game NewGame(Display, Deck1.ReturnDeck(), Deck2.ReturnDeck());
 		std::cout << "Rozpoczęto partię gry\n";
 		return NewGame.GameLoopPvP();
+	}
+	if (Exit)
+	{
+		return 1;
 	}
 	else
 	{
