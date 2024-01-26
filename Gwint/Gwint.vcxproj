@@ -271,8 +271,10 @@
     <Image Include="images\UI\RedReverseCard.png" />
     <Image Include="images\UI\ReverseCard.png" />
     <Image Include="images\UI\SkillDescr.png" />
+    <Image Include="images\UI\smallButton.png" />
     <Image Include="images\UI\StatFrame.png" />
     <Image Include="images\UI\TextFrame.png" />
+    <Image Include="images\UI\transparent.png" />
     <Image Include="images\UI\YellowCrystal.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

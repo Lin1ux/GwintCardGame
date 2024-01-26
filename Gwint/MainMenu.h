@@ -12,7 +12,7 @@ private:
 	Button HowToPlay;										//Poradnik
 	Button PVPGame;											//Przycisk startu gry
 	int ExitButtonActivation(float mouseX,float mouseY);	//Przycisk wyjścia
-	void HowToPlayActivation(float mouseX, float mouseY);	//Poradnik
+	int HowToPlayActivation(float mouseX, float mouseY);	//Poradnik
 	int PVPGameActivation(float mouseX, float mouseY);		//Start gry
 public:
 	MainMenu(ALLEGRO_DISPLAY* Disp, float DisplayWidth, float DisplayHeight);			//Konstruktor

@@ -68,3 +68,39 @@ void AllSkills::SetSkills()
 	GoldDeadEater = Skills(goldDeadEater, "Trupojad", "Pożera kartę z cmentarza i dodaje wartość pożartej karty do siebie (działa również na złote karty)", Images::GoldenDeadEater);
 	GoldMedic = Skills(goldMedic, "Medyk", "Wskrzesza wybraną kartę z cmentarza (działa również na złote karty)", Images::GoldenMedic);
 }
+
+std::vector<Skills> AllSkills::ReturnSkillList()
+{
+	std::vector<Skills> SkillList;
+	SetSkills();
+	
+	SkillList.push_back(Brotherhood);
+	SkillList.push_back(Medic);
+	SkillList.push_back(Spy);
+	SkillList.push_back(Executioner);
+	SkillList.push_back(Archer);
+	SkillList.push_back(Horde);
+	SkillList.push_back(Thief);
+	SkillList.push_back(Transport);
+	SkillList.push_back(SummonerMortar);
+	SkillList.push_back(DeadEater);
+	SkillList.push_back(Slayer);
+	SkillList.push_back(Banish);
+	SkillList.push_back(GoldDeadEater);
+	SkillList.push_back(GoldMedic);
+
+	return SkillList;
+}
+//Zwraca liczbę umiejętności na podstawie vectora (wolniejszy)
+//---------------------------------
+int AllSkills::AmountOfSkillsAuto()
+{
+	return ReturnSkillList().size();
+}
+//Zwraca liczbę umiejętności (należy ręcznie aktualizować)
+//-------------------------------------------------------
+int AllSkills::AmountOfSkills()
+{
+	return AllSkills::goldMedic - 1;
+}
+

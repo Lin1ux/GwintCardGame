@@ -192,7 +192,7 @@ int Game::GameLoopPvP()
 				History.UpdateTarget(CardToTake.card);
 				if (CardToTake.card.ReturnSkill() == AllSkills::Brotherhood)					//Zaktualizowanie wartości braterstwa
 				{
-					AbilityManager(CardToTake.card);											//Używa umiejętności karty
+					AbilityManager(CardToTake.card,false);											//Używa umiejętności karty
 				}
 				skillId = 0;
 				mouseButton = 0;
@@ -216,7 +216,13 @@ int Game::GameLoopPvP()
 			{
 				//Miejsce na zadanie obrażeń
 				History.UpdateTarget(TargetCard.card);
-				Player2->AddDiffrenceOfCard(TargetCard.card.ReturnRow(), TargetCard.index, -3);
+				if (Player2->AddDiffrenceOfCard(TargetCard.card.ReturnRow(), TargetCard.index, -3))
+				{
+					if (TargetCard.card.ReturnSkill() == AllSkills::Brotherhood)					//Zaktualizowanie wartości braterstwa
+					{
+						AbilityManager(TargetCard.card,true);											//Używa umiejętności karty
+					}
+				}
 				skillId = 0;
 				mouseButton = 0;
 			}
@@ -308,7 +314,7 @@ int Game::GameLoopPvP()
 				Player1->RemoveCardFromGraveyard(SelectedCard.card);
 				while (SelectedCard.card != Card())
 				{
-					SelectedCard.card = AbilityManager(SelectedCard.card);		//Używa umiejętności karty
+					SelectedCard.card = AbilityManager(SelectedCard.card,false);		//Używa umiejętności karty
 				}
 			}
 			al_flip_display();
@@ -340,7 +346,7 @@ int Game::GameLoopPvP()
 			LastPlayedCard = DrawPlayersCards(mouseX, mouseY);				//Rysowanie kart gracza i zagranie karty
 			while (LastPlayedCard.card != Card())						
 			{
-				LastPlayedCard.card = AbilityManager(LastPlayedCard.card);	//Używa umiejętności karty
+				LastPlayedCard.card = AbilityManager(LastPlayedCard.card,false);	//Używa umiejętności karty
 			}
 			//Zagranie karty i przekazanie ruchu następnemu graczowi
 			if (cardPlayed && skillId == 0)
@@ -598,7 +604,7 @@ CardPos Game::DrawPlayersCards(float mouseX,float mouseY)
 }
 //Sprawdza i używa odpowiedniej umiejętności
 //------------------------------------------
-Card Game::AbilityManager(Card UsedCard)
+Card Game::AbilityManager(Card UsedCard, bool otherPlayer)
 {
 	int PlayerNumber;
 	bool CanAddAction = true;
@@ -616,22 +622,27 @@ Card Game::AbilityManager(Card UsedCard)
 	//Umiejętność kart gracza
 	if (UsedCard.ReturnSkill() == AllSkills::Brotherhood)	//Braterstwo
 	{
+		PlayerInfo* EffectedPlayer = Player1;
+		if (otherPlayer)
+		{
+			EffectedPlayer = Player2;
+		}
 		std::vector<Card> Table;
 		if (UsedCard.ReturnRow() == CardList::front)
 		{
-			Table = Player1->ReturnMeleeRow();
+			Table = EffectedPlayer->ReturnMeleeRow();
 		}
 		if (UsedCard.ReturnRow() == CardList::back)
 		{
-			Table = Player1->ReturnRangeRow();
+			Table = EffectedPlayer->ReturnRangeRow();
 		}
-		int multiplayer = Player1->NumberOfSpecificCards(UsedCard);
+		int multiplayer = EffectedPlayer->NumberOfSpecificCards(UsedCard);
 		
 		for (int i = 0; i < Table.size(); i++)
 		{
 			if (Table[i] == UsedCard)
 			{
-				Player1->SetMultiplayerOfCard(UsedCard.ReturnRow(), i, multiplayer);
+				EffectedPlayer->SetMultiplayerOfCard(UsedCard.ReturnRow(), i, multiplayer);
 			}
 		}
 		//Zapisanie w histori efektu braterstwa na drugą taką kartę

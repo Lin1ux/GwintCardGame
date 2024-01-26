@@ -12,6 +12,7 @@
 #include "Images.h"                         //Obrazy
 #include "OtherFunctions.h"                 //Inne funkcje
 #include "MainMenu.h"                       //Menu główne
+#include "HowToPlay.h"                      //Poradnik
 
 //#define ScreenWidth 1920
 //#define ScreenHeight 1080
@@ -39,9 +40,8 @@ int main()
     }
     //Ustawienie rozdzielczości okna
     ALLEGRO_DISPLAY* display;                                                       //Zmienna okna
-    std::cout << "Creat screen\n";
+    std::cout << "Tworzenie okna\n";
     display = al_create_display(settings::ScrWidth(), settings::ScrHeight());       //Ustawia rozdzielczość okna
-    std::cout << "After sCreat screen\n";
     al_set_window_position(display, 200, 50);                                       //Ustawia pozycje okna
     al_set_window_title(display, "Arok The Card Game");                             //Ustawia tytuł gry
     std::cout << "Gra zostala uruchomiona!\n";
@@ -62,10 +62,10 @@ int main()
 
     al_install_keyboard();		//Inicjalizacja klawiatury
     al_install_mouse();			//Inicjalizacja myszy
-    std::cout << "Game menu\n";
+
     Menu GameMenu(display, settings::ScrWidth(), settings::ScrHeight());
-    std::cout << "Game menu2\n";
     MainMenu MainMenuWindow(display, settings::ScrWidth(), settings::ScrHeight());    //Obiekt menu głównego
+    HowToPlay Tutorial(display);
     int State = 0;              //Stan gry
     while (true)                //Pętla gry
     {
@@ -81,6 +81,10 @@ int main()
         if (State == 2)
         {
             State = GameMenu.MenuLoopPVP();
+        }
+        if (State == 3)
+        {
+            State = Tutorial.Loop();
         }
         if (State == -1)
         {

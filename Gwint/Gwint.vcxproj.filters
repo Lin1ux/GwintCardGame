@@ -312,5 +312,11 @@
     <Image Include="images\UI\RedReverseCard.png">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="images\UI\transparent.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\smallButton.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
 </Project>

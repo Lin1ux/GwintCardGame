@@ -36,7 +36,7 @@ private:
 	bool GameBegin(float mouseX, float mouseY,int *CardsChanged);							//Możliwość wymiany kart w ręce gracza
 	void HiddenGameBegin(float mouseX, float mouseY);										//Zasłonięte karty do wymiany
 	CardPos DrawPlayersCards(float mouseX, float mouseY);									//Rysuje karty należące do gracza oraz sprawdza przyciski pozwala na zagranie karty i zwraca zagraną kartę
-	Card AbilityManager(Card UsedCard);														//Sprawdza i używa odpowiedniej umiejętności i zwraca nowo zagraną kartę jeśli umiejętność zagrywa dodatkowe karty
+	Card AbilityManager(Card UsedCard,bool otherPlayer);									//Sprawdza i używa odpowiedniej umiejętności i zwraca nowo zagraną kartę jeśli umiejętność zagrywa dodatkowe karty
 	void DrawOtherInfo(float mouseX, float mouseY);											//Rysuje inne informacje takie jak ilość kart i liczba wygranych rund
 	void DrawHistory();																		//Rysuje historię
 	void EndRoundButton(float mouseX, float mouseY);										//Przycisk Końca tury

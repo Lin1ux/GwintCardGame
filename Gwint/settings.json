@@ -1,6 +1,6 @@
 {
     "framePerSecond": 30,
-    "screenHeight": 900,
-    "screenWidth": 1600,
-    "windowed": true
+    "screenHeight": 1080,
+    "screenWidth": 1920,
+    "windowed": false
 }

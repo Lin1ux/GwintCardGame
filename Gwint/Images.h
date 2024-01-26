@@ -49,6 +49,8 @@ public:
 	static ALLEGRO_BITMAP* EmptyCrystal;
 	static ALLEGRO_BITMAP* YellowCrystal;
 	static ALLEGRO_BITMAP* PurpleCrystal;
+	static ALLEGRO_BITMAP* Tansparent;
+	static ALLEGRO_BITMAP* SmallButton;
 	//Game Skills
 	static ALLEGRO_BITMAP* None;
 	static ALLEGRO_BITMAP* Brotherhood;

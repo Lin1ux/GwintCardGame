@@ -1,4 +1,5 @@
 #include "Skills.h"
+#include <vector>
 #pragma once
 class AllSkills
 {
@@ -34,6 +35,9 @@ public:
 	static Skills Banish;
 	static Skills GoldDeadEater;
 	static Skills GoldMedic;
-	static void SetSkills();
+	static void SetSkills();						//Ustawia wartoœci umiejêtnoœci
+	static std::vector<Skills> ReturnSkillList();	//Zwraca vector z wszystkimi umiejêtnoœciami
+	static int AmountOfSkillsAuto();				//Zwraca liczbê umiejêtnoœci na podstawie vectora (wolniejszy)
+	static int AmountOfSkills();					//Zwraca liczbê umiejêtnoœci (nale¿y rêcznie aktualizowaæ)
 };
 

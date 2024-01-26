@@ -820,8 +820,9 @@ void PlayerInfo::SetDiffrenceOfCard(int row, int index, int value)
 }
 //Dodaje wartoœæ do modyfikatora karty o podanym indeksie i rzêdzie
 //-----------------------------------------------------------------
-void PlayerInfo::AddDiffrenceOfCard(int row, int index, int value)
+bool PlayerInfo::AddDiffrenceOfCard(int row, int index, int value)
 {
+	bool dead = false;
 	if (row == CardList::front && index < MeleeRow.size())
 	{
 		MCardsValues[index].SetDiffrence(MCardsValues[index].ReturnDiffrence() + value);
@@ -829,6 +830,7 @@ void PlayerInfo::AddDiffrenceOfCard(int row, int index, int value)
 		if (MCardsValues[index].ReturnCurrentValue() <= 0)
 		{
 			AddCardToGraveyard(RemoveCardFromTable(row, index));
+			dead = true;
 		}
 	}
 	if (row == CardList::back && index < RangeRow.size())
@@ -837,8 +839,10 @@ void PlayerInfo::AddDiffrenceOfCard(int row, int index, int value)
 		if (RCardsValues[index].ReturnCurrentValue() <= 0)
 		{
 			AddCardToGraveyard(RemoveCardFromTable(row, index));
+			dead = true;
 		}
 	}
+	return dead;
 }
 //Zwraca aktualn¹ wartoœæ karty
 //--------------------------------------------------------

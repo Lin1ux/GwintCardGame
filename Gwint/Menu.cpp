@@ -45,10 +45,12 @@ Menu::Menu(ALLEGRO_DISPLAY* Disp, float DisplayWidth,float DisplayHeight)	//Kons
 	//Przyciski talii gracza
 	//Przycisk przewijania do góry tali
 	UpDeck = Button(settings::PosX(0.87f), settings::PosY(0.93f), settings::PosX(0.9f), settings::PosY(0.98f));
+	UpDeck.SetImage(Images::SmallButton,100,100);
 	UpDeck.SetColor(Colors::white, Colors::lightGray);
 	UpDeck.SetText("/\\");
 	//Przycisk przewijania w dół tali
 	DownDeck = Button(settings::PosX(0.83f), settings::PosY(0.93f), settings::PosX(0.86f), settings::PosY(0.98f));
+	DownDeck.SetImage(Images::SmallButton, 100, 100);
 	DownDeck.SetColor(Colors::white, Colors::lightGray);
 	DownDeck.SetText("\\/");
 	//Przycisk informacji
@@ -309,6 +311,7 @@ void Menu::PreviousButton(float mouseX, float mouseY, bool* changeMenu)
 {
 	Button BackButton(settings::PosX(0.005), settings::PosY(0.005), settings::PosX(0.04), settings::PosY(0.04 * settings::ProportionScreenWH()));
 	BackButton.SetColor(Colors::white, Colors::lightGray);
+	BackButton.SetImage(Images::SmallButton, 100, 100);
 	BackButton.SetText("X");
 	//Wciśnięcie przycisku
 	if (BackButton.MouseOn(mouseX, mouseY) && mouseButton == 1)

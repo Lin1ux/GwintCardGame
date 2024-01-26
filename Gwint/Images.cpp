@@ -44,6 +44,8 @@ ALLEGRO_BITMAP* Images::RangeCircle;
 ALLEGRO_BITMAP* Images::EmptyCrystal;
 ALLEGRO_BITMAP* Images::YellowCrystal;
 ALLEGRO_BITMAP* Images::PurpleCrystal;
+ALLEGRO_BITMAP*  Images::Tansparent;
+ALLEGRO_BITMAP* Images::SmallButton;
 //Deklaracja ikon umiejêtnoœci
 ALLEGRO_BITMAP* Images::None;
 ALLEGRO_BITMAP* Images::Brotherhood;
@@ -107,6 +109,8 @@ void Images::SetImages()
 	Images::EmptyCrystal = al_load_bitmap("images/UI/Empty Crystal.png");
 	Images::YellowCrystal = al_load_bitmap("images/UI/YellowCrystal.png");
 	Images::PurpleCrystal = al_load_bitmap("images/UI/PurpleCrystal.png");
+	Images::Tansparent = al_load_bitmap("images/UI/Transparent.png");
+	Images::SmallButton = al_load_bitmap("images/UI/smallButton.png");
 	//Deklaracja ikon umiejêtnoœci
 	Images::None = al_load_bitmap("images/Skills/StatCircle.png");
 	Images::Brotherhood = al_load_bitmap("images/Skills/BrotherhoodSkill.png");

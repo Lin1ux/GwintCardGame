@@ -82,7 +82,7 @@ public:
 	//Watoœci kart na stole
 	void SetMultiplayerOfCard(int row, int index, int value);			//Ustawia mno¿nik karty o podanym indeksie i rzêdzie							
 	void SetDiffrenceOfCard(int row, int index, int value);				//Ustawia modyfikator karty o podanym indeksie i rzêdzie
-	void AddDiffrenceOfCard(int row, int index, int value);				//Dodaje wartoœæ do modyfikatora karty o podanym indeksie i rzêdzie
+	bool AddDiffrenceOfCard(int row, int index, int value);				//Dodaje wartoœæ do modyfikatora karty o podanym indeksie i rzêdzie zwraca true jeœli karta zosta³a usuniêta
 	int ReturnCurrentValueOfCard(int row, int index);					//Zwraca aktualn¹ wartoœæ karty
 	
 //Cmentarz (U¿yte karty)
