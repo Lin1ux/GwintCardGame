@@ -44,12 +44,12 @@ Menu::Menu(ALLEGRO_DISPLAY* Disp, float DisplayWidth,float DisplayHeight)	//Kons
 	NextCards.SetText("->");
 	//Przyciski talii gracza
 	//Przycisk przewijania do góry tali
-	UpDeck = Button(settings::PosX(0.87f), settings::PosY(0.93f), settings::PosX(0.9f), settings::PosY(0.98f));
+	UpDeck = Button(settings::PosX(0.87f), settings::PosY(0.91f), settings::PosX(0.9f), settings::PosY(0.96f));
 	UpDeck.SetImage(Images::SmallButton,100,100);
 	UpDeck.SetColor(Colors::white, Colors::lightGray);
 	UpDeck.SetText("/\\");
 	//Przycisk przewijania w dół tali
-	DownDeck = Button(settings::PosX(0.83f), settings::PosY(0.93f), settings::PosX(0.86f), settings::PosY(0.98f));
+	DownDeck = Button(settings::PosX(0.83f), settings::PosY(0.91f), settings::PosX(0.86f), settings::PosY(0.96f));
 	DownDeck.SetImage(Images::SmallButton, 100, 100);
 	DownDeck.SetColor(Colors::white, Colors::lightGray);
 	DownDeck.SetText("\\/");
@@ -57,7 +57,7 @@ Menu::Menu(ALLEGRO_DISPLAY* Disp, float DisplayWidth,float DisplayHeight)	//Kons
 	InfoButton = Button();
 	InfoButton.ChangeState(false);
 	//Przycisk startu gry
-	StartGame = Button(settings::PosX(0.91f), settings::PosY(0.93f), settings::PosX(0.98f), settings::PosY(0.98f));
+	StartGame = Button(settings::PosX(0.91f), settings::PosY(0.91f), settings::PosX(0.98f), settings::PosY(0.96f));
 	StartGame.SetColor(Colors::white, Colors::lightGray);
 	StartGame.SetText("Dalej");
 	StartGame.ChangeState(false);
@@ -137,7 +137,7 @@ int Menu::MenuLoopPVP()
 			}
 			float mouseX_percent = (float)events.mouse.x / ScreenWidth;
 			float mouseY_percent = (float)events.mouse.y / ScreenHeight;
-			//printf("X - %d (%.3f)\nY - %d (%.3f)\n\n", events.mouse.x, mouseX_percent, events.mouse.y, mouseY_percent);
+			printf("X - %d (%.3f)\nY - %d (%.3f)\n\n", events.mouse.x, mouseX_percent, events.mouse.y, mouseY_percent);
 		}
 		else if (events.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
 		{
@@ -170,6 +170,7 @@ int Menu::MenuLoopPVP()
 			StartCardGame(mouseX, mouseY, &ChangeMenu, &StartNewGame);	  //Start gry
 			//Rysowanie
 			al_clear_to_color(Colors::darkGray); //tło
+			al_draw_scaled_bitmap(Images::MenuBackground, 0, 0, 1920, 1080, 0, 0, settings::PosX(1), settings::PosY(1), NULL);
 			DrawCartToSelect(mouseX, mouseY, firstCard);				//Rysowanie kart do wyboru
 			DrawDeck(AmountOfShowCard, firstDeckCard, mouseX, mouseY);  //Rysowanie talii
 			//Rysowanie Przycisków
@@ -187,11 +188,11 @@ int Menu::MenuLoopPVP()
 			//Wskazówki
 			if (IsPlayer1Selecting)
 			{
-				al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.05f), settings::PosY(0.87f), ALLEGRO_ALIGN_LEFT, "Wybiera Gracz 1");
+				al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.07f), settings::PosY(0.87f), ALLEGRO_ALIGN_LEFT, "Wybiera Gracz 1");
 			}
 			if (!IsPlayer1Selecting)
 			{
-				al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.05f), settings::PosY(0.87f), ALLEGRO_ALIGN_LEFT, "Wybiera Gracz 2");
+				al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.07f), settings::PosY(0.87f), ALLEGRO_ALIGN_LEFT, "Wybiera Gracz 2");
 			}
 			if (StartGame.IsActive())
 			{
@@ -309,7 +310,7 @@ void Menu::AddCard(float mouseX, float mouseY, int *firstCard,int i)
 //Przycisk cofania
 void Menu::PreviousButton(float mouseX, float mouseY, bool* changeMenu)
 {
-	Button BackButton(settings::PosX(0.005), settings::PosY(0.005), settings::PosX(0.04), settings::PosY(0.04 * settings::ProportionScreenWH()));
+	Button BackButton(settings::PosX(0.005), settings::PosY(0.05), settings::PosX(0.04), settings::PosY(0.06 * settings::ProportionScreenWH()));
 	BackButton.SetColor(Colors::white, Colors::lightGray);
 	BackButton.SetImage(Images::SmallButton, 100, 100);
 	BackButton.SetText("X");
@@ -327,7 +328,7 @@ void Menu::PreviousButton(float mouseX, float mouseY, bool* changeMenu)
 		}
 	}
 	BackButton.DrawImage();
-	BackButton.DrawText(Fonts::ValueFont, settings::PosY(0.01f));
+	BackButton.DrawText(Fonts::ValueFont, settings::PosY(0.005f));
 }
 //Przycisk usuwania talii	
 void Menu::ClearDeckButton(float mouseX, float mouseY,int* firstDeckCard)
@@ -468,16 +469,17 @@ void Menu::DrawCartToSelect(float mouseX, float mouseY,int firstCard)
 void Menu::DrawDeck(int AmountOfShowCard,int firstDeckCard,float mouseX,float mouseY)
 {
 	//Wydane złoto
-	al_draw_text(Fonts::SmallValueFont, Colors::white, settings::PosX(0.83f), settings::PosY(0.05f), ALLEGRO_ALIGN_LEFT, Deck->GoldText().c_str());
+	al_draw_text(Fonts::SmallValueFont, Colors::white, settings::PosX(0.8555f), settings::PosY(0.03f), ALLEGRO_ALIGN_CENTER, Deck->GoldText().c_str());
 	//Liczba kart
+	al_draw_scaled_bitmap(Images::StatCircle, 0, 0, 100, 100, settings::PosX(0.955), settings::PosY(0.021), settings::PosX(0.03), settings::PosY(0.03 * settings::ProportionScreenWH()), NULL);
 	if (Deck->CanStartGame())
 	{
-		al_draw_text(Fonts::SmallValueFont, Colors::lightGreen, settings::PosX(0.98f), settings::PosY(0.05f), ALLEGRO_ALIGN_RIGHT, std::to_string(Deck->ReturnAmountOfCards()).c_str());
+		al_draw_text(Fonts::SmallValueFont, Colors::lightGreen, settings::PosX(0.97f), settings::PosY(0.031f), ALLEGRO_ALIGN_CENTER, std::to_string(Deck->ReturnAmountOfCards()).c_str());
 		StartGame.ChangeState(true);
 	}
 	else
 	{
-		al_draw_text(Fonts::SmallValueFont, Colors::lightRed, settings::PosX(0.98f), settings::PosY(0.05f), ALLEGRO_ALIGN_RIGHT, std::to_string(Deck->ReturnAmountOfCards()).c_str());
+		al_draw_text(Fonts::SmallValueFont, Colors::lightRed, settings::PosX(0.97f), settings::PosY(0.031f), ALLEGRO_ALIGN_CENTER, std::to_string(Deck->ReturnAmountOfCards()).c_str());
 		StartGame.ChangeState(false);
 	}
 	//Karty do wybrania

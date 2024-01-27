@@ -327,5 +327,17 @@
     <Image Include="images\UI\longDescr.png">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="images\UI\Menu Background.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\begin Background.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\BlueGameBackground.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\RedGameBackground.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
 </Project>

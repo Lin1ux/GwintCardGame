@@ -265,12 +265,16 @@
     <Image Include="images\Skills\StatCircle.png" />
     <Image Include="images\Skills\ThiefSkill.png" />
     <Image Include="images\Skills\TransportSkill.png" />
+    <Image Include="images\UI\begin Background.png" />
+    <Image Include="images\UI\BlueGameBackground.png" />
     <Image Include="images\UI\BlueReverseCard.png" />
     <Image Include="images\UI\CharacterFrame.png" />
     <Image Include="images\UI\CharacterFrameGold.png" />
     <Image Include="images\UI\Empty Crystal.png" />
     <Image Include="images\UI\longDescr.png" />
+    <Image Include="images\UI\Menu Background.png" />
     <Image Include="images\UI\PurpleCrystal.png" />
+    <Image Include="images\UI\RedGameBackground.png" />
     <Image Include="images\UI\RedReverseCard.png" />
     <Image Include="images\UI\ReverseCard.png" />
     <Image Include="images\UI\SkillDescr.png" />

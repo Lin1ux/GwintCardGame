@@ -145,6 +145,14 @@ int Game::GameLoopPvP()
 		}
 		timerEvent = events.type == ALLEGRO_EVENT_TIMER;
 		al_clear_to_color(Colors::darkGray);						//tło
+		if (player1Turn)
+		{
+			al_draw_scaled_bitmap(Images::RedGameBackground, 0, 0, 1920, 1080, 0, 0, settings::PosX(1), settings::PosY(1), NULL);
+		}
+		else
+		{
+			al_draw_scaled_bitmap(Images::BlueGameBackground, 0, 0, 1920, 1080, 0, 0, settings::PosX(1), settings::PosY(1), NULL);
+		}
 		//Wymiana kart na początku gry
 		if (timerEvent && GameStart && !TurnBegin)
 		{
@@ -382,10 +390,12 @@ int Game::GameLoopPvP()
 bool Game::GameBegin(float mouseX,float mouseY,int *CardsChanged)
 {
 	//Przycisk startu gry
-	Button StartGame(settings::PosX(0.7f), settings::PosY(0.5f), settings::PosX(0.8f), settings::PosY(0.55f));
+	Button StartGame(settings::PosX(0.67f), settings::PosY(0.5f), settings::PosX(0.77f), settings::PosY(0.55f));
 	StartGame.SetColor(Colors::white, Colors::lightGray);
 	StartGame.SetText("Rozpocznij");
 	std::vector<Card> PlayerHand = Player1->ReturnPlayerHand();
+	//tło
+	al_draw_scaled_bitmap(Images::GameBeginBackground, 0, 0, 1920, 1080, 0, 0, settings::PosX(1), settings::PosY(1), NULL);
 	//Rysowanie instrukcji
 	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.24f), ALLEGRO_ALIGN_CENTER, "Wybierz kartę którą chcesz odrzucić");
 	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.29f), ALLEGRO_ALIGN_CENTER, ("Liczba dostępnych przelosowań:  " + std::to_string(2 - *CardsChanged)).c_str());
@@ -454,16 +464,18 @@ void Game::HiddenGameBegin(float mouseX, float mouseY)
 {
 	std::vector<Card> PlayerHand = Player1->ReturnPlayerHand();
 	float ReverseCardSizeX = 0.077f;
+	//tło
+	al_draw_scaled_bitmap(Images::GameBeginBackground, 0, 0, 1920, 1080, 0, 0, settings::PosX(1), settings::PosY(1), NULL);
 	//Rysowanie instrukcji
 	if (player1Turn)
 	{
-		al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.24f), ALLEGRO_ALIGN_CENTER, "Gracz 1");
+		al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.24f), ALLEGRO_ALIGN_CENTER, "Gracz 1: Kliknij na dowolną kartę");
 	}
 	else
 	{
-		al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.24f), ALLEGRO_ALIGN_CENTER, "Gracz 2");
+		al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.24f), ALLEGRO_ALIGN_CENTER, "Gracz 2: Kliknij na dowolną kartę");
 	}
-	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.29f), ALLEGRO_ALIGN_CENTER, "Kliknij na dowolną kartę aby odkryć pozostałe");
+	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.29f), ALLEGRO_ALIGN_CENTER, "aby odkryć pozostałe");
 	//Rysowanie ręki gracza
 	for (int i = 0; i < PlayerHand.size(); i++)
 	{
@@ -831,30 +843,30 @@ void Game::DrawOtherInfo(float mouseX, float mouseY)
 	al_draw_scaled_bitmap(FirstCrystal, 0, 0, 100, 100, settings::PosX(0.17), settings::PosY(0.34), settings::PosX(0.015), settings::PosY(0.015 * settings::ProportionScreenWH()), NULL);
 	al_draw_scaled_bitmap(SecondCrystal, 0, 0, 100, 100, settings::PosX(0.19), settings::PosY(0.34), settings::PosX(0.015), settings::PosY(0.015 * settings::ProportionScreenWH()), NULL);
 	//Rzędy gracza
-	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.783),settings::PosY(0.45) }, { 100,100 },
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.783),settings::PosY(0.47) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player1->ReturnMeleePoints()).c_str());
-	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.783),settings::PosY(0.65) }, { 100,100 },
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.783),settings::PosY(0.67) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player1->ReturnRangePoints()).c_str());
 	//Rzędy przeciwnika
-	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.783),settings::PosY(0.25) }, { 100,100 },
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.783),settings::PosY(0.27) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player2->ReturnMeleePoints()).c_str());
-	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.783),settings::PosY(0.05) }, { 100,100 },
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.783),settings::PosY(0.07) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player2->ReturnRangePoints()).c_str());
 	//Suma punktów rzędów
-	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.165),settings::PosY(0.25) }, { 100,100 },
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.172),settings::PosY(0.25) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player2->CountPoints()).c_str());
-	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.165),settings::PosY(0.45) }, { 100,100 },
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.172),settings::PosY(0.45) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player1->CountPoints()).c_str());
 	//Nie dobrane karty
-	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.82) }, { 100,100 },
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.95),settings::PosY(0.82) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player1->ReturnAmountOfCardStack()).c_str());
 
 	al_draw_scaled_bitmap(Player1->ReturnReverse(), 0, 0, 330, 430, settings::PosX(0.865), settings::PosY(0.76), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
-	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.12) }, { 100,100 },
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.95),settings::PosY(0.12) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player2->ReturnAmountOfCardStack()).c_str());
 	al_draw_scaled_bitmap(Player2->ReturnReverse(), 0, 0, 330, 430, settings::PosX(0.865), settings::PosY(0.06), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
 	//Cmentarz
-	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.62) }, { 100,100 },
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.95),settings::PosY(0.62) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player1->ReturnAmountOfCardUsed()).c_str());
 	al_draw_scaled_bitmap(Player1->ReturnReverse(), 0, 0, 330, 430, settings::PosX(0.865), settings::PosY(0.56), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
 	//Przycisk cmentarzu
@@ -868,7 +880,7 @@ void Game::DrawOtherInfo(float mouseX, float mouseY)
 	}
 	//GraveyardButton.DrawHitbox();
 	//Cmentarz przeciwnika
-	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.96),settings::PosY(0.32) }, { 100,100 },
+	OtherFunctions::DrawTextImage(Images::StatCircle, { settings::PosX(0.95),settings::PosY(0.32) }, { 100,100 },
 		{ settings::PosX(0.03),settings::PosY(0.03 * settings::ProportionScreenWH()) }, std::to_string(Player2->ReturnAmountOfCardUsed()).c_str());
 	al_draw_scaled_bitmap(Player2->ReturnReverse(), 0, 0, 330, 430, settings::PosX(0.865), settings::PosY(0.26), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
 	//Przycisk cmentarzu
@@ -1133,6 +1145,7 @@ void Game::DrawHiddenHand(float mouseX, float mouseY)
 	std::vector<Card> PlayerHand = Player1->ReturnPlayerHand();
 	//Rysowanie podpowiedzi
 	DrawTip("Kliknij na kartę w ręce");
+
 	//Rysowanie stołu
 	DrawTable(mouseX, mouseY);
 	//Rysowanie ręki gracza

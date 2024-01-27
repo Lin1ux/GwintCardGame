@@ -49,6 +49,11 @@ ALLEGRO_BITMAP* Images::YellowCrystal;
 ALLEGRO_BITMAP* Images::PurpleCrystal;
 ALLEGRO_BITMAP*  Images::Tansparent;
 ALLEGRO_BITMAP* Images::SmallButton;
+//Deklaracja t³a
+ALLEGRO_BITMAP* Images::MenuBackground;
+ALLEGRO_BITMAP* Images::GameBeginBackground;
+ALLEGRO_BITMAP* Images::RedGameBackground;
+ALLEGRO_BITMAP* Images::BlueGameBackground;
 //Deklaracja ikon umiejêtnoœci
 ALLEGRO_BITMAP* Images::None;
 ALLEGRO_BITMAP* Images::Brotherhood;
@@ -117,6 +122,11 @@ void Images::SetImages()
 	Images::PurpleCrystal = al_load_bitmap("images/UI/PurpleCrystal.png");
 	Images::Tansparent = al_load_bitmap("images/UI/Transparent.png");
 	Images::SmallButton = al_load_bitmap("images/UI/smallButton.png");
+	//Deklaracja t³a
+	Images::MenuBackground = al_load_bitmap("images/UI/Menu Background.png");
+	Images::GameBeginBackground = al_load_bitmap("images/UI/begin Background.png");
+	Images::RedGameBackground = al_load_bitmap("images/UI/RedGameBackground.png");
+	Images::BlueGameBackground = al_load_bitmap("images/UI/BlueGameBackground.png");
 	//Deklaracja ikon umiejêtnoœci
 	Images::None = al_load_bitmap("images/Skills/StatCircle.png");
 	Images::Brotherhood = al_load_bitmap("images/Skills/BrotherhoodSkill.png");
