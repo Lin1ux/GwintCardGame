@@ -318,5 +318,14 @@
     <Image Include="images\UI\smallButton.png">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="images\Characters\MistrzIluzji.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\Characters\Unknown.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\longDescr.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
 </Project>

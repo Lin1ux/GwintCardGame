@@ -2,6 +2,7 @@
 #include "HowToPlay.h"
 #include "Colors.h"
 #include "Fonts.h"
+#include "Images.h";
 #include "Button.h"
 #include "settings.h"
 #include "Skills.h"
@@ -289,12 +290,13 @@ void HowToPlay::Skill()
 	for (int i = 0; i < 5; i++)
 	{
 		if (i + Page * 5 < AmountOfSkills)
-		{
-			al_draw_scaled_bitmap(AllSkills[i + Page*5].ReturnIcon(),0,0,100,100,settings::PosX(0.3),settings::PosY(0.2 + 0.1 * i),settings::PosX(0.05),settings::PosY(0.05 * settings::ProportionScreenWH()),NULL);
-			//al_draw_multiline_text(Fonts::ValueFont, Colors::white, settings::PosX(0.3), settings::PosY(0.2 + 0.1 * i), settings::PosX(0.1), settings::PosY(0.7), ALLEGRO_ALIGN_LEFT, AllSkills[i + Page * 5].ReturnDescr().c_str());
-			//Dokończy tekst
-			//al_draw_text(Fonts::ValueFont, Colors::white, settings::PosX(0.4), settings::PosY(0.2 + 0.1 * i),ALLEGRO_ALIGN_LEFT, AllSkills[i + Page * 5].ReturnDescr().c_str());
-		}
+		{	
+			Skills Skill = AllSkills[i + Page * 5];
+			al_draw_scaled_bitmap(Skill.ReturnIcon(),0,0,100,100,settings::PosX(0.3),settings::PosY(0.2 + 0.1 * i),settings::PosX(0.05),settings::PosY(0.05 * settings::ProportionScreenWH()),NULL);
+			al_draw_scaled_bitmap(Images::LongDescrFrame, 0, 0, 800, 100, settings::PosX(0.38), settings::PosY(0.2 + 0.1 * i), settings::PosX(0.6), settings::PosY(0.09), NULL);
+			al_draw_multiline_text(Fonts::SmallValueFont, Colors::white, settings::PosX(0.4), settings::PosY(0.215 + 0.1 * i), settings::PosX(0.58), settings::PosY(0.02), ALLEGRO_ALIGN_LEFT, (Skill.ReturnName()+": " + Skill.ReturnDescr()).c_str());
+			
+		}	
 	}
 	//for(in)
 }

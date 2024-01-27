@@ -231,6 +231,7 @@
     <Image Include="images\Characters\Krokoliszek.png" />
     <Image Include="images\Characters\Liniux.png" />
     <Image Include="images\Characters\Mimik.png" />
+    <Image Include="images\Characters\MistrzIluzji.png" />
     <Image Include="images\Characters\Moloch.png" />
     <Image Include="images\Characters\Mozdzierz.png" />
     <Image Include="images\Characters\Ogar Mrozu.png" />
@@ -244,6 +245,7 @@
     <Image Include="images\Characters\Tarczownik.png" />
     <Image Include="images\Characters\Terizino.png" />
     <Image Include="images\Characters\Tytus.png" />
+    <Image Include="images\Characters\Unknown.png" />
     <Image Include="images\Characters\Zenon.png" />
     <Image Include="images\Skills\ArcherSkill.png" />
     <Image Include="images\Skills\BanishSkill.png" />
@@ -267,6 +269,7 @@
     <Image Include="images\UI\CharacterFrame.png" />
     <Image Include="images\UI\CharacterFrameGold.png" />
     <Image Include="images\UI\Empty Crystal.png" />
+    <Image Include="images\UI\longDescr.png" />
     <Image Include="images\UI\PurpleCrystal.png" />
     <Image Include="images\UI\RedReverseCard.png" />
     <Image Include="images\UI\ReverseCard.png" />

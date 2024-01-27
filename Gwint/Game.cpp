@@ -666,7 +666,7 @@ Card Game::AbilityManager(Card UsedCard, bool otherPlayer)
 	if (UsedCard.ReturnSkill() == AllSkills::Spy)		//Szpieg
 	{
 		Player1->TakeCard();
-		History.UpdateTarget(Player1->LastCardInHand());
+		History.UpdateTarget(CardList::Unknown);
 	}
 	if (UsedCard.ReturnSkill() == AllSkills::Executioner)	//Egzekutor
 	{

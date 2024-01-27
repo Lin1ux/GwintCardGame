@@ -8,6 +8,7 @@ class Images
 public:
 	//Characters
 	static ALLEGRO_BITMAP* Empty;
+	static ALLEGRO_BITMAP* Unknown;
 	static ALLEGRO_BITMAP* Bert;
 	static ALLEGRO_BITMAP* BrotherOfBlood;
 	static ALLEGRO_BITMAP* Carnothaurus;
@@ -17,6 +18,7 @@ public:
 	static ALLEGRO_BITMAP* Guts;
 	static ALLEGRO_BITMAP* Juggernaut;
 	static ALLEGRO_BITMAP* Liniux;
+	static ALLEGRO_BITMAP* MasterOfIllusion;
 	static ALLEGRO_BITMAP* Mimic;
 	static ALLEGRO_BITMAP* Mortar;
 	static ALLEGRO_BITMAP* Fang;
@@ -39,6 +41,7 @@ public:
 	static ALLEGRO_BITMAP* StatFrame;
 	static ALLEGRO_BITMAP* NameFrame;
 	static ALLEGRO_BITMAP* DescrFrame;
+	static ALLEGRO_BITMAP* LongDescrFrame;
 	static ALLEGRO_BITMAP* ReverseCard;
 	static ALLEGRO_BITMAP* RedReverseCard;
 	static ALLEGRO_BITMAP* BlueReverseCard;

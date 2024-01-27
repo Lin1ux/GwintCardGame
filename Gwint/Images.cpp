@@ -3,6 +3,7 @@
 #include <allegro5/allegro_image.h>
 
 //Deklaracja Postaci
+ALLEGRO_BITMAP* Images::Unknown;
 ALLEGRO_BITMAP* Images::Empty;
 ALLEGRO_BITMAP* Images::Bert;
 ALLEGRO_BITMAP* Images::BrotherOfBlood;
@@ -13,6 +14,7 @@ ALLEGRO_BITMAP* Images::Golem;
 ALLEGRO_BITMAP* Images::Guts;
 ALLEGRO_BITMAP* Images::Juggernaut;
 ALLEGRO_BITMAP* Images::Liniux;
+ALLEGRO_BITMAP* Images::MasterOfIllusion;
 ALLEGRO_BITMAP* Images::Mimic;
 ALLEGRO_BITMAP* Images::Mortar;
 ALLEGRO_BITMAP* Images::Fang;
@@ -34,6 +36,7 @@ ALLEGRO_BITMAP* Images::CharacterFrame;
 ALLEGRO_BITMAP* Images::StatFrame;
 ALLEGRO_BITMAP* Images::NameFrame;
 ALLEGRO_BITMAP* Images::DescrFrame;
+ALLEGRO_BITMAP* Images::LongDescrFrame;
 ALLEGRO_BITMAP* Images::ReverseCard;
 ALLEGRO_BITMAP* Images::RedReverseCard;
 ALLEGRO_BITMAP* Images::BlueReverseCard;
@@ -69,6 +72,7 @@ void Images::SetImages()
 {
 	//Postacie
 	Images::Empty = al_load_bitmap("images/Characters/Empty.png");
+	Images::Unknown = al_load_bitmap("images/Characters/Unknown.png");
 	Images::Bert = al_load_bitmap("images/Characters/Bert.png");
 	Images::BrotherOfBlood = al_load_bitmap("images/Characters/Brat Krwi.png");
 	Images::Carnothaurus = al_load_bitmap("images/Characters/Karnotaur.png");
@@ -78,6 +82,7 @@ void Images::SetImages()
 	Images::Guts = al_load_bitmap("images/Characters/Jelito.png");
 	Images::Juggernaut = al_load_bitmap("images/Characters/Moloch.png");
 	Images::Liniux = al_load_bitmap("images/Characters/Liniux.png");
+	Images::MasterOfIllusion = al_load_bitmap("images/Characters/MistrzIluzji.png");
 	Images::Mimic = al_load_bitmap("images/Characters/Mimik.png");
 	Images::Mortar = al_load_bitmap("images/Characters/Mozdzierz.png");
 	Images::Fang = al_load_bitmap("images/Characters/Kiel.png");
@@ -99,6 +104,7 @@ void Images::SetImages()
 	Images::StatFrame = al_load_bitmap("images/UI/StatFrame.png");
 	Images::NameFrame = al_load_bitmap("images/UI/textFrame.png");
 	Images::DescrFrame = al_load_bitmap("images/UI/SkillDescr.png");
+	Images::LongDescrFrame = al_load_bitmap("images/UI/LongDescr.png");
 	Images::ReverseCard = al_load_bitmap("images/UI/ReverseCard.png");
 	Images::RedReverseCard = al_load_bitmap("images/UI/RedReverseCard.png");
 	Images::BlueReverseCard = al_load_bitmap("images/UI/BlueReverseCard.png");

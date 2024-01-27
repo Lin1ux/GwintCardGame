@@ -9,6 +9,8 @@
 
 int CardList::front;
 int CardList::back;
+Card CardList::None;
+Card CardList::Unknown;
 Card CardList::Bert;
 Card CardList::BrotherOfBlood;
 Card CardList::Carnotaur;
@@ -43,6 +45,8 @@ void CardList::SetCards()
 	back = 2;
 	AllSkills::SetSkills();			//Upewnienie, że wszystkie umiejętności zostały ustawione
 	//Ustawianie danych kart
+	None = Card(false, front, 0, 0, AllSkills::None, "", Images::Empty);
+	Unknown = Card(false, back, 0, 0, AllSkills::None, "?", Images::Unknown);
 	Bert = Card(false, back, 3,5, AllSkills::None, "Bert", Images::Bert);
 	BrotherOfBlood = Card(false, front, 4,35, AllSkills::DeadEater, "Brat Krwi", Images::BrotherOfBlood);
 	Carnotaur = Card(false, front, 5, 40, AllSkills::Brotherhood, "Karnotaur", Images::Carnothaurus);
@@ -53,7 +57,7 @@ void CardList::SetCards()
 	Guts = Card(true, front, 6, 45, AllSkills::GoldDeadEater, "Jelito", Images::Guts);
 	Juggernaut = Card(false, front, 10, 45, AllSkills::Executioner, "Moloch", Images::Juggernaut);
 	Liniux = Card(true, front, 8, 50, AllSkills::Banish, "Liniux", Images::Liniux);
-	MasterOfIllusion = Card(false, front, 8, 45, AllSkills::Spy, "Mistrz Iluzji", Images::Liniux);
+	MasterOfIllusion = Card(false, front, 8, 45, AllSkills::Spy, "Mistrz Iluzji", Images::MasterOfIllusion);
 	Mimic = Card(false, front, 2, 45, AllSkills::Thief, "Mimik", Images::Mimic);
 	Mortar = Card(false, back, 4, 15, AllSkills::Archer, "Moździerz", Images::Mortar);
 	Omobamidele = Card(true, back, 7, 35, AllSkills::Archer, "Omobamidele", Images::Omobamidele);
