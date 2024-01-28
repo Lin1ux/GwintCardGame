@@ -44,7 +44,7 @@ private:
 	bool DrawSummary(float mouseX, float mouseY);											//Rysuje podsumowanie gry zwraca true jeśli naciśnięto przycisk
 	void ClearButtons();																	//Czyści zawartość przycisków
 	CardPos DrawGraveyard(float mouseX, float mouseY, bool IsPlayerGraveyard,bool CanHero);	//Rysuje karty w cmentarzu
-	void DrawHand(float mouseX, float mouseY);												//Rysuje rękę gracza (bez animacji)
+	void DrawHand(float mouseX, float mouseY,bool hide);									//Rysuje rękę gracza (bez animacji)
 	void DrawHiddenHand(float mouseX, float mouseY);										//Rysuje ręke z odwróconymi kartami
 	void DrawTable(float mouseX, float mouseY);												//Rysuje stół
 	void DrawTip(std::string text);															//Rysuje poradę w lewym głównym rogu

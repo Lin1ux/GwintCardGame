@@ -54,6 +54,7 @@ ALLEGRO_BITMAP* Images::MenuBackground;
 ALLEGRO_BITMAP* Images::GameBeginBackground;
 ALLEGRO_BITMAP* Images::RedGameBackground;
 ALLEGRO_BITMAP* Images::BlueGameBackground;
+ALLEGRO_BITMAP* Images::GraveyardBackground;
 //Deklaracja ikon umiejêtnoœci
 ALLEGRO_BITMAP* Images::None;
 ALLEGRO_BITMAP* Images::Brotherhood;
@@ -127,6 +128,7 @@ void Images::SetImages()
 	Images::GameBeginBackground = al_load_bitmap("images/UI/begin Background.png");
 	Images::RedGameBackground = al_load_bitmap("images/UI/RedGameBackground.png");
 	Images::BlueGameBackground = al_load_bitmap("images/UI/BlueGameBackground.png");
+	Images::GraveyardBackground = al_load_bitmap("images/UI/GraveyardBackground.png");
 	//Deklaracja ikon umiejêtnoœci
 	Images::None = al_load_bitmap("images/Skills/StatCircle.png");
 	Images::Brotherhood = al_load_bitmap("images/Skills/BrotherhoodSkill.png");

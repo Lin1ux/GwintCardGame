@@ -339,5 +339,8 @@
     <Image Include="images\UI\RedGameBackground.png">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="images\UI\GraveyardBackground.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -59,6 +59,7 @@ public:
 	static ALLEGRO_BITMAP* GameBeginBackground;
 	static ALLEGRO_BITMAP* RedGameBackground;
 	static ALLEGRO_BITMAP* BlueGameBackground;
+	static ALLEGRO_BITMAP* GraveyardBackground;
 	//Game Skills
 	static ALLEGRO_BITMAP* None;
 	static ALLEGRO_BITMAP* Brotherhood;

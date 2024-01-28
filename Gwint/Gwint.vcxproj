@@ -271,6 +271,7 @@
     <Image Include="images\UI\CharacterFrame.png" />
     <Image Include="images\UI\CharacterFrameGold.png" />
     <Image Include="images\UI\Empty Crystal.png" />
+    <Image Include="images\UI\GraveyardBackground.png" />
     <Image Include="images\UI\longDescr.png" />
     <Image Include="images\UI\Menu Background.png" />
     <Image Include="images\UI\PurpleCrystal.png" />

@@ -51,9 +51,9 @@ void CardList::SetCards()
 	BrotherOfBlood = Card(false, front, 4,35, AllSkills::DeadEater, "Brat Krwi", Images::BrotherOfBlood);
 	Carnotaur = Card(false, front, 5, 40, AllSkills::Brotherhood, "Karnotaur", Images::Carnothaurus);
 	Crocolisk = Card(false, front, 12, 40, AllSkills::None, "Krokoliszek", Images::Crocolisk);
-	FrozenChempion = Card(false, front, 5, 15, AllSkills::None, "Czempion", Images::FrozenChempion);
+	FrozenChempion = Card(false, front, 6, 20, AllSkills::None, "Czempion", Images::FrozenChempion);
 	FrozenDog = Card(false, front, 4, 30, AllSkills::Horde, "Ogar Mrozu", Images::FrozenDog);
-	Golem = Card(false, front, 6, 20, AllSkills::None, "Golem", Images::Golem);
+	Golem = Card(false, front, 5, 15, AllSkills::None, "Golem", Images::Golem);
 	Guts = Card(true, front, 6, 45, AllSkills::GoldDeadEater, "Jelito", Images::Guts);
 	Juggernaut = Card(false, front, 10, 45, AllSkills::Executioner, "Moloch", Images::Juggernaut);
 	Liniux = Card(true, front, 8, 50, AllSkills::Banish, "Liniux", Images::Liniux);
@@ -65,7 +65,7 @@ void CardList::SetCards()
 	Raptor = Card(false, front, 2, 20, AllSkills::Brotherhood, "Raptor", Images::Raptor);
 	Reptile = Card(false, back, 4, 30, AllSkills::Brotherhood, "Reptilian", Images::Reptile);
 	Sarco = Card(false, front, 4, 10, AllSkills::None, "Sarcozuch", Images::Sarco);
-	Seraphin = Card(false, front, 8, 45, AllSkills::Medic, "Serafin", Images::Seraphin);
+	Seraphin = Card(false, front, 7, 50, AllSkills::Medic, "Serafin", Images::Seraphin);
 	Shielder = Card(false, front, 3, 25, AllSkills::Brotherhood, "Tarczownik", Images::Shielder);
 	Fang = Card(false, back, 5,30,AllSkills::Archer,"Kieł",Images::Fang);
 	Terizino = Card(false, front, 10, 35, AllSkills::None, "Terizinozaur", Images::Terizino);

@@ -42,7 +42,7 @@ PlayerInfo::PlayerInfo(std::vector<Card> DeckCards)
 	ReverseCard = ::Images::ReverseCard;
 
 	//Dokoñczyæ Odkomentowaæ linijkê pod tym komentarzem (Do testów lepiej nie tasowaæ tali)
-	//std::random_shuffle(DeckCards.begin(), DeckCards.end());		//Przetasowanie kart w tali gracza
+	std::random_shuffle(DeckCards.begin(), DeckCards.end());		//Przetasowanie kart w tali gracza
 	for (int i = 0; i < DeckCards.size(); i++)
 	{
 		if (i < 10)

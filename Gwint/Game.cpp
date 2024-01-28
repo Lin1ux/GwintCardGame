@@ -256,7 +256,7 @@ int Game::GameLoopPvP()
 			{
 				SelectedCard = DrawGraveyard(mouseX, mouseY, PlayersGraveyard, true);		//Rysowanie cmentarza
 			}
-			DrawHand(mouseX, mouseY);													//Rysuje karty na ręce
+			DrawHand(mouseX, mouseY,false);													//Rysuje karty na ręce
 			if (SelectedCard.card != Card())											//Nakładanie bonusowych punktów
 			{
 				skillId = AllSkills::none;
@@ -311,7 +311,7 @@ int Game::GameLoopPvP()
 			{
 				SelectedCard = DrawGraveyard(mouseX, mouseY, PlayersGraveyard, true);		//Rysowanie cmentarza
 			}
-			DrawHand(mouseX, mouseY);													//Rysuje karty na ręce
+			DrawHand(mouseX, mouseY,false);													//Rysuje karty na ręce
 			if (SelectedCard.card != Card())	//Nakładanie bonusowych punktów
 			{
 				skillId = AllSkills::none;
@@ -373,7 +373,7 @@ int Game::GameLoopPvP()
 		{
 			DrawOtherInfo(mouseX, mouseY);									//Rysowanie reszty informacji
 			DrawGraveyard(mouseX, mouseY, PlayersGraveyard,true);			//Rysowanie cmentarza
-			DrawHand(mouseX, mouseY);										//Rysuje karty na ręce
+			DrawHand(mouseX, mouseY, TurnBegin);							//Rysuje karty na ręce
 			al_flip_display();												//Wrzucenie na ekran
 		}
 	}
@@ -1018,6 +1018,9 @@ void Game::ClearButtons()
 //Rysuje karty w cmentarzu
 CardPos Game::DrawGraveyard(float mouseX, float mouseY,bool IsPlayerGraveyard,bool CanHero)
 {
+	//Rysowanie tła
+	al_draw_scaled_bitmap(Images::Tansparent, 0, 0, 1, 1, 0, 0, settings::PosX(1), settings::PosY(1),NULL);
+	al_draw_scaled_bitmap(Images::GraveyardBackground, 0, 0, 1920, 1080, 0, 0, settings::PosX(1), settings::PosY(1), NULL);
 	CardPos CardClicked = {Card(),-1};
 	//Przycisk startu gry
 	Button LeaveGraveyard(settings::PosX(0.865f), settings::PosY(0.47f), settings::PosX(0.945f), settings::PosY(0.515f));
@@ -1041,7 +1044,7 @@ CardPos Game::DrawGraveyard(float mouseX, float mouseY,bool IsPlayerGraveyard,bo
 		PlayerGraveyard = Player2->ReturnCardUsed();
 	}
 	//Rysowanie instrukcji
-	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.45f), settings::PosY(0.09f), ALLEGRO_ALIGN_CENTER, "Cmentarz");
+	al_draw_text(Fonts::BigFont, Colors::white, settings::PosX(0.5f), settings::PosY(0.09f), ALLEGRO_ALIGN_CENTER, "Cmentarz");
 	//Rysowanie strony kart
 	//Strona kart do wybrania
 	if (PrevCard.MouseOn(mouseX, mouseY) && mouseButton == 1)
@@ -1122,19 +1125,27 @@ CardPos Game::DrawGraveyard(float mouseX, float mouseY,bool IsPlayerGraveyard,bo
 }
 //Rysuje rękę gracza (bez animacji)
 //--------------------------------------------
-void Game::DrawHand(float mouseX, float mouseY)
+void Game::DrawHand(float mouseX, float mouseY,bool hide)
 {
 	std::vector<Card> PlayerHand = Player1->ReturnPlayerHand();
 	//Rysowanie ręki gracza
 	float StartDrawPointX = OtherFunctions::AlignCenter(0.01f, 0.86f, +PlayerHand.size() * 0.08f);
 	for (int i = 0; i < PlayerHand.size(); i++)
 	{
-		HandButtons[i] = Button(PlayerHand[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.8f));
-
-		PlayerHand[i].DrawCard(StartDrawPointX + i * 0.08f, 0.8f);
-		if (HandButtons[i].MouseOn(mouseX, mouseY))
+		if (!hide)
 		{
-			PlayerHand[i].DrawBigCardDescr(0.02, 0.1f);
+			HandButtons[i] = Button(PlayerHand[i].NormalCardVertexesPosition(StartDrawPointX + i * 0.08f, 0.8f));
+
+			PlayerHand[i].DrawCard(StartDrawPointX + i * 0.08f, 0.8f);
+			if (HandButtons[i].MouseOn(mouseX, mouseY))
+			{
+				PlayerHand[i].DrawBigCardDescr(0.02, 0.1f);
+			}
+		}
+		else
+		{
+			float ReverseCardSizeX = 0.077f;
+			al_draw_scaled_bitmap(Player1->ReturnReverse(), 0, 0, 330, 430, settings::PosX(StartDrawPointX + i * 0.08f), settings::PosY(0.8f), settings::PosX(ReverseCardSizeX), settings::PosY(ReverseCardSizeX * 1.31 * settings::ProportionScreenWH()), NULL);
 		}
 	}
 }
