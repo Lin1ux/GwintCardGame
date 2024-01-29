@@ -189,7 +189,9 @@
     <ClCompile Include="Skills.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Gwint.exe" />
     <None Include="packages.config" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllSkills.h" />
