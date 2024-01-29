@@ -104,7 +104,7 @@ int Menu::MenuLoopPVP()
 	while (!ChangeMenu)
 	{
 		ALLEGRO_EVENT events;
-		al_wait_for_event(event_queue, &events); //Czeka do wciśnięcia przycisku		
+		al_wait_for_event(event_queue, &events); //Czeka do wciśnięcia przycisku
 		//Zamykanie okna
 		if (events.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 		{
@@ -204,6 +204,7 @@ int Menu::MenuLoopPVP()
 			{
 				DrawInfo(infoPosition.x, infoPosition.y);
 			}
+			OtherFunctions::DrawMouseCursor(mouseX, mouseY); //Kursor myszy
 			al_flip_display();
 		}
 	}

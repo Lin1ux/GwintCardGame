@@ -49,6 +49,7 @@ public:
 	static ALLEGRO_BITMAP* MeleeCircle;
 	static ALLEGRO_BITMAP* RangeCircle;
 	//Game UI
+	static ALLEGRO_BITMAP* Cursor;
 	static ALLEGRO_BITMAP* EmptyCrystal;
 	static ALLEGRO_BITMAP* YellowCrystal;
 	static ALLEGRO_BITMAP* PurpleCrystal;
@@ -76,6 +77,8 @@ public:
 	static ALLEGRO_BITMAP* GoldenDeadEater;
 	static ALLEGRO_BITMAP* Slayer;
 	static ALLEGRO_BITMAP* Banish;
+
+
 	 
 	//static ALLEGRO_BITMAP* CharacterFrame;
 	//static ALLEGRO_BITMAP* CharacterFrame;

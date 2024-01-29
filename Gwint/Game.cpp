@@ -157,6 +157,7 @@ int Game::GameLoopPvP()
 		if (timerEvent && GameStart && !TurnBegin)
 		{
 			GameStart = GameBegin(mouseX, mouseY,&CardsChanged);	//Wymiana kart 
+			OtherFunctions::DrawMouseCursor(mouseX, mouseY);		//Kursor myszy
 			al_flip_display();										//Wrzucenie na ekran
 			continue;
 		}
@@ -164,13 +165,15 @@ int Game::GameLoopPvP()
 		if (timerEvent && GameStart && TurnBegin)
 		{
 			HiddenGameBegin(mouseX, mouseY);						//Początek wymiany kart kart 
+			OtherFunctions::DrawMouseCursor(mouseX, mouseY);		//Kursor myszy
 			al_flip_display();										//Wrzucenie na ekran
 			continue;
 		}
 		//Podsumowanie gry
 		if (gameEnd)
 		{
-			GameOver = DrawSummary(mouseX, mouseY);
+			GameOver = DrawSummary(mouseX, mouseY);					//Rysowanie podsumowania
+			OtherFunctions::DrawMouseCursor(mouseX, mouseY);		//Kursor myszy
 			al_flip_display();
 			continue;
 		}
@@ -205,6 +208,7 @@ int Game::GameLoopPvP()
 				skillId = 0;
 				mouseButton = 0;
 			}
+			OtherFunctions::DrawMouseCursor(mouseX, mouseY); //Kursor myszy
 			al_flip_display();
 			continue;
 		}
@@ -234,6 +238,7 @@ int Game::GameLoopPvP()
 				skillId = 0;
 				mouseButton = 0;
 			}
+			OtherFunctions::DrawMouseCursor(mouseX, mouseY); //Kursor myszy
 			al_flip_display();
 			continue;
 		}
@@ -265,6 +270,7 @@ int Game::GameLoopPvP()
 				Player1->SetDiffrenceOfCard(lastUsedCardRow, lastUsedCardIndex, SelectedCard.card.ReturnValue());	//Nakładanie bonusowych wartości
 				Player1->RemoveCardFromGraveyard(SelectedCard.card);												//Usunięcie karty z cmentarza
 			}
+			OtherFunctions::DrawMouseCursor(mouseX, mouseY); //Kursor myszy
 			al_flip_display();
 			continue;
 		}
@@ -325,6 +331,7 @@ int Game::GameLoopPvP()
 					SelectedCard.card = AbilityManager(SelectedCard.card,false);		//Używa umiejętności karty
 				}
 			}
+			OtherFunctions::DrawMouseCursor(mouseX, mouseY); //Kursor myszy
 			al_flip_display();
 			continue;
 		}
@@ -344,6 +351,7 @@ int Game::GameLoopPvP()
 			DrawHiddenHand(mouseX, mouseY);									//Rysowanie ukrytej ręki
 			EndRoundButton(mouseX, mouseY);									//Przycisk końca rundy
 			RoundResult(&RoundNumber);										//Koniec rundy
+			OtherFunctions::DrawMouseCursor(mouseX, mouseY);				//Kursor myszy
 			al_flip_display();												//Wrzucenie na ekran
 			continue;
 		}
@@ -365,6 +373,7 @@ int Game::GameLoopPvP()
 			}
 			EndRoundButton(mouseX, mouseY);									//Przycisk końca rundy
 			RoundResult(&RoundNumber);										//Koniec rundy
+			OtherFunctions::DrawMouseCursor(mouseX, mouseY);				//Kursor myszy
 			al_flip_display();												//Wrzucenie na ekran
 			continue;
 		}
@@ -374,6 +383,8 @@ int Game::GameLoopPvP()
 			DrawOtherInfo(mouseX, mouseY);									//Rysowanie reszty informacji
 			DrawGraveyard(mouseX, mouseY, PlayersGraveyard,true);			//Rysowanie cmentarza
 			DrawHand(mouseX, mouseY, TurnBegin);							//Rysuje karty na ręce
+			OtherFunctions::DrawMouseCursor(mouseX, mouseY);				//Kursor myszy
+			OtherFunctions::DrawMouseCursor(mouseX, mouseY);				//Kursor myszy
 			al_flip_display();												//Wrzucenie na ekran
 		}
 	}
@@ -1016,6 +1027,7 @@ void Game::ClearButtons()
 
 }
 //Rysuje karty w cmentarzu
+//------------------------------------------------------------------------------------------
 CardPos Game::DrawGraveyard(float mouseX, float mouseY,bool IsPlayerGraveyard,bool CanHero)
 {
 	//Rysowanie tła

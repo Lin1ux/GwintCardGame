@@ -140,6 +140,9 @@
     <ClInclude Include="json.hpp">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="test.txt" />
@@ -342,5 +345,28 @@
     <Image Include="images\UI\GraveyardBackground.png">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="images\UI\GreenCrystal.ico">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="icon1.ico">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\Crystal.ico">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\GreenCrystal.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\ui\icon2.ico">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="images\UI\Cursor.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Gwint.rc">
+      <Filter>Pliki zasobów</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

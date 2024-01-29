@@ -146,6 +146,7 @@ int MainMenu::MenuLoop()
 			{
 				ReturnValue = HowToPlayActivation(mouseX, mouseY);
 			}
+			OtherFunctions::DrawMouseCursor(mouseX, mouseY);
 			al_flip_display();
 		}
 	}

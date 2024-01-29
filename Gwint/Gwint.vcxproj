@@ -127,6 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -156,6 +157,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -208,6 +210,7 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="OtherFunctions.h" />
     <ClInclude Include="PlayerInfo.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="Skills.h" />
   </ItemGroup>
@@ -220,6 +223,7 @@
     <Font Include="fonts\TIMESS__.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="icon1.ico" />
     <Image Include="images\Characters\Bert.png" />
     <Image Include="images\Characters\Brat Krwi.png" />
     <Image Include="images\Characters\Czempion Kultu.png" />
@@ -270,8 +274,13 @@
     <Image Include="images\UI\BlueReverseCard.png" />
     <Image Include="images\UI\CharacterFrame.png" />
     <Image Include="images\UI\CharacterFrameGold.png" />
+    <Image Include="images\UI\Crystal.ico" />
+    <Image Include="images\UI\Cursor.png" />
     <Image Include="images\UI\Empty Crystal.png" />
     <Image Include="images\UI\GraveyardBackground.png" />
+    <Image Include="images\UI\GreenCrystal.ico" />
+    <Image Include="images\UI\GreenCrystal.png" />
+    <Image Include="images\ui\icon2.ico" />
     <Image Include="images\UI\longDescr.png" />
     <Image Include="images\UI\Menu Background.png" />
     <Image Include="images\UI\PurpleCrystal.png" />
@@ -284,6 +293,9 @@
     <Image Include="images\UI\TextFrame.png" />
     <Image Include="images\UI\transparent.png" />
     <Image Include="images\UI\YellowCrystal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Gwint.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

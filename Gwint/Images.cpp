@@ -44,6 +44,7 @@ ALLEGRO_BITMAP* Images::StatCircle;
 ALLEGRO_BITMAP* Images::MeleeCircle;
 ALLEGRO_BITMAP* Images::RangeCircle;
 //Deklaracja czêœci interfejsu gry
+ALLEGRO_BITMAP* Images::Cursor;
 ALLEGRO_BITMAP* Images::EmptyCrystal;
 ALLEGRO_BITMAP* Images::YellowCrystal;
 ALLEGRO_BITMAP* Images::PurpleCrystal;
@@ -71,6 +72,7 @@ ALLEGRO_BITMAP* Images::DeadEater;
 ALLEGRO_BITMAP* Images::GoldenDeadEater;
 ALLEGRO_BITMAP* Images::Slayer;
 ALLEGRO_BITMAP* Images::Banish;
+
 
 //Za³adowuje obrazki
 //-----------------------
@@ -118,6 +120,7 @@ void Images::SetImages()
 	Images::MeleeCircle = al_load_bitmap("images/Skills/Melee Circle.png");
 	Images::RangeCircle = al_load_bitmap("images/Skills/Range Circle.png");
 	//Deklaracja czêœci interfejsu gry
+	Images::Cursor = al_load_bitmap("images/UI/Cursor.png");
 	Images::EmptyCrystal = al_load_bitmap("images/UI/Empty Crystal.png");
 	Images::YellowCrystal = al_load_bitmap("images/UI/YellowCrystal.png");
 	Images::PurpleCrystal = al_load_bitmap("images/UI/PurpleCrystal.png");

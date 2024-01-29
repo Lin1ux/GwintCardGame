@@ -7,6 +7,8 @@
 
 #include "Fonts.h"
 #include "Colors.h"
+#include "Images.h"
+#include "settings.h"
 
 //Rysuje prostok¹t u¿ywaj¹c struktury "RectanglePoints"
 //------------------------------------------------------------------------------------
@@ -41,6 +43,12 @@ float OtherFunctions::AlignCenter(float start, float end, float size)
 	float realSize = end - start;
 	float emptySpace = realSize - size;
 	return start+emptySpace/2;
+}
+//Rysuje kursor myszy
+//-----------------------------------
+void OtherFunctions::DrawMouseCursor(float mouseX, float mouseY)
+{
+	al_draw_scaled_bitmap(Images::Cursor, 0, 0, 128, 128, mouseX, mouseY, settings::PosX(0.03), settings::PosY(0.03 * settings::ProportionScreenWH()), NULL); //Mysz
 }
 
 

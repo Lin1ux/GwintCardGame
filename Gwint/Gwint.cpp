@@ -43,7 +43,7 @@ int main()
     std::cout << "Tworzenie okna\n";
     display = al_create_display(settings::ScrWidth(), settings::ScrHeight());       //Ustawia rozdzielczość okna
     al_set_window_position(display, 200, 50);                                       //Ustawia pozycje okna
-    al_set_window_title(display, "Arok The Card Game");                             //Ustawia tytuł gry
+    al_set_window_title(display, "Projekt Gwint");                                  //Ustawia tytuł gry
     std::cout << "Gra zostala uruchomiona!\n";
 
     //Sprawdzenie czy okno istnieje
@@ -62,6 +62,8 @@ int main()
 
     al_install_keyboard();		//Inicjalizacja klawiatury
     al_install_mouse();			//Inicjalizacja myszy
+
+    al_hide_mouse_cursor(display);
 
     Menu GameMenu(display, settings::ScrWidth(), settings::ScrHeight());
     MainMenu MainMenuWindow(display, settings::ScrWidth(), settings::ScrHeight());    //Obiekt menu głównego

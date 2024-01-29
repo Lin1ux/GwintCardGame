@@ -171,6 +171,7 @@ int HowToPlay::Loop()
 			{
 				Skill();
 			}
+			OtherFunctions::DrawMouseCursor(mouseX, mouseY); //Kursor myszy
 			al_flip_display();
 		}
 	}
@@ -298,5 +299,4 @@ void HowToPlay::Skill()
 			
 		}	
 	}
-	//for(in)
 }
